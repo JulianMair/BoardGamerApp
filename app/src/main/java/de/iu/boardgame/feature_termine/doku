@@ -1,0 +1,20 @@
+1. Klassen Struktur angelegt
+2. Date -> helper objekt erstellt
+2. Meeting -> room objekt
+3. PROBLEM: room dependency nicht vorhanden
+4. room dependency in gradle.kts hinzugefügt
+5. Room imports in Meeting hinzugefügt
+6. einarbeiten DAO
+
+Warum localDate + localTime
+java.util.Date -> veraltet
+java.util.Calender -> umständlich und kompliziert
+einfacher zu verarbeiten strikt getrennt zeit/datum
+
+Pflichtfelder
+meeting_id
+date
+time
+location
+host_id -> verbdinung zum gastgeber
+status offen/vergeben
