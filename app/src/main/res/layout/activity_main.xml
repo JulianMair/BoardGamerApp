@@ -49,4 +49,12 @@
             android:text="Essensauswahl öffnen" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/TerminVerwaltung"
+        android:layout_width="116dp"
+        android:layout_height="70dp"
+        android:text="Termin Verwaltung"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="330dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

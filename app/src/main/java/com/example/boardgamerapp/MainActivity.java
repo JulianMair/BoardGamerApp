@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import de.iu.boardgame.R;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
