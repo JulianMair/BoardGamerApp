@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.boardgamerapp.featureEvaluate.Evaluate;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -24,14 +26,18 @@ public class MainActivity extends AppCompatActivity {
 
         //Activity aufrufen
 
+
+        btnEvaluate.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, Evaluate.class)));
+
+
 /*        btnAdministration.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, Activity1.class)));
 
         btnAppointment.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, Activity2.class)));
 
-        btnEvaluate.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, Activity3.class)));
+
 
         btnAppointment.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, Activity4.class)));
