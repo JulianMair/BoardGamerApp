@@ -22,7 +22,11 @@ public class Meeting {
     @ColumnInfo(name="status")
     String status;
 
-    public Meeting(LocalDate date, LocalTime time, String location, long host_id, String status) {
+    @ColumnInfo(name="title")
+    String title;
+
+    public Meeting(String title, LocalDate date, LocalTime time, String location, long host_id, String status) {
+        this.title = title;
         this.date = date;
         this.time = time;
         this.location = location;
