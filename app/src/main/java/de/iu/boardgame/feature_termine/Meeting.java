@@ -1,7 +1,8 @@
 package de.iu.boardgame.feature_termine;
-import androidx.room.ColumnInfo;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.ColumnInfo;
 import  java.time.LocalDate;
 import java.time.LocalTime;
 
