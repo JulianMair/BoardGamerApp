@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_termine.helpers.DatePickerFragment;
 import de.iu.boardgame.feature_termine.helpers.TimePickerFragment;
 
 public class MeetingCreateForm extends AppCompatActivity
@@ -26,16 +27,26 @@ public class MeetingCreateForm extends AppCompatActivity
             EdgeToEdge.enable(this);
             setContentView(R.layout.activity_meeting_create_form);
             Button pickTimeButton = findViewById(R.id.pickTime);
+            Button pickDateButton = findViewById(R.id.pickDate);
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
                 Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
                 return insets;
             });
+
             pickTimeButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     DialogFragment timepicker = new TimePickerFragment();
                     timepicker.show(getSupportFragmentManager(), "time picker");
+                }
+            });
+
+            pickDateButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    DialogFragment datepicker = new DatePickerFragment();
+                    datepicker.show(getSupportFragmentManager(), "date picker");
                 }
             });
         }
