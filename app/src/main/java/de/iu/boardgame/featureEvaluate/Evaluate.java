@@ -1,4 +1,4 @@
-package com.example.boardgamerapp.featureEvaluate;
+package de.iu.boardgame.featureEvaluate;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.boardgamerapp.R;
+import de.iu.boardgame.R;
 
 public class Evaluate extends AppCompatActivity {
     @Override
