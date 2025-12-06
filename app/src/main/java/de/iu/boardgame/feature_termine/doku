@@ -20,4 +20,6 @@ host_id -> verbdinung zum gastgeber
 status offen/vergeben
 
 
-7. wie zeit eingabe unmsetzten -> timepicker
+7. wie zeit eingabe unmsetzten -> timepicker -> datepicker
+8. wie diese auswahl in der Anwendung umsetzen? chain pick oder exteren Bibliothek?
+    -> Entscheidung Material Design Guidlines von google folgen Chain
