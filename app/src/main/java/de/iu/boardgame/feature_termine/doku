@@ -23,3 +23,8 @@ status offen/vergeben
 7. wie zeit eingabe unmsetzten -> timepicker -> datepicker
 8. wie diese auswahl in der Anwendung umsetzen? chain pick oder exteren Bibliothek?
     -> Entscheidung Material Design Guidlines von google folgen Chain
+
+9. Form erstellen
+    Fehler LiniarLayout horizontal nur die Überschrift war zusehen alles andere wurde aus dem bild geschoben
+
+10 ausgewähltes datum anzeigen lassen

@@ -12,9 +12,9 @@ public class Meeting {
     @PrimaryKey(autoGenerate = true)
     int meeting_id;
     @ColumnInfo(name="date")
-    LocalDate date;
+    String date;
     @ColumnInfo(name="time")
-    LocalTime time;
+    String time;
     @ColumnInfo(name="location")
     String location;
     //@ForeignKey(entity = User.class, parentColumns = "user_id", childColumns = "host_id")
@@ -26,7 +26,21 @@ public class Meeting {
     @ColumnInfo(name="title")
     String title;
 
-    public Meeting(String title, LocalDate date, LocalTime time, String location, long host_id, String status) {
+    @ColumnInfo(name="evaluation_id")
+    int evaluation_id;
+
+
+    /**
+     * Die Daten werden in der MeetingCreateForm eingegeben
+     * Ausnahme: HOST_id muss vom User Objekt übergeben werden.
+     * @param title
+     * @param date
+     * @param time
+     * @param location
+     * @param host_id
+     * @param status
+     */
+    public Meeting(String title, String date, String time, String location, long host_id, String status) {
         this.title = title;
         this.date = date;
         this.time = time;
@@ -35,7 +49,7 @@ public class Meeting {
         this.status = status;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return this.date;
     }
 
@@ -43,11 +57,11 @@ public class Meeting {
         return this.location;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return this.time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -59,7 +73,7 @@ public class Meeting {
         return this.status;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -79,4 +93,7 @@ public class Meeting {
         return this.meeting_id;
     }
 
+    public void setEvaluation_id(int evaluation_id){this.evaluation_id = evaluation_id;}
+
+    public int getEvaluation_id(){return this.evaluation_id; }
 }

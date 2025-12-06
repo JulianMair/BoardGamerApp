@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.activity.EdgeToEdge;
@@ -29,6 +30,11 @@ public class MeetingCreateForm extends AppCompatActivity
 
     DialogFragment datepicker;
     DialogFragment timepicker;
+    String date_str = "";
+    String time_str = "";
+    Button btndate;
+    Button btnCreateAppointment;
+    TextView tvDateRes;
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,9 @@ public class MeetingCreateForm extends AppCompatActivity
             EdgeToEdge.enable(this);
             setContentView(R.layout.activity_meeting_create_form);
 
-            Button btndate = findViewById(R.id.btnSelect);
+            btndate = findViewById(R.id.btnSelect);
+            btnCreateAppointment = findViewById(R.id.btnSave);
+            tvDateRes = findViewById(R.id.tvDateResult);
 
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
                 Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -49,22 +57,37 @@ public class MeetingCreateForm extends AppCompatActivity
                 DatePickerFragment dateFragment = new DatePickerFragment();
                 dateFragment.show(getSupportFragmentManager(), "datePicker");
             });
+
+            btnCreateAppointment.setOnClickListener(view -> {
+
+            });
         }
 
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Log.d("THIS IS A TE>XT", String.valueOf(year));
+        this.date_str = create_date_str(year, month, dayOfMonth);
         create_Time_Dialog();
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        time_str = create_time_str(hourOfDay, minute);
+        String tvShowString = "am: " + date_str + "\num: " + time_str + " Uhr";
+        tvDateRes.setText(tvShowString);
 
     }
 
     public void create_Time_Dialog() {
         TimePickerFragment timeFragment = new TimePickerFragment();
         timeFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    String create_date_str(int year, int month, int day){
+        return String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
+    }
+
+    String create_time_str(int hour, int min){
+        return String.valueOf(hour) + ":" + String.valueOf(min);
     }
 }
