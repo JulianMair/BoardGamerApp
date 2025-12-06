@@ -12,15 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BoardGamerApp"
         tools:targetApi="31">
-        <activity
-            android:name=".feature_termine.MeetingCreateForm"
-            android:exported="true" />
-        <activity
-            android:name=".feature_termine.MeetingDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feature_termine.MeetingListActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -30,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".featureEvaluate.Evaluate" />
+        <activity android:name=".feature_evaluate.RatingList" />
+        <activity android:name=".feature_evaluate.RatingPage" />
 
     </application>
 

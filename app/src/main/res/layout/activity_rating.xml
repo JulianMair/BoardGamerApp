@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Titel -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spieleabend bewerten"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:paddingBottom="24dp" />
+
+            <!-- Gastgeber Bewertung -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gastgeber:"
+                android:textSize="18sp" />
+
+            <RatingBar
+                android:id="@+id/ratingHost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Essen Bewertung -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Essen:"
+                android:textSize="18sp" />
+
+            <RatingBar
+                android:id="@+id/ratingFood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Allgemeiner Abend Bewertung -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Abend allgemein:"
+                android:textSize="18sp" />
+
+            <RatingBar
+                android:id="@+id/ratingEvening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Freitext -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kommentar:"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editComment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:hint="Wie war der Abend? Schreibe deine Gedanken..."
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Speichern Button -->
+            <Button
+                android:id="@+id/btnSaveRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bewertung speichern"
+                android:padding="12dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
