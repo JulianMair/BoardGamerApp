@@ -32,9 +32,13 @@ public class MeetingCreateForm extends AppCompatActivity
     DialogFragment timepicker;
     String date_str = "";
     String time_str = "";
+    Button btnsave;
     Button btndate;
     Button btnCreateAppointment;
     TextView tvDateRes;
+    TextView tvTitle;
+    TextView tvLocation;
+    MeetingViewModel meetingViewModel;
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +46,14 @@ public class MeetingCreateForm extends AppCompatActivity
             EdgeToEdge.enable(this);
             setContentView(R.layout.activity_meeting_create_form);
 
+            btnsave = findViewById(R.id.btnSave);
             btndate = findViewById(R.id.btnSelect);
             btnCreateAppointment = findViewById(R.id.btnSave);
             tvDateRes = findViewById(R.id.tvDateResult);
+            tvTitle = findViewById(R.id.tvtitle);
+            tvLocation = findViewById(R.id.tvLocation);
+
+            meetingViewModel = new MeetingViewModel();
 
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
                 Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -60,6 +69,19 @@ public class MeetingCreateForm extends AppCompatActivity
 
             btnCreateAppointment.setOnClickListener(view -> {
 
+            });
+            // TODO: Host_id muss vom User kommen dh DUMMY
+            // TODO: Status = dummy
+            btnsave.setOnClickListener(view -> {
+                Meeting meeting = new Meeting(tvTitle.getText().toString(),
+                                              date_str,
+                                              time_str,
+                                              tvLocation.getText().toString(),
+                                              1,
+                                              "dummy");
+
+                meetingViewModel.insert(meeting);
+                finish();
             });
         }
 
