@@ -2,10 +2,12 @@ package de.iu.boardgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_termine.MeetingCreateForm;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnVoting = findViewById(R.id.btnVoting);
         Button btnFoodAdministration = findViewById(R.id.btnFoodAdministration);
 
-
+        btnAdministration.setOnClickListener(v ->
+                startActivity(new Intent(this, MeetingCreateForm.class)));
 
         //Activity aufrufen
 
