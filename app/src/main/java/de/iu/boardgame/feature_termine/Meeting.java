@@ -7,7 +7,7 @@ import  java.time.LocalDate;
 import java.time.LocalTime;
 
 
-@Entity(tableName = "meeting")
+@Entity(tableName = "meeting_table")
 public class Meeting {
     @PrimaryKey(autoGenerate = true)
     int meeting_id;

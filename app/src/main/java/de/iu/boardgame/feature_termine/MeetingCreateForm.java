@@ -53,7 +53,7 @@ public class MeetingCreateForm extends AppCompatActivity
             tvTitle = findViewById(R.id.tvtitle);
             tvLocation = findViewById(R.id.tvLocation);
 
-            meetingViewModel = new MeetingViewModel();
+            meetingViewModel = new MeetingViewModel(getApplication());
 
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
                 Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -81,7 +81,7 @@ public class MeetingCreateForm extends AppCompatActivity
                                               "dummy");
 
                 meetingViewModel.insert(meeting);
-                finish();
+                //finish();
             });
         }
 

@@ -1,10 +1,12 @@
 package de.iu.boardgame.feature_termine;
 
+import android.app.Application;
+
 public class MeetingViewModel {
     MeetingRepository meetingRepos;
 
-    public MeetingViewModel(){
-        meetingRepos = new MeetingRepository();
+    public MeetingViewModel(Application application){
+        meetingRepos = new MeetingRepository(application);
     }
 
     public void insert(Meeting meeting){

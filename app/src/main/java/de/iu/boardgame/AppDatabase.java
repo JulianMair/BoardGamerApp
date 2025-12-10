@@ -31,7 +31,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     //Erstellen/Öffnen der DB
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    AppDatabase.class, "meeting_database").build();
+                                    AppDatabase.class, "boardgame_database").build();
                 }
             }
         }
