@@ -2,11 +2,14 @@ package de.iu.boardgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
 import de.iu.boardgame.feature_spiele.GamesDatabase;
 import de.iu.boardgame.logging.AppLog;
+import de.iu.boardgame.R;
+import de.iu.boardgame.feature_termine.MeetingCreateForm;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
                 AppLog.e("BGA-MAIN", "DB test read failed: " + e.getMessage(), e);
             }
         }).start();
+        btnAdministration.setOnClickListener(v ->
+                startActivity(new Intent(this, MeetingCreateForm.class)));
 
         //Activity aufrufen
 
