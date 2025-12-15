@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
@@ -13,13 +14,29 @@ import java.util.concurrent.Executors;
 
 import de.iu.boardgame.logging.AppLog;
 
-@Database(entities = {Game.class}, version = 1, exportSchema = false)
+@Database(entities = {Game.class, de.iu.boardgame.feature_abstimmung.Vote.class}, version = 2, exportSchema = false)
 public abstract class GamesDatabase extends RoomDatabase {
 
     private static volatile GamesDatabase INSTANCE;
     private static final ExecutorService DB_EXECUTOR = Executors.newSingleThreadExecutor();
 
     public abstract GameDao gameDao();
+    public abstract de.iu.boardgame.feature_abstimmung.VoteDao voteDao();
+
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS votes (" +
+                            "meeting_id INTEGER NOT NULL, " +
+                            "user_id INTEGER NOT NULL, " +
+                            "game_id INTEGER NOT NULL, " +
+                            "PRIMARY KEY(meeting_id, user_id, game_id))"
+            );
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_votes_meeting_id ON votes(meeting_id)");
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_votes_meeting_id_user_id ON votes(meeting_id, user_id)");
+        }
+    };
 
     public static GamesDatabase getInstance(Context context) {
         if (INSTANCE == null) {
@@ -27,17 +44,17 @@ public abstract class GamesDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     AppLog.d("BGA-DB", "Creating Room instance...");
 
-                    INSTANCE = Room.databaseBuilder(
-                                    context.getApplicationContext(),
-                                    GamesDatabase.class,
-                                    "games_db"
-                            )
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), GamesDatabase.class, "games_db")
                             .addCallback(dbCallback)
+                            .addMigrations(MIGRATION_1_2)
                             .build();
                 }
             }
         }
         return INSTANCE;
+    }
+    public static void runDb(Runnable task) {
+        DB_EXECUTOR.execute(task);
     }
 
     private static final Callback dbCallback = new Callback() {
@@ -68,6 +85,7 @@ public abstract class GamesDatabase extends RoomDatabase {
             super.onOpen(db);
             AppLog.i("DB", "onOpen() -> DB opened (exists already or just created).");
         }
+
     };
 }
 

@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import de.iu.boardgame.feature_spiele.GamesDatabase;
+import de.iu.boardgame.feature_spiele.GamesListActivity;
+import de.iu.boardgame.feature_abstimmung.VoteGamesActivity;
 import de.iu.boardgame.logging.AppLog;
+import de.iu.boardgame.feature_termine.MeetingCreateForm;
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.MeetingCreateForm;
 
@@ -25,6 +28,27 @@ public class MainActivity extends AppCompatActivity {
         Button btnUser = findViewById(R.id.btnUser);
         Button btnVoting = findViewById(R.id.btnVoting);
         Button btnFoodAdministration = findViewById(R.id.btnFoodAdministration);
+
+        Button btnShowGames = findViewById(R.id.btnShowGames);
+        btnShowGames.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, GamesListActivity.class))
+        );
+
+        Button btnTestVoting = findViewById(R.id.btnTestVoting);
+        btnTestVoting.setOnClickListener(v -> {
+
+            // Mock-Daten zum Testen
+            //todo: echte Daten einfügen
+            long mockMeetingId = 1L;
+            long mockUserId = 1L;
+
+            Intent intent = new Intent(MainActivity.this, VoteGamesActivity.class);
+            intent.putExtra(VoteGamesActivity.EXTRA_MEETING_ID, mockMeetingId);
+            intent.putExtra("EXTRA_USER_ID", mockUserId); // nur für Test
+
+            startActivity(intent);
+        });
+
 
         // Triggert:
         // - DB existiert → nichts passiert

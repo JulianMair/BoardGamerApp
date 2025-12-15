@@ -4,7 +4,7 @@ import android.util.Log;
 
 public final class AppLog {
 
-    private static final String PREFIX = "BGA"; // damit du leicht filtern kannst
+    private static final String PREFIX = "BGA";
 
     private AppLog() {}
 

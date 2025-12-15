@@ -47,6 +47,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Essensauswahl öffnen" />
+
+        <Button
+            android:id="@+id/btnShowGames"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Spiele anzeigen" />
+
+        <Button
+            android:id="@+id/btnTestVoting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TEST: Abstimmung (Mock)" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
