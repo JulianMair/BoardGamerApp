@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
-    tools:context=".feature_termine.MeetingCreateForm">
+    tools:context=".feature_termine.ui.MeetingCreateForm">
 
     <ScrollView
         android:layout_width="match_parent"

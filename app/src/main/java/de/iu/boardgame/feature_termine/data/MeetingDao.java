@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_termine;
+package de.iu.boardgame.feature_termine.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

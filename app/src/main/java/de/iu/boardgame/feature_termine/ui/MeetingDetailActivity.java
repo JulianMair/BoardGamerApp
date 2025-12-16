@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_termine;
+package de.iu.boardgame.feature_termine.ui;
 
 import android.os.Bundle;
 

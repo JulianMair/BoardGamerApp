@@ -5,6 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.iu.boardgame.feature_termine.MeetingDetailActivity">
+    tools:context="de.iu.boardgame.feature_termine.ui.MeetingDetailActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
