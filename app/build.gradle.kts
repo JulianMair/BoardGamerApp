@@ -7,7 +7,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "de.iu.boardgame"
+        applicationId = "com.example.boardgamerapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -40,31 +40,4 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-    //----------------- Room dependencies ---------------------------------
-    val room_version = "2.8.4"
-
-    implementation("androidx.room:room-runtime:$room_version")
-
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$room_version")
-
-    // optional - RxJava2 support for Room
-    implementation("androidx.room:room-rxjava2:$room_version")
-
-    // optional - RxJava3 support for Room
-    implementation("androidx.room:room-rxjava3:$room_version")
-
-    // optional - Guava support for Room, including Optional and ListenableFuture
-    implementation("androidx.room:room-guava:$room_version")
-
-    // optional - Test helpers
-    testImplementation("androidx.room:room-testing:$room_version")
-
-    // optional - Paging 3 Integration
-    implementation("androidx.room:room-paging:$room_version")
-    //------------------End Room --------------------------------------------------
 }
-

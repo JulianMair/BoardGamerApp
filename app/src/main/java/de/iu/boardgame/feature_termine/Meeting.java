@@ -1,21 +1,20 @@
 package de.iu.boardgame.feature_termine;
-
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import androidx.room.ColumnInfo;
 import  java.time.LocalDate;
 import java.time.LocalTime;
 
 
-@Entity(tableName = "meeting_table")
+@Entity(tableName = "meeting")
 public class Meeting {
     @PrimaryKey(autoGenerate = true)
     int meeting_id;
     @ColumnInfo(name="date")
-    String date;
+    LocalDate date;
     @ColumnInfo(name="time")
-    String time;
+    LocalTime time;
     @ColumnInfo(name="location")
     String location;
     //@ForeignKey(entity = User.class, parentColumns = "user_id", childColumns = "host_id")
@@ -27,21 +26,7 @@ public class Meeting {
     @ColumnInfo(name="title")
     String title;
 
-    @ColumnInfo(name="evaluation_id")
-    int evaluation_id;
-
-
-    /**
-     * Die Daten werden in der MeetingCreateForm eingegeben
-     * Ausnahme: HOST_id muss vom User Objekt übergeben werden.
-     * @param title
-     * @param date
-     * @param time
-     * @param location
-     * @param host_id
-     * @param status
-     */
-    public Meeting(String title, String date, String time, String location, long host_id, String status) {
+    public Meeting(String title, LocalDate date, LocalTime time, String location, long host_id, String status) {
         this.title = title;
         this.date = date;
         this.time = time;
@@ -50,7 +35,7 @@ public class Meeting {
         this.status = status;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return this.date;
     }
 
@@ -58,11 +43,11 @@ public class Meeting {
         return this.location;
     }
 
-    public String getTime() {
+    public LocalTime getTime() {
         return this.time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
@@ -74,7 +59,7 @@ public class Meeting {
         return this.status;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -94,7 +79,4 @@ public class Meeting {
         return this.meeting_id;
     }
 
-    public void setEvaluation_id(int evaluation_id){this.evaluation_id = evaluation_id;}
-
-    public int getEvaluation_id(){return this.evaluation_id; }
 }
