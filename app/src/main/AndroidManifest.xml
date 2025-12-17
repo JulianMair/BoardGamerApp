@@ -24,6 +24,9 @@
         </activity>
         <activity android:name=".feature_evaluate.RatingList" />
         <activity android:name=".feature_evaluate.RatingPage" />
+        <activity android:name=".feature_send_message.ChatActivity"/>
+        <activity android:name=".feature_send_message.SendMessageActivity"/>
+
 
     </application>
 

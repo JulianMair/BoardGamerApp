@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import de.iu.boardgame.feature_evaluate.RatingList;
-import de.iu.boardgame.feature_evaluate.RatingPage;
+import de.iu.boardgame.feature_send_message.ChatActivity;
 import de.iu.boardgame.feature_termine.Meeting;
 
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHolder> {
@@ -63,7 +63,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         });
 
         holder.btnMessage.setOnClickListener(v -> {
-            // Öffne MessageActivity für diesen Termin
+            Intent intent = new Intent(context, ChatActivity.class);
+            context.startActivity(intent);
+
         });
     }
 
