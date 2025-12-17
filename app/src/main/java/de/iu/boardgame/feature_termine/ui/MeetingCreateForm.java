@@ -2,6 +2,7 @@ package de.iu.boardgame.feature_termine.ui;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -88,6 +89,12 @@ public class MeetingCreateForm extends AppCompatActivity
             //Activity beenden
             finish();
         });
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        startActivity(new Intent(MeetingCreateForm.this, MeetingListActivity.class));
     }
 
     @Override

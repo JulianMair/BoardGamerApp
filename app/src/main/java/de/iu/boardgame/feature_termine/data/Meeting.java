@@ -21,6 +21,14 @@ public class Meeting {
     @ColumnInfo(name="status")
     String status;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @ColumnInfo(name="title")
     String title;
 

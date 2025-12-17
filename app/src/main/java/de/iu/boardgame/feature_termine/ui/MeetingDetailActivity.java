@@ -1,27 +1,80 @@
 package de.iu.boardgame.feature_termine.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LiveData;
+
+import java.text.BreakIterator;
+import java.util.Objects;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_termine.data.Meeting;
+import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
+import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
 
 
 public class MeetingDetailActivity extends AppCompatActivity {
 
-    @Override
+    private TextView tvtitle;
+    private TextView tvdate;
+    private TextView tvtime;
+    private TextView tvlocation;
+    private TextView tvhost;
+    private Button btnBack;
+    private Button btnDelete;
+    private MeetingViewModel viewModel;
+    private int meetingId;
+    private LiveData<Meeting> currentMeeting;
+
+    @ Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_meeting_detail);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        tvdate = findViewById(R.id.tvdate);
+        tvtime = findViewById(R.id.tvtime);
+        tvlocation = findViewById(R.id.tvlocation);
+        tvhost = findViewById(R.id.tvhost);
+        tvtitle = findViewById(R.id.tvtitle);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnDelete = findViewById(R.id.btnDelete);
+
+        viewModel = new MeetingViewModel(getApplication());
+        meetingId = getIntent().getIntExtra("MEETING_ID", -1);
+
+        currentMeeting = viewModel.getcurrentMeeting(meetingId);
+
+        btnBack.setOnClickListener(view -> {
+           finish();
         });
+
+        btnDelete.setOnClickListener(view -> {
+            viewModel.deleteById(meetingId);
+            finish();
+        });
+
+        // Läd die Daten wenn sie vorhanden sind
+        viewModel.getcurrentMeeting(meetingId).observe(this, meeting -> {
+            if (meeting != null){
+                tvtitle.setText(meeting.getTitle());
+                tvdate.setText("Datum: " + meeting.getDate());
+                tvtime.setText("Uhrzeit: " + meeting.getLocation());
+                // TODO: den host namen getten
+                tvhost.setText("Gastgeber: " + meeting.getHost_id());
+                tvlocation.setText("Ort: " + meeting.getLocation());
+            }
+        });
+
     }
 }

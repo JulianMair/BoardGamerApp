@@ -1,5 +1,6 @@
 package de.iu.boardgame.feature_termine.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,14 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
 
     private List<Meeting> meetingList = new ArrayList<>();
 
+    // Methode zur definition des onCLickListeners
+    public interface OnItemClickListener {
+        void onItemClick(Meeting meeting);
+    }
+    private OnItemClickListener listener;
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
     public static class MeetingViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDate;
         private TextView tvlocation;
@@ -45,6 +54,13 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
         //Daten in die Textfelder schreiben (U M W A N D EL time?`?????)
         holder.tvDate.setText("Datum: " + currentMeeting.getDate());
         holder.tvlocation.setText(currentMeeting.getLocation());
+
+        //Klicks auf das Item anfangen
+        holder.itemView.setOnClickListener(view -> {
+            if(listener != null){
+                listener.onItemClick(currentMeeting);
+            }
+        });
     }
 
     @Override
@@ -54,6 +70,8 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
 
     public void setMeetings(List<Meeting> meetings){
         this.meetingList = meetings;
+        // Logge die Größe der neuen Liste
+        android.util.Log.d("ADAPTER_CHECK", "Neue Liste erhalten! Anzahl: " + meetings.size());
         notifyDataSetChanged();
     }
 }

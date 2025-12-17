@@ -36,7 +36,9 @@
                 android:layout_height="wrap_content"
                 android:hint="Bennene Deinen Abend"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:editable="false"
+                tools:ignore="Deprecated">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tvtitle"

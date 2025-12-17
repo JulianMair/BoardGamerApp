@@ -20,8 +20,9 @@ public interface MeetingDao {
     //READ
     @Query("SELECT * FROM meeting_table")
     List<Meeting> getAll();
+
     @Query("SELECT * FROM meeting_table WHERE meeting_id = :id")
-    Meeting getById(int id);
+    LiveData<Meeting> getById(int id);
 
     //UPDATE
     @Update
@@ -30,6 +31,10 @@ public interface MeetingDao {
     //DELETE
     @Delete
     void delete(Meeting meeting);
+
+    //Löschen per ID
+    @Query("DELETE FROM meeting_table WHERE meeting_id = :id")
+    void deleteById(int id);
 
     @Query("SELECT * FROM meeting_table ORDER BY date ASC")
     LiveData<List<Meeting>> getAllMeetings();

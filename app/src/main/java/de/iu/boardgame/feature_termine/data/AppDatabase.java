@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 public abstract class AppDatabase extends RoomDatabase {
    public abstract MeetingDao meetingDao();
 
-   // Signalton Logik
+   // Signalton Logik enthält die EInzige Instanz der DB
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
 
