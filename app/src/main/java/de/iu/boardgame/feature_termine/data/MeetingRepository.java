@@ -41,14 +41,10 @@ public class MeetingRepository {
     }
 
     public void insert(Meeting meeting){
-        Log.d("DB_DEBUG", "Starte Insert für: " + meeting.getTitle());
         AppDatabase.databaseWriteExecutor.execute(() -> {
             try {
-                Log.d("DB_DEBUG", "Starte Insert für: " + meeting.getTitle());
                 meetingDao.create(meeting);
-                Log.d("DB_DEBUG", "Insert ERFOLGREICH!");
-            } catch (Exception e) {
-                Log.e("DB_DEBUG", "FEHLER beim Insert: " + e.getMessage());
+            } catch (Exception e){
                 e.printStackTrace();
             }
         });

@@ -28,8 +28,6 @@ public class MeetingViewModel extends AndroidViewModel {
     }
 
     public void insert(Meeting meeting) {
-        int id = meeting.getMeeting_id();
-        Log.d("ID_TEST", "create: " + id);
         repository.insert(meeting);
     }
 

@@ -93,8 +93,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
         viewModel.getcurrentMeeting(meetingId).observe(this, meeting -> {
             if (meeting != null){
                 tvtitle.setText(meeting.getTitle());
-                tvdate.setText("Datum: " + meeting.getDate());
-                tvtime.setText("Uhrzeit: " + meeting.getLocation());
+                tvdate.setText("Datum: " + meeting.getFormatedDate());
+                tvtime.setText("Uhrzeit: " + meeting.getFormatedTime());
                 // TODO: den host namen getten
                 tvhost.setText("Gastgeber: " + meeting.getHost_id());
                 tvlocation.setText("Ort: " + meeting.getLocation());

@@ -21,6 +21,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 
+import java.util.Calendar;
+
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_termine.data.Meeting;
@@ -37,8 +39,7 @@ public class MeetingCreateForm extends AppCompatActivity
 
     DialogFragment datepicker;
     DialogFragment timepicker;
-    String date_str = "";
-    String time_str = "";
+    long timestamp;
     MaterialButton btnsave;
     Button btndate;
     MaterialButton btncancle;
@@ -47,6 +48,10 @@ public class MeetingCreateForm extends AppCompatActivity
     TextView tvLocation;
     MeetingViewModel meetingViewModel;
     int duration = Toast.LENGTH_SHORT;
+    private int year, month, day;
+    private int hour, minute;
+    Calendar c;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,8 @@ public class MeetingCreateForm extends AppCompatActivity
         tvLocation = findViewById(R.id.tvLocation);
         MeetingViewModelFactory factory = new MeetingViewModelFactory(this.getApplication());
         meetingViewModel = new ViewModelProvider(this, factory).get(MeetingViewModel.class);
+
+        c = Calendar.getInstance();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -82,8 +89,7 @@ public class MeetingCreateForm extends AppCompatActivity
         btnsave.setOnClickListener(view -> {
             Log.d("FEHLER", "1");
             Meeting meeting = new Meeting(tvTitle.getText().toString(),
-                                          date_str,
-                                          time_str,
+                                          c.getTimeInMillis(),
                                           tvLocation.getText().toString(),
                                           0,
                                           "dummy");
@@ -115,25 +121,21 @@ public class MeetingCreateForm extends AppCompatActivity
         timeFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
-    String create_date_str(int year, int month, int day){
-        return String.format("%02d/%02d/%04d", day, month, year);
-    }
-
-    String create_time_str(int hour, int min){
-        return String.valueOf(hour) + ":" + String.valueOf(min);
-    }
-
     @Override
     public void onDateSelected(int year, int month, int day) {
-        android.util.Log.d("DEBUG_DATE", "Activity: onDateSelected erreicht! Datum: " + day + "." + month);
-        this.date_str = create_date_str(year, month + 1, day);
+        this.year = year;
+        this.month = month;
+        this.day = day;
         create_Time_Dialog();
     }
 
     @Override
     public void onTimeSelected(int hour, int minute) {
-        time_str = create_time_str(hour, minute);
-        String tvShowString = "am: " + date_str + "\num: " + time_str + " Uhr";
-        tvDateRes.setText(tvShowString);
+        this.hour = hour;
+        this.minute = minute;
+
+
+        c.set(year, month, day, hour, minute);
+        tvDateRes.setText("am: " + day + "-" + month + "-" + year + "\num: " + hour + ":" + minute);
     }
 }

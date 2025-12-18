@@ -4,6 +4,10 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 
 @Entity(tableName = "meeting_table")
 public class Meeting {
@@ -35,7 +39,7 @@ public class Meeting {
      * @param host_id
      * @param status
      */
-    public Meeting(String title, long timestamp, String location, long host_id, String status) {
+    public Meeting(String title,long timestamp, String location, long host_id, String status) {
         this.title = title;
         this.timestamp = timestamp;
         this.location = location;
@@ -43,20 +47,16 @@ public class Meeting {
         this.status = status;
     }
 
-    public String getDate() {
-        return this.date;
+    public long getTimestmap() {
+        return this.timestamp;
     }
 
     public String getLocation() {
         return this.location;
     }
 
-    public String getTime() {
-        return this.time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setTimestamp(long timestamp){
+        this.timestamp = timestamp;
     }
 
     public long getHost_id() {
@@ -65,10 +65,6 @@ public class Meeting {
 
     public String getStatus() {
         return this.status;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public void setLocation(String location) {
@@ -94,8 +90,21 @@ public class Meeting {
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getFormatedDate(){
+        Date date = new Date(this.timestamp);
+        SimpleDateFormat formatierer = new SimpleDateFormat("dd-MM-yy", Locale.GERMANY);
+
+        return formatierer.format(date);
+    }
+
+    public String getFormatedTime(){
+        Date date = new Date(this.timestamp);
+        SimpleDateFormat formatierer = new SimpleDateFormat("HH:mm", Locale.GERMANY);
+
+        return formatierer.format(date);
     }
 }

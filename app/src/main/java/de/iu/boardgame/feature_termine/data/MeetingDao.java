@@ -18,7 +18,7 @@ public interface MeetingDao {
     void create(Meeting ... meeting);
 
     //READ
-    @Query("SELECT * FROM meeting_table")
+    @Query("SELECT * FROM meeting_table ORDER BY timestamp")
     List<Meeting> getAll();
 
     @Query("SELECT * FROM meeting_table WHERE meeting_id = :id")
@@ -36,7 +36,7 @@ public interface MeetingDao {
     @Query("DELETE FROM meeting_table WHERE meeting_id = :id")
     void deleteById(int id);
 
-    @Query("SELECT * FROM meeting_table ORDER BY date ASC")
+    @Query("SELECT * FROM meeting_table ORDER BY timestamp")
     LiveData<List<Meeting>> getAllMeetings();
 
 
