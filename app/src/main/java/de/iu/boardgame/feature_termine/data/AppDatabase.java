@@ -37,14 +37,17 @@ public abstract class AppDatabase extends RoomDatabase {
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
 
-            // Prepopulate im Hintergrund
             databaseWriteExecutor.execute(() -> {
                 try {
                     if (INSTANCE != null) {
                         GameDao dao = INSTANCE.gameDao();
-                        dao.insert(new Game("Catan", 90, "Strategie"));
-                        dao.insert(new Game("Codenames", 30, "Party"));
-                        dao.insert(new Game("Carcassonne", 45, "Familie"));
+
+                        // nur wenn leer
+                        if (dao.getAll().isEmpty()) {
+                            dao.insert(new Game("Catan", 90, "Strategie"));
+                            dao.insert(new Game("Codenames", 30, "Party"));
+                            dao.insert(new Game("Carcassonne", 45, "Familie"));
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
