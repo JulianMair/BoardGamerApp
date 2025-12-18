@@ -14,6 +14,7 @@ import android.util.Log;
 public class MeetingRepository {
 
     private static volatile MeetingRepository INSTANCE;
+    //################
     private final MeetingDao meetingDao;
     // Erstellt einen Thread pool zur Ausführung der db im Hintergrund
     //private final ExecutorService databaseWriteExecutor;
@@ -24,11 +25,15 @@ public class MeetingRepository {
         //Erstellen der DB
         //AppDatabase db = Room.databaseBuilder(application,AppDatabase.class, "boardgame_database").build();
         AppDatabase db = AppDatabase.getDatabase(application);
+
+        // ########
         meetingDao = db.meetingDao();
+
         allMeetings = meetingDao.getAllMeetings();
         //databaseWriteExecutor = Executors.newFixedThreadPool(4);
     }
 
+    // Erstellt eine INSTANCE oder gibt die bestehende zurück
     public static MeetingRepository getInstance(Application application) {
         if(INSTANCE == null){
             synchronized (MeetingRepository.class){
@@ -40,6 +45,7 @@ public class MeetingRepository {
         return INSTANCE;
     }
 
+    // -------------------- MEETING ----------------------------------------------
     public void insert(Meeting meeting){
         AppDatabase.databaseWriteExecutor.execute(() -> {
             try {
@@ -63,4 +69,6 @@ public class MeetingRepository {
     public LiveData<Meeting> getCurrentMeeting(int meetingId) {
         return meetingDao.getById(meetingId);
     }
+
+    //----------------------END MEETING -------------------------------------------
 }
