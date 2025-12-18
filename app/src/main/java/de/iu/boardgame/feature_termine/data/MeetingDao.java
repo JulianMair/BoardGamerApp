@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_termine;
+package de.iu.boardgame.feature_termine.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -18,10 +18,11 @@ public interface MeetingDao {
     void create(Meeting ... meeting);
 
     //READ
-    @Query("SELECT * FROM meeting_table")
+    @Query("SELECT * FROM meeting_table ORDER BY timestamp")
     List<Meeting> getAll();
+
     @Query("SELECT * FROM meeting_table WHERE meeting_id = :id")
-    Meeting getById(int id);
+    LiveData<Meeting> getById(int id);
 
     //UPDATE
     @Update
@@ -31,7 +32,11 @@ public interface MeetingDao {
     @Delete
     void delete(Meeting meeting);
 
-    @Query("SELECT * FROM meeting_table ORDER BY date ASC")
+    //Löschen per ID
+    @Query("DELETE FROM meeting_table WHERE meeting_id = :id")
+    void deleteById(int id);
+
+    @Query("SELECT * FROM meeting_table ORDER BY timestamp")
     LiveData<List<Meeting>> getAllMeetings();
 
 

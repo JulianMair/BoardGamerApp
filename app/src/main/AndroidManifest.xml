@@ -12,27 +12,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BoardGamerApp"
         tools:targetApi="31">
-
-        <activity android:name=".MainActivity"
-                   android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".feature_termine.MeetingCreateForm"
-            android:exported="true" />
-
-        <activity
-            android:name=".feature_termine.MeetingDetailActivity"
-            android:exported="false" />
-
         <activity
             android:name=".feature_termine.MeetingListActivity"
             android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".feature_termine.ui.MeetingCreateForm"
+            android:exported="true" />
+        <activity
+            android:name=".feature_termine.ui.MeetingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feature_termine.ui.MeetingListActivity"
+            android:exported="false" />
     </application>
+
 </manifest>

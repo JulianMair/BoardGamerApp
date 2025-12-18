@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import de.iu.boardgame.R;
-import de.iu.boardgame.feature_termine.MeetingCreateForm;
+import de.iu.boardgame.feature_termine.ui.MeetingCreateForm;
+import de.iu.boardgame.feature_termine.ui.MeetingListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnAdministration.setOnClickListener(v ->
                 startActivity(new Intent(this, MeetingCreateForm.class)));
+
+        btnAppointment.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, MeetingListActivity.class)));
 
         //Activity aufrufen
 
