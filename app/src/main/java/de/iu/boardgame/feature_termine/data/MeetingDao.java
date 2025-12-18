@@ -39,6 +39,8 @@ public interface MeetingDao {
     @Query("SELECT * FROM meeting_table ORDER BY timestamp")
     LiveData<List<Meeting>> getAllMeetings();
 
+    @Query("SELECT COUNT(*) FROM meeting_table")
+    int countMeetings();
 
 
 

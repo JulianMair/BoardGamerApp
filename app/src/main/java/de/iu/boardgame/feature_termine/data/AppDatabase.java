@@ -42,11 +42,44 @@ public abstract class AppDatabase extends RoomDatabase {
                     if (INSTANCE != null) {
                         GameDao dao = INSTANCE.gameDao();
 
-                        // nur wenn leer
-                        if (dao.getAll().isEmpty()) {
-                            dao.insert(new Game("Catan", 90, "Strategie"));
-                            dao.insert(new Game("Codenames", 30, "Party"));
-                            dao.insert(new Game("Carcassonne", 45, "Familie"));
+                        // ---------- Dummy Games ----------
+                        GameDao gameDao = INSTANCE.gameDao();
+                        if (gameDao.getAll().isEmpty()) {
+                            gameDao.insert(new Game("Catan", 90, "Strategie"));
+                            gameDao.insert(new Game("Codenames", 30, "Party"));
+                            gameDao.insert(new Game("Carcassonne", 45, "Familie"));
+                        }
+
+                        // ---------- Dummy Meetings ----------
+                        MeetingDao meetingDao = INSTANCE.meetingDao();
+                        if (meetingDao.countMeetings() == 0) {
+
+                            long now = System.currentTimeMillis();
+                            long oneDay = 24L * 60 * 60 * 1000;
+
+                            meetingDao.create(new Meeting(
+                                    "Spieleabend bei Anna",
+                                    now + oneDay,
+                                    "Bei Anna zuhause",
+                                    1L,
+                                    "open"
+                            ));
+
+                            meetingDao.create(new Meeting(
+                                    "Boardgame Night",
+                                    now + 3 * oneDay,
+                                    "Wohnung Markus",
+                                    1L,
+                                    "open"
+                            ));
+
+                            meetingDao.create(new Meeting(
+                                    "Familien-Spieleabend",
+                                    now - oneDay,
+                                    "Elternhaus",
+                                    2L,
+                                    "closed"
+                            ));
                         }
                     }
                 } catch (Exception e) {
