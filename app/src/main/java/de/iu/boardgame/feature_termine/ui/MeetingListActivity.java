@@ -2,8 +2,6 @@ package de.iu.boardgame.feature_termine.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import de.iu.boardgame.MainActivity;
 import de.iu.boardgame.feature_termine.ui.adapter.MeetingAdapter;
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
@@ -29,7 +26,7 @@ public class MeetingListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_meeting_list);
+        setContentView(R.layout.termine_activity_meeting_list);
         //factory = new MeetingViewModelFactory(this.getApplication());
         btnAdd = findViewById(R.id.btdAdd);
         meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);

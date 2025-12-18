@@ -1,27 +1,18 @@
 package de.iu.boardgame.feature_termine.ui;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
-
-import java.text.BreakIterator;
-import java.util.Objects;
 
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
-import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
 
 
 public class MeetingDetailActivity extends AppCompatActivity {
@@ -41,7 +32,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_meeting_detail);
+        setContentView(R.layout.termine_activity_meeting_detail);
 
         tvdate = findViewById(R.id.tvdate);
         tvtime = findViewById(R.id.tvtime);
