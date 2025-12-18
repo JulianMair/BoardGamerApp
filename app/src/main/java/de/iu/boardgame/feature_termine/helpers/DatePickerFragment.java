@@ -11,10 +11,13 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
-public class DatePickerFragment extends DialogFragment {
-    int selectedYear;
-    int selecteDay;
-    int selectedMonth;
+public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+    private DatePickerDialog.OnDateSetListener listener;
+
+    public interface DatePickerListener {
+        void onDateSelected(int year, int month, int day);
+    }
 
     @NonNull
     @Override
@@ -26,42 +29,25 @@ public class DatePickerFragment extends DialogFragment {
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it.
-        return new DatePickerDialog(
-                getActivity(),
-                (DatePickerDialog.OnDateSetListener) getActivity(),
-                year,
-                month,
-                day);
+        DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        DatePicker picker = dialog.getDatePicker();
+
+        picker.setMinDate(System.currentTimeMillis() -1000);
+
+        return dialog;
     }
+    @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        this.selecteDay = day;
-        this.selectedMonth = month;
-        this.selectedYear = year;
+
+        android.util.Log.d("DEBUG_DATE", "Fragment: onDateSet wurde aufgerufen!");
+
+        if (getActivity() == null) {
+            return;
+        }
+        // prüfen, ob die Activity das Interface implementiert
+        if (getActivity() instanceof DatePickerListener) {
+            android.util.Log.e("DEBUG_DATE", "Fragment: getActivity() ist NULL!");
+            ((DatePickerListener) getActivity()).onDateSelected(year, month, day);
+        }
     }
-
-    public void setDay(int day){
-        this.selecteDay = day;
-    }
-
-    public void setMonth(int month){
-        this.selectedMonth = month;
-    }
-
-    public void setYear(int year){
-        this.selectedYear = year;
-    }
-
-    public int getDay () {
-        return selecteDay;
-    }
-
-    public int getMonth() {
-        return selectedMonth;
-    }
-
-    public int getYear(){
-        return selectedYear;
-    }
-
-
 }

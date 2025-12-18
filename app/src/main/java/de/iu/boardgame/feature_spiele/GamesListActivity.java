@@ -14,14 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import de.iu.boardgame.R;
-
 import android.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import de.iu.boardgame.R;
 
 
 public class GamesListActivity extends AppCompatActivity {

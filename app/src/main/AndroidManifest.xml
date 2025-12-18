@@ -18,29 +18,23 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".feature_termine.MeetingCreateForm"
+            android:name=".feature_termine.ui.MeetingCreateForm"
             android:exported="true" />
 
         <activity
-            android:name=".feature_termine.MeetingDetailActivity"
+            android:name=".feature_termine.ui.MeetingDetailActivity"
             android:exported="false" />
 
         <activity
-            android:name=".feature_termine.MeetingListActivity"
+            android:name=".feature_termine.ui.MeetingListActivity"
             android:exported="false" />
 
-        <activity android:name=".feature_spiele.AddGameActivity" />
-
-        <activity android:name=".feature_spiele.GamesListActivity" />
-
-        <activity android:name=".feature_spiele.ManageGamesActivity" />
-
-        <activity android:name=".feature_abstimmung.VoteGamesActivity" />
 
     </application>
 </manifest>

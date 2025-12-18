@@ -31,3 +31,7 @@ status offen/vergeben
 11. überprüfen ob korrektes datum + zeit nach dem auswählen vorhanden sind
 12. Es wird das Speichern der angelegten Meetings benötigt -> ROOM
 13. Einarbeiten
+
+14. Löschen meetings per id damit nicht erst das objekt aus der db geholt werden muss
+
+15. Löschen der Termine wird nciht aktuallisert DetailAc und ListAc haben unterschiedliche Instancen von Repository verwendet, daher hat LiveDate nicht funktioniert.
