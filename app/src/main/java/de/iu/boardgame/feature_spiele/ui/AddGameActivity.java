@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_spiele;
+package de.iu.boardgame.feature_spiele.ui;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -7,13 +7,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_spiele.data.Game;
+import de.iu.boardgame.feature_spiele.viewmodel.GamesViewModel;
 
 public class AddGameActivity extends AppCompatActivity {
 
     private EditText etName, etDuration, etCategory;
     private Button btnSave;
+
+    private GamesViewModel gamesViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,9 @@ public class AddGameActivity extends AppCompatActivity {
         etDuration = findViewById(R.id.etGameDuration);
         etCategory = findViewById(R.id.etGameCategory);
         btnSave = findViewById(R.id.btnSaveGame);
+
+        // ✅ ViewModel holen
+        gamesViewModel = new ViewModelProvider(this).get(GamesViewModel.class);
 
         btnSave.setOnClickListener(v -> saveGame());
     }
@@ -52,17 +60,10 @@ public class AddGameActivity extends AppCompatActivity {
             }
         }
 
-        Game game = new Game(name, duration, category);
+        // ✅ über ViewModel speichern
+        gamesViewModel.insert(new Game(name, duration, category));
 
-        GamesDatabase db = GamesDatabase.getInstance(getApplicationContext());
-
-        GamesDatabase.runDb(() -> {
-            db.gameDao().insert(game);
-
-            runOnUiThread(() -> {
-                Toast.makeText(this, "Spiel gespeichert!", Toast.LENGTH_SHORT).show();
-                finish();
-            });
-        });
+        Toast.makeText(this, "Spiel gespeichert!", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

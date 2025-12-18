@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_spiele;
+package de.iu.boardgame.feature_spiele.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -10,44 +10,34 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_spiele.data.Game;
+import de.iu.boardgame.feature_spiele.ui.adapter.ManageGameAdapter;
+import de.iu.boardgame.feature_spiele.viewmodel.GamesViewModel;
 
 public class ManageGamesActivity extends AppCompatActivity implements ManageGameAdapter.Listener {
 
-    private GamesDatabase db;
     private ManageGameAdapter adapter;
+    private GamesViewModel gamesViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_games);
 
-        db = GamesDatabase.getInstance(getApplicationContext());
-
         RecyclerView rv = findViewById(R.id.rvGames);
         rv.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ManageGameAdapter(this);
         rv.setAdapter(adapter);
 
-        loadGames();
-    }
+        gamesViewModel = new ViewModelProvider(this).get(GamesViewModel.class);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadGames();
-    }
-
-    private void loadGames() {
-        GamesDatabase.runDb(() -> {
-            List<Game> games = db.gameDao().getAll();
-            runOnUiThread(() -> adapter.setItems(games));
-        });
+        // ✅ LiveData beobachten -> kein onResume/loadGames mehr nötig
+        gamesViewModel.getAllGames().observe(this, games -> adapter.setItems(games));
     }
 
     public void showAddDialog() {
@@ -63,16 +53,11 @@ public class ManageGamesActivity extends AppCompatActivity implements ManageGame
     public void onDelete(Game game) {
         new AlertDialog.Builder(this)
                 .setTitle("Spiel löschen")
-                .setMessage("Willst du \"" + game.name + "\" wirklich löschen?")
+                .setMessage("Willst du \"" + game.gameTitle + "\" wirklich löschen?")
                 .setNegativeButton("Abbrechen", null)
                 .setPositiveButton("Löschen", (d, w) -> {
-                    GamesDatabase.runDb(() -> {
-                        db.gameDao().deleteById(game.id);
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "Gelöscht", Toast.LENGTH_SHORT).show();
-                            loadGames();
-                        });
-                    });
+                    gamesViewModel.deleteById(game.id);
+                    Toast.makeText(this, "Gelöscht", Toast.LENGTH_SHORT).show();
                 })
                 .show();
     }
@@ -87,17 +72,10 @@ public class ManageGamesActivity extends AppCompatActivity implements ManageGame
         boolean isEdit = existing != null;
 
         if (isEdit) {
-            etName.setText(existing.name);
-            etDuration.setText(String.valueOf(existing.durationMinutes));
+            etName.setText(existing.gameTitle);
+            etDuration.setText(String.valueOf(existing.gameDuration));
             etCategory.setText(existing.category);
         }
-
-        new AlertDialog.Builder(this)
-                .setTitle(isEdit ? "Spiel bearbeiten" : "Spiel hinzufügen")
-                .setView(view)
-                .setNegativeButton("Abbrechen", null)
-                .setPositiveButton("Speichern", null) // wir überschreiben gleich, damit Validierung klappt
-                .create();
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(isEdit ? "Spiel bearbeiten" : "Spiel hinzufügen")
@@ -132,28 +110,19 @@ public class ManageGamesActivity extends AppCompatActivity implements ManageGame
 
             if (isEdit) {
                 // id behalten!
-                existing.name = name;
+                existing.gameTitle = name;
                 existing.category = category;
-                existing.durationMinutes = duration;
+                existing.gameDuration = duration;
 
-                GamesDatabase.runDb(() -> {
-                    db.gameDao().update(existing);
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Aktualisiert", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        loadGames();
-                    });
-                });
+                gamesViewModel.update(existing);
+
+                Toast.makeText(this, "Aktualisiert", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             } else {
-                Game g = new Game(name, duration, category);
-                GamesDatabase.runDb(() -> {
-                    db.gameDao().insert(g);
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Hinzugefügt", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        loadGames();
-                    });
-                });
+                gamesViewModel.insert(new Game(name, duration, category));
+
+                Toast.makeText(this, "Hinzugefügt", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
     }

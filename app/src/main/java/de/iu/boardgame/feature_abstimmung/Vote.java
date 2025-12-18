@@ -1,5 +1,6 @@
 package de.iu.boardgame.feature_abstimmung;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 
@@ -12,8 +13,11 @@ import androidx.room.Index;
         }
 )
 public class Vote {
+    @ColumnInfo(name="meeting_id")
     public long meeting_id;
+    @ColumnInfo(name="user_id")
     public long user_id;
+    @ColumnInfo(name="game_id")
     public long game_id;
 
     public Vote(long meeting_id, long user_id, long game_id) {

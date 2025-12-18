@@ -7,8 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import de.iu.boardgame.feature_abstimmung.VoteGamesActivity;
-import de.iu.boardgame.feature_spiele.GamesDatabase;
-import de.iu.boardgame.feature_spiele.GamesListActivity;
+import de.iu.boardgame.feature_spiele.ui.GamesListActivity;
 import de.iu.boardgame.feature_termine.ui.MeetingCreateForm;
 import de.iu.boardgame.feature_termine.ui.MeetingListActivity;
 
@@ -47,17 +46,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // Triggert:
-        // - DB existiert → nichts passiert
-        // - DB existiert nicht → onCreate + Dummy-Daten
-        GamesDatabase db = GamesDatabase.getInstance(this);
-
-        new Thread(() -> {
-            try {
-                int count = db.gameDao().getAll().size();
-            } catch (Exception e) {
-            }
-        }).start();
         btnAdministration.setOnClickListener(v ->
                 startActivity(new Intent(this, MeetingCreateForm.class)));
 

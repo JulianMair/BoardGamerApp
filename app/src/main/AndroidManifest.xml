@@ -35,6 +35,21 @@
             android:name=".feature_termine.ui.MeetingListActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".feature_spiele.ui.GamesListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".feature_spiele.ui.AddGameActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".feature_spiele.ui.ManageGamesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".feature_abstimmung.VoteGamesActivity"
+            android:exported="false" />
 
     </application>
 </manifest>

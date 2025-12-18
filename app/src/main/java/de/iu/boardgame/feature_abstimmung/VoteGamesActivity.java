@@ -12,16 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import de.iu.boardgame.R;
-import de.iu.boardgame.feature_abstimmung.GameVoteInfo;
-import de.iu.boardgame.feature_spiele.GamesDatabase;
-import de.iu.boardgame.feature_abstimmung.Vote;
+import de.iu.boardgame.feature_termine.data.AppDatabase;
 
 public class VoteGamesActivity extends AppCompatActivity implements VoteListAdapter.Listener {
 
     public static final String EXTRA_MEETING_ID = "meeting_id";
     public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
 
-    private GamesDatabase db;
+    private AppDatabase db;
     private long meetingId;
     private long userId;
 
@@ -56,7 +54,7 @@ public class VoteGamesActivity extends AppCompatActivity implements VoteListAdap
         }
 
 
-        db = GamesDatabase.getInstance(getApplicationContext());
+        db = AppDatabase.getDatabase(getApplicationContext());
 
         tvMyVotes = findViewById(R.id.tvMyVotes);
 
@@ -70,7 +68,7 @@ public class VoteGamesActivity extends AppCompatActivity implements VoteListAdap
     }
 
     private void load() {
-        GamesDatabase.runDb(() -> {
+        AppDatabase.runDb(() -> {
             int myCount = db.voteDao().countVotesByUser(meetingId, userId);
             List<GameVoteInfo> list = db.voteDao().getGamesWithVotes(meetingId, userId);
 
@@ -83,7 +81,7 @@ public class VoteGamesActivity extends AppCompatActivity implements VoteListAdap
 
     @Override
     public void onToggleVote(GameVoteInfo game) {
-        GamesDatabase.runDb(() -> {
+        AppDatabase.runDb(() -> {
             boolean alreadyVoted = game.isVotedByMe();
             if (alreadyVoted) {
                 db.voteDao().deleteVote(meetingId, userId, game.id);

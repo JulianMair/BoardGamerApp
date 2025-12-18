@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_spiele;
+package de.iu.boardgame.feature_spiele.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_spiele.data.Game;
 
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameVH> {
 
@@ -34,9 +35,9 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameVH> {
     @Override
     public void onBindViewHolder(@NonNull GameVH holder, int position) {
         Game g = items.get(position);
-        holder.tvName.setText(g.name);
+        holder.tvName.setText(g.gameTitle);
 
-        String meta = g.category + " • " + g.durationMinutes + " min";
+        String meta = g.category + " • " + g.gameDuration + " min";
         holder.tvMeta.setText(meta);
     }
 

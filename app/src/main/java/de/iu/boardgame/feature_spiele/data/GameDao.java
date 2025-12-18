@@ -1,7 +1,7 @@
-package de.iu.boardgame.feature_spiele;
+package de.iu.boardgame.feature_spiele.data;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -18,16 +18,15 @@ public interface GameDao {
     @Update
     int update(Game game);
 
-    @Delete
-    int delete(Game game);
+    @Query("SELECT * FROM games WHERE id = :id LIMIT 1")
+    LiveData<Game> getById(long id);
 
     @Query("DELETE FROM games WHERE id = :id")
-    int deleteById(long id);
+    void deleteById(long id);
 
-    @Query("SELECT * FROM games ORDER BY name")
+    @Query("SELECT * FROM games ORDER BY gameTitle")
     List<Game> getAll();
 
-    @Query("DELETE FROM games")
-    void deleteAll();
+    @Query("SELECT * FROM games ORDER BY gameTitle")
+    LiveData<List<Game>> getAllGames();
 }
-
