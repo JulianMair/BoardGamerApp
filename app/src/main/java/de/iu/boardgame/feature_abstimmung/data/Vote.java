@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_abstimmung;
+package de.iu.boardgame.feature_abstimmung.data;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

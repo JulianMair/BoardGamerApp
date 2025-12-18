@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_abstimmung;
+package de.iu.boardgame.feature_abstimmung.ui;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -6,25 +6,31 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import de.iu.boardgame.R;
-import de.iu.boardgame.feature_termine.data.AppDatabase;
+import de.iu.boardgame.feature_abstimmung.data.GameVoteInfo;
+import de.iu.boardgame.feature_abstimmung.ui.adapter.VoteListAdapter;
+import de.iu.boardgame.feature_abstimmung.viewmodel.VotesViewModel;
 
 public class VoteGamesActivity extends AppCompatActivity implements VoteListAdapter.Listener {
 
     public static final String EXTRA_MEETING_ID = "meeting_id";
     public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
 
-    private AppDatabase db;
     private long meetingId;
     private long userId;
 
     private TextView tvMyVotes;
     private VoteListAdapter adapter;
+
+    private VotesViewModel votesViewModel;
+
+    private int myCountCached = 0; // für Adapter-disable
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,11 +43,7 @@ public class VoteGamesActivity extends AppCompatActivity implements VoteListAdap
             return;
         }
 
-        // TODO: userId aus SharedPreferences holen. Aktuell gemocked.
-        // 1) aus Intent (Test)
         userId = getIntent().getLongExtra(EXTRA_USER_ID, -1L);
-
-        // 2) Fallback: aus SharedPrefs (Produktiv)
         if (userId <= 0) {
             userId = getSharedPreferences("app_prefs", MODE_PRIVATE)
                     .getLong("login_id", -1L);
@@ -53,49 +55,37 @@ public class VoteGamesActivity extends AppCompatActivity implements VoteListAdap
             return;
         }
 
-
-        db = AppDatabase.getDatabase(getApplicationContext());
-
         tvMyVotes = findViewById(R.id.tvMyVotes);
 
         RecyclerView rv = findViewById(R.id.rvVoteGames);
         rv.setLayoutManager(new LinearLayoutManager(this));
-
         adapter = new VoteListAdapter(this);
         rv.setAdapter(adapter);
 
-        load();
-    }
+        votesViewModel = new ViewModelProvider(this).get(VotesViewModel.class);
 
-    private void load() {
-        AppDatabase.runDb(() -> {
-            int myCount = db.voteDao().countVotesByUser(meetingId, userId);
-            List<GameVoteInfo> list = db.voteDao().getGamesWithVotes(meetingId, userId);
+        // ✅ Count beobachten
+        votesViewModel.getMyCount(meetingId, userId).observe(this, count -> {
+            int c = (count == null) ? 0 : count;
+            myCountCached = c;
+            tvMyVotes.setText("Deine Stimmen: " + c + "/3");
+            // Liste wird separat beobachtet, aber Adapter braucht den Count.
+            // setItems wird beim Listen-Observer aufgerufen.
+        });
 
-            runOnUiThread(() -> {
-                tvMyVotes.setText("Deine Stimmen: " + myCount + "/3");
-                adapter.setItems(list, myCount);
-            });
+        // ✅ Liste beobachten
+        votesViewModel.getGames(meetingId, userId).observe(this, list -> {
+            adapter.setItems(list, myCountCached);
         });
     }
 
     @Override
     public void onToggleVote(GameVoteInfo game) {
-        AppDatabase.runDb(() -> {
-            boolean alreadyVoted = game.isVotedByMe();
-            if (alreadyVoted) {
-                db.voteDao().deleteVote(meetingId, userId, game.id);
-            } else {
-                int myCount = db.voteDao().countVotesByUser(meetingId, userId);
-                if (myCount >= 3) {
-                    runOnUiThread(() ->
-                            Toast.makeText(this, "Maximal 3 Spiele pro User", Toast.LENGTH_SHORT).show()
-                    );
-                    return;
-                }
-                db.voteDao().insertVote(new Vote(meetingId, userId, game.id));
-            }
-            runOnUiThread(this::load);
-        });
+        votesViewModel.toggleVote(meetingId, userId, game,
+                () -> runOnUiThread(() ->
+                        Toast.makeText(this, "Maximal 3 Spiele pro User", Toast.LENGTH_SHORT).show()
+                )
+        );
+        // Kein reload nötig: LiveData aktualisiert automatisch, sobald DB geändert wurde.
     }
 }

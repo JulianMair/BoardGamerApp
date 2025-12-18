@@ -48,7 +48,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".feature_abstimmung.VoteGamesActivity"
+            android:name=".feature_abstimmung.ui.VoteGamesActivity"
             android:exported="false" />
 
     </application>

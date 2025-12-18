@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import de.iu.boardgame.feature_abstimmung.VoteGamesActivity;
+import de.iu.boardgame.feature_abstimmung.ui.VoteGamesActivity;
 import de.iu.boardgame.feature_spiele.ui.GamesListActivity;
 import de.iu.boardgame.feature_termine.ui.MeetingCreateForm;
 import de.iu.boardgame.feature_termine.ui.MeetingListActivity;

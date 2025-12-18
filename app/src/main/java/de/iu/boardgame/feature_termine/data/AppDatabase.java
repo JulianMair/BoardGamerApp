@@ -6,14 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.iu.boardgame.feature_abstimmung.Vote;
-import de.iu.boardgame.feature_abstimmung.VoteDao;
+import de.iu.boardgame.feature_abstimmung.data.Vote;
+import de.iu.boardgame.feature_abstimmung.data.VoteDao;
 import de.iu.boardgame.feature_spiele.data.Game;
 import de.iu.boardgame.feature_spiele.data.GameDao;
 
@@ -32,10 +31,6 @@ public abstract class AppDatabase extends RoomDatabase {
     // Execute fürs Repository
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-
-    public static void runDb(Runnable task) {
-        databaseWriteExecutor.execute(task);
-    }
 
     private static final Callback dbCallback = new Callback() {
         @Override

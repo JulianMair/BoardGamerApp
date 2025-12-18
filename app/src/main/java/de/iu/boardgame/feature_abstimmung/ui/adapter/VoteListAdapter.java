@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_abstimmung;
+package de.iu.boardgame.feature_abstimmung.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_abstimmung.data.GameVoteInfo;
 
 public class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.VH> {
 
