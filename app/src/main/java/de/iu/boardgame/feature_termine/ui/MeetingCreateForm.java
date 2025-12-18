@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -16,24 +17,31 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.button.MaterialButton;
 
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.helpers.DatePickerFragment;
 import de.iu.boardgame.feature_termine.helpers.TimePickerFragment;
+import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
+
+import de.iu.boardgame.feature_termine.helpers.DatePickerFragment;
+import de.iu.boardgame.feature_termine.helpers.TimePickerFragment;
 
 public class MeetingCreateForm extends AppCompatActivity
-            implements DatePickerDialog.OnDateSetListener,
-                       TimePickerDialog.OnTimeSetListener {
+            implements DatePickerFragment.DatePickerListener,
+            TimePickerFragment.TimePickerListener {
 
     DialogFragment datepicker;
     DialogFragment timepicker;
     String date_str = "";
     String time_str = "";
-    Button btnsave;
+    MaterialButton btnsave;
     Button btndate;
-    Button btnCreateAppointment;
+    MaterialButton btncancle;
     TextView tvDateRes;
     TextView tvTitle;
     TextView tvLocation;
@@ -46,14 +54,15 @@ public class MeetingCreateForm extends AppCompatActivity
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_meeting_create_form);
 
+
         btnsave = findViewById(R.id.btnSave);
         btndate = findViewById(R.id.btnSelect);
-        btnCreateAppointment = findViewById(R.id.btnSave);
+        btncancle = findViewById(R.id.btnCancel);
         tvDateRes = findViewById(R.id.tvDateResult);
         tvTitle = findViewById(R.id.tvtitle);
         tvLocation = findViewById(R.id.tvLocation);
-
-        meetingViewModel = new MeetingViewModel(getApplication());
+        MeetingViewModelFactory factory = new MeetingViewModelFactory(this.getApplication());
+        meetingViewModel = new ViewModelProvider(this, factory).get(MeetingViewModel.class);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -64,24 +73,24 @@ public class MeetingCreateForm extends AppCompatActivity
         // Öffnen des Datums auswahl Dialogs
         btndate.setOnClickListener(view -> {
             DatePickerFragment dateFragment = new DatePickerFragment();
+
             dateFragment.show(getSupportFragmentManager(), "datePicker");
         });
 
-        btnCreateAppointment.setOnClickListener(view -> {
-
-        });
         // TODO: Host_id muss vom User kommen dh DUMMY
         // TODO: Status = dummy
         btnsave.setOnClickListener(view -> {
+            Log.d("FEHLER", "1");
             Meeting meeting = new Meeting(tvTitle.getText().toString(),
                                           date_str,
                                           time_str,
                                           tvLocation.getText().toString(),
-                                          1,
+                                          0,
                                           "dummy");
 
-            //Speichern
+            Log.d("FEHLER", "2");
             meetingViewModel.insert(meeting);
+            Log.d("FEHLER", "3");
 
             // Feedback anzeigen
             Toast.makeText(MeetingCreateForm.this, "Dein Spieleabend wurde erstellt.", Toast.LENGTH_SHORT).show();
@@ -89,38 +98,42 @@ public class MeetingCreateForm extends AppCompatActivity
             //Activity beenden
             finish();
         });
+
+        btncancle.setOnClickListener(view -> {
+           finish();
+        });
     }
 
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        startActivity(new Intent(MeetingCreateForm.this, MeetingListActivity.class));
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        this.date_str = create_date_str(year, month, dayOfMonth);
-        create_Time_Dialog();
-    }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        time_str = create_time_str(hourOfDay, minute);
-        String tvShowString = "am: " + date_str + "\num: " + time_str + " Uhr";
-        tvDateRes.setText(tvShowString);
-
-    }
 
     public void create_Time_Dialog() {
+        //Doppelklick verhinden
+        if (getSupportFragmentManager().findFragmentByTag("timePicker") != null) {
+            return;
+        }
+
         TimePickerFragment timeFragment = new TimePickerFragment();
         timeFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     String create_date_str(int year, int month, int day){
-        return String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
+        return String.format("%02d/%02d/%04d", day, month, year);
     }
 
     String create_time_str(int hour, int min){
         return String.valueOf(hour) + ":" + String.valueOf(min);
+    }
+
+    @Override
+    public void onDateSelected(int year, int month, int day) {
+        android.util.Log.d("DEBUG_DATE", "Activity: onDateSelected erreicht! Datum: " + day + "." + month);
+        this.date_str = create_date_str(year, month + 1, day);
+        create_Time_Dialog();
+    }
+
+    @Override
+    public void onTimeSelected(int hour, int minute) {
+        time_str = create_time_str(hour, minute);
+        String tvShowString = "am: " + date_str + "\num: " + time_str + " Uhr";
+        tvDateRes.setText(tvShowString);
     }
 }

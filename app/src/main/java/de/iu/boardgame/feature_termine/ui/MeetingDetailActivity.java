@@ -1,5 +1,6 @@
 package de.iu.boardgame.feature_termine.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -60,8 +62,31 @@ public class MeetingDetailActivity extends AppCompatActivity {
         });
 
         btnDelete.setOnClickListener(view -> {
-            viewModel.deleteById(meetingId);
-            finish();
+            AlertDialog.Builder builder = new AlertDialog.Builder(MeetingDetailActivity.this);
+            builder.setTitle("Alle Achtung");
+            builder.setMessage("Weg damit?");
+
+            // Button 1 Ja -> löschen
+            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which){
+                    viewModel.deleteById(meetingId);
+                    finish();
+                }
+            });
+
+            // BUTTON 2 NEIN -> Abbrechen
+            builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Hier passiert nichts, Dialog schließt sich einfach
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
         });
 
         // Läd die Daten wenn sie vorhanden sind

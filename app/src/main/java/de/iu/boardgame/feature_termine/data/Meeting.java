@@ -9,10 +9,8 @@ import androidx.room.ColumnInfo;
 public class Meeting {
     @PrimaryKey(autoGenerate = true)
     int meeting_id;
-    @ColumnInfo(name="date")
-    String date;
-    @ColumnInfo(name="time")
-    String time;
+    @ColumnInfo(name="timestamp")
+    long timestamp;
     @ColumnInfo(name="location")
     String location;
     //@ForeignKey(entity = User.class, parentColumns = "user_id", childColumns = "host_id")
@@ -21,15 +19,7 @@ public class Meeting {
     @ColumnInfo(name="status")
     String status;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @ColumnInfo(name="title")
+    @ColumnInfo(name="Title")
     String title;
 
     @ColumnInfo(name="evaluation_id")
@@ -40,16 +30,14 @@ public class Meeting {
      * Die Daten werden in der MeetingCreateForm eingegeben
      * Ausnahme: HOST_id muss vom User Objekt übergeben werden.
      * @param title
-     * @param date
-     * @param time
+     * @param timestamp
      * @param location
      * @param host_id
      * @param status
      */
-    public Meeting(String title, String date, String time, String location, long host_id, String status) {
+    public Meeting(String title, long timestamp, String location, long host_id, String status) {
         this.title = title;
-        this.date = date;
-        this.time = time;
+        this.timestamp = timestamp;
         this.location = location;
         this.host_id = host_id;
         this.status = status;
@@ -102,4 +90,12 @@ public class Meeting {
     public void setEvaluation_id(int evaluation_id){this.evaluation_id = evaluation_id;}
 
     public int getEvaluation_id(){return this.evaluation_id; }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

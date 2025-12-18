@@ -48,15 +48,24 @@ public class MeetingListActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         //ViewModel beobachten
         meetingViewModel.getAllMeetings().observe(this, meetings -> {
             if(meetings != null) {
+                for(int i=0; i<meetings.size(); i++){
+                    meetings.get(i).getDate()
+                }
                 adapter.setMeetings(meetings);
             }
         });
 
+        //CreateForm öffnen
         btnAdd.setOnClickListener(v -> {
             startActivity(new Intent(MeetingListActivity.this, MeetingCreateForm.class));
         });
+    }
+
+    private dateConverter(String date){
+
     }
 }

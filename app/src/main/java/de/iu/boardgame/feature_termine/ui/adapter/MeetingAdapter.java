@@ -1,6 +1,5 @@
 package de.iu.boardgame.feature_termine.ui.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +28,12 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
     }
     public static class MeetingViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDate;
-        private TextView tvlocation;
+
+        private TextView tvTitle;
         public MeetingViewHolder(View view) {
             super(view);
-            this.tvDate = view.findViewById(R.id.tvItemDate);
-            this.tvlocation = view.findViewById(R.id.tvItemLocation);
+            this.tvDate = view.findViewById(R.id.tvItemDateTime);
+            this.tvTitle = view.findViewById(R.id.tvTitle);
         }
     }
 
@@ -51,9 +51,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
     public void onBindViewHolder(@NonNull MeetingViewHolder holder, int position) {
         Meeting currentMeeting = meetingList.get(position);
 
-        //Daten in die Textfelder schreiben (U M W A N D EL time?`?????)
-        holder.tvDate.setText("Datum: " + currentMeeting.getDate());
-        holder.tvlocation.setText(currentMeeting.getLocation());
+        //Daten in die Textfelder schreiben
+        holder.tvDate.setText("Datum:   " + currentMeeting.getDate() + "\nUhrzeit:  " + currentMeeting.getTime());
+        holder.tvTitle.setText(currentMeeting.getTitle());
 
         //Klicks auf das Item anfangen
         holder.itemView.setOnClickListener(view -> {

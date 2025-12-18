@@ -16,16 +16,17 @@ public class MeetingRepository {
     private static volatile MeetingRepository INSTANCE;
     private final MeetingDao meetingDao;
     // Erstellt einen Thread pool zur Ausführung der db im Hintergrund
-    private final ExecutorService databaseWriteExecutor;
+    //private final ExecutorService databaseWriteExecutor;
     private LiveData<List<Meeting>> allMeetings;
 
     //Verhindert neue Instanzen von außen
     private MeetingRepository(Application application){
         //Erstellen der DB
-        AppDatabase db = Room.databaseBuilder(application,AppDatabase.class, "boardgame_database").build();
+        //AppDatabase db = Room.databaseBuilder(application,AppDatabase.class, "boardgame_database").build();
+        AppDatabase db = AppDatabase.getDatabase(application);
         meetingDao = db.meetingDao();
         allMeetings = meetingDao.getAllMeetings();
-        databaseWriteExecutor = Executors.newFixedThreadPool(4);
+        //databaseWriteExecutor = Executors.newFixedThreadPool(4);
     }
 
     public static MeetingRepository getInstance(Application application) {
@@ -40,9 +41,16 @@ public class MeetingRepository {
     }
 
     public void insert(Meeting meeting){
+        Log.d("DB_DEBUG", "Starte Insert für: " + meeting.getTitle());
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            // Insert wird im Hintergrund ausgeführt
-            meetingDao.create(meeting);
+            try {
+                Log.d("DB_DEBUG", "Starte Insert für: " + meeting.getTitle());
+                meetingDao.create(meeting);
+                Log.d("DB_DEBUG", "Insert ERFOLGREICH!");
+            } catch (Exception e) {
+                Log.e("DB_DEBUG", "FEHLER beim Insert: " + e.getMessage());
+                e.printStackTrace();
+            }
         });
     }
 
