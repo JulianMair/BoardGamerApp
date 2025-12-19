@@ -15,33 +15,32 @@ import java.util.List;
 
 import de.iu.boardgame.feature_evaluate.RatingList;
 import de.iu.boardgame.feature_send_message.ChatActivity;
-import de.iu.boardgame.feature_termine.Meeting;
+import de.iu.boardgame.feature_termine.data.Meeting;
 
-public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHolder> {
+public class MeetingAdaptertest extends RecyclerView.Adapter<MeetingAdaptertest.ViewHolder> {
 
     private List<Meeting> events;
     private Context context;
 
-    public MeetingAdapter(Context context, List<Meeting> events) {
+    public MeetingAdaptertest(Context context, List<Meeting> events) {
         this.context = context;
         this.events = events;
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_meeting, parent, false);
+                .inflate(R.layout.main_item_meeting, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meeting event = events.get(position);
-        holder.tvDate.setText("📅 " + event.getDate());
+        holder.tvDate.setText("📅 " + event.getFormatedDate());
         holder.tvLocation.setText("📍 " + event.getLocation());
         holder.tvHost.setText("👤 " + event.getHost_id());
-        holder.tvTime.setText(""+ event.getTime());
+        holder.tvTime.setText(""+ event.getFormatedTime());
 
         // Buttons
         holder.btnEdit.setOnClickListener(v -> {

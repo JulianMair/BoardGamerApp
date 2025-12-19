@@ -1,5 +1,6 @@
 package de.iu.boardgame.feature_evaluate;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,9 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.Executors;
 
-import de.iu.boardgame.AppDatabase;
 import de.iu.boardgame.R;
 
 public class RatingPage extends AppCompatActivity {
@@ -46,23 +45,22 @@ public class RatingPage extends AppCompatActivity {
         }
 
         // Bewertung erstellen
-        MeetingRating rating = new MeetingRating(
-                host,
-                food,
-                evening,
-                comment,
-                LocalDateTime.now()
-        );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            MeetingRating rating = new MeetingRating(
+                    host,
+                    food,
+                    evening,
+                    comment,
+                    LocalDateTime.now()
+            );
+        }
 
         // Speichern in Datenbank (ASYNC!)
-        Executors.newSingleThreadExecutor().execute(() -> {
-            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
-            db.ratingDao().insert(rating);
 
             runOnUiThread(() -> {
                 Toast.makeText(this, "Bewertung gespeichert!", Toast.LENGTH_SHORT).show();
                 finish(); // Activity schließen, wenn gewünscht
             });
-        });
-    }
+    };
 }
+

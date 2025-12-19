@@ -12,14 +12,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.iu.boardgame.AppDatabase;
 import de.iu.boardgame.MainActivity;
 import de.iu.boardgame.R;
 
 public class RatingList extends AppCompatActivity {
 
     private RatingAdapter adapter;
-    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +32,6 @@ public class RatingList extends AppCompatActivity {
         adapter = new RatingAdapter();
         recyclerView.setAdapter(adapter);
 
-        //db = AppDatabase.getInstance(this);
 
         btnNewRating.setOnClickListener(v -> {
             startActivity(new Intent(RatingList.this, RatingPage.class));

@@ -22,20 +22,19 @@
         </activity>
 
         <activity
-            android:name=".feature_termine.MeetingCreateForm"
+            android:name=".feature_termine.ui.MeetingCreateForm"
             android:exported="true" />
 
         <activity
-            android:name=".feature_termine.MeetingDetailActivity"
+            android:name=".feature_termine.ui.MeetingDetailActivity"
             android:exported="false" />
 
         <activity
-            android:name=".feature_termine.MeetingListActivity"
+            android:name=".feature_termine.ui.MeetingListActivity"
             android:exported="false" />
 
         <activity android:name=".feature_evaluate.RatingList" />
         <activity android:name=".feature_evaluate.RatingPage" />
         <activity android:name=".feature_send_message.ChatActivity"/>
-        <activity android:name=".feature_send_message.SendMessageActivity"/>
     </application>
 </manifest>

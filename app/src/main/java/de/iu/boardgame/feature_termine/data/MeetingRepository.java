@@ -6,11 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import java.util.List;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import android.util.Log;
-
 public class MeetingRepository {
 
     private static volatile MeetingRepository INSTANCE;

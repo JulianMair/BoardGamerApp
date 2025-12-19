@@ -1,14 +1,9 @@
 package de.iu.boardgame.feature_termine.ui;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -29,9 +24,6 @@ import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.helpers.DatePickerFragment;
 import de.iu.boardgame.feature_termine.helpers.TimePickerFragment;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
-
-import de.iu.boardgame.feature_termine.helpers.DatePickerFragment;
-import de.iu.boardgame.feature_termine.helpers.TimePickerFragment;
 
 public class MeetingCreateForm extends AppCompatActivity
             implements DatePickerFragment.DatePickerListener,
@@ -61,7 +53,7 @@ public class MeetingCreateForm extends AppCompatActivity
 
 
         btnsave = findViewById(R.id.btnSave);
-        btndate = findViewById(R.id.btnSelect);
+        btndate = findViewById(R.id.pickTime);
         btncancle = findViewById(R.id.btnCancel);
         tvDateRes = findViewById(R.id.tvDateResult);
         tvTitle = findViewById(R.id.tvtitle);
