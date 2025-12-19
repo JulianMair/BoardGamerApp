@@ -13,8 +13,8 @@ import java.util.Locale;
 public class Meeting {
     @PrimaryKey(autoGenerate = true)
     int meeting_id;
-    @ColumnInfo(name="timestamp")
-    long timestamp;
+    @ColumnInfo(name="timestamp")   // Name in der Datenbank
+    long timestamp;                 // Name in Java
     @ColumnInfo(name="location")
     String location;
     //@ForeignKey(entity = User.class, parentColumns = "user_id", childColumns = "host_id")
@@ -31,13 +31,10 @@ public class Meeting {
 
 
     /**
-     * Die Daten werden in der MeetingCreateForm eingegeben
-     * Ausnahme: HOST_id muss vom User Objekt übergeben werden.
-     * @param title
-     * @param timestamp
-     * @param location
-     * @param host_id
-     * @param status
+     * Konstruktor
+     * WICHTIG: Room braucht diesen Konstruktor, um Daten zu lesen.
+     * meetingId und evaluationId werden nicht übergeben, da sie
+     * automatisch generiert oder später gesetzt werden.
      */
     public Meeting(String title,long timestamp, String location, long host_id, String status) {
         this.title = title;
@@ -47,6 +44,7 @@ public class Meeting {
         this.status = status;
     }
 
+    // --- Getter und Setter ---
     public long getTimestmap() {
         return this.timestamp;
     }
@@ -94,6 +92,13 @@ public class Meeting {
         this.title = title;
     }
 
+
+    // --- Hilfs-Methoden für die Anzeige ---
+
+    /**
+     * Gibt das Datum formatiert zurück.
+     * Beispiel: "am: 26-12-2025"
+     */
     public String getFormatedDate(){
         Date date = new Date(this.timestamp);
         SimpleDateFormat formatierer = new SimpleDateFormat("dd-MM-yy", Locale.GERMANY);
@@ -101,6 +106,10 @@ public class Meeting {
         return formatierer.format(date);
     }
 
+    /**
+     * Gibt die Zeit formatiert zurück.
+     * Beispiel: "um 15:30 Uhr"
+     */
     public String getFormatedTime(){
         Date date = new Date(this.timestamp);
         SimpleDateFormat formatierer = new SimpleDateFormat("HH:mm", Locale.GERMANY);

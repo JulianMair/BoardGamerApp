@@ -6,29 +6,41 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-// "Erklärt" wie man ein MeetingViewModel mit Application abhänigkeit erstellt
+/**
+ * Der 'ViewModelProvider' von Android kann standardmäßig nur ViewModels erstellen,
+ * die KEINE Parameter im Konstruktor haben (leerer Konstruktor).
+ *
+ * Da 'MeetingViewModel' aber die 'Application' braucht (für die Datenbank),
+ * Dient diese Factory als Bauanleitung für Android.
+ */
 public class MeetingViewModelFactory implements ViewModelProvider.Factory {
-    //Speichern der Abhänigkeit
+
+    // Zwischenspeierung der Application
     private final Application application;
 
-    // Konstruktor über den die Application übergeben wird
+    /**
+     * Konstruktor der Factory.
+     * Hier muss die Application EINMALIG von der Activity übergeben werden
+     */
     public MeetingViewModelFactory(@NonNull Application application){
         this.application = application;
     }
 
 
     /**
-     * Diese Methode wird vom ViewModelProvider aufgerufen, wenn er ein ViewModel erstellen soll.
+     * Diese Methode wird intern vom ViewModelProvider aufgerufen
      *
-     * @param modelClass Die Klasse des ViewModels, das erstellt werden soll (MeetingViewModel.class).
-     * @return Eine neue Instanz des angeforderten ViewModels.
+     * @param modelClass Die Klasse, die erstellt werden soll.
+     * @return Das fertig gebaute ViewModel mit allen Abhängigkeiten.
      */
-
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass){
-        // Prüfen ob MeetingViewModel angefordert wird
+        // Sicherheitscheck
         if(modelClass.isAssignableFrom(MeetingViewModel.class)) {
+            // manueler Konstruktor aufruf
+            // weitergabe der Application
+            // (T) ist ein Cast, damit Java weiß, dass es das richtige Rückgabeformat ist.
             return (T) new MeetingViewModel(application);
         }
         return null;
