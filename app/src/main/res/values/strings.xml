@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">BoardGamerApp</string>
+    <string name="spielname">Spielname</string>
+    <string name="dauer_minuten">Dauer (Minuten)</string>
+    <string name="kategorie">Kategorie</string>
+    <string name="speichern">Speichern</string>
+    <string name="spiele">Spiele</string>
+    <string name="default_spiele_name">Catan</string>
+    <string name="default_kategorie_spieldauer">Strategie • 90 min</string>
+    <string name="spiel_hinzuf_gen">Spiel hinzufügen</string>
+    <string name="spiele_verwalten">Spiele verwalten</string>
+    <string name="loeschen">Löschen</string>
+    <string name="bearbeiten">Bearbeiten</string>
+    <string name="default_abstimmung">12 Votes</string>
 </resources>

@@ -2,68 +2,109 @@ package de.iu.boardgame.feature_termine.data;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Zentrale Datenbank-Klasse (Room Database).
- * Hier werden alle Tabellen (Entities) registriert und die Datenbank-Instanz verwaltet.
- * * ACHTUNG TEAM: Wenn ihr neue Tabellen (z.B. Player) hinzufügt, müsst ihr sie
- * oben in der @Database Annotation bei "entities" ergänzen!
- */
-@Database(entities = {Meeting.class}, version = 1, exportSchema = false)
-public abstract class AppDatabase extends RoomDatabase {
+import de.iu.boardgame.feature_abstimmung.data.Vote;
+import de.iu.boardgame.feature_abstimmung.data.VoteDao;
+import de.iu.boardgame.feature_spiele.data.Game;
+import de.iu.boardgame.feature_spiele.data.GameDao;
 
-    /**
-     * Zugriffspunkt auf das DAO (Data Access Object) für Meetings.
-     * Room generiert den Code für diese Methode automatisch im Hintergrund.
-     * Für neue Tabellen (z.B. PlayerDao) hier einfach eine neue abstrakte Methode hinzufügen.
-     */
+@Database(entities = {Meeting.class, Game.class, Vote.class}, version = 3, exportSchema = false)
+public abstract class AppDatabase extends RoomDatabase {
     public abstract MeetingDao meetingDao();
 
-    // SINGLETON-PATTERN:
-    // Wir wollen nur EINE offene Datenbank-Verbindung für die gesamte App (Performance).
-    // 'volatile' stellt sicher, dass alle Threads sofort sehen, wenn die Instanz erstellt wurde.
-    private static volatile AppDatabase INSTANCE;
+    public abstract GameDao gameDao();
 
-    // Anzahl der Threads für Hintergrundoperationen
+    public abstract VoteDao voteDao();
+
+    // Signalton Logik enthält die EInzige Instanz der DB
+    private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
 
-    /**
-     * ExecutorService für Datenbank-Schreibvorgänge.
-     * WICHTIG: Datenbankzugriffe dürfen NIEMALS im Main-Thread (UI) laufen,
-     * sonst friert die App ein. Das Repository nutzt diesen Executor.
-     */
+    // Execute fürs Repository
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    /**
-     * Holt die Datenbank-Instanz. Wenn noch keine existiert, wird eine erstellt.
-     * @param context Der App-Kontext (meist ApplicationContext)
-     * @return Die Singleton-Instanz der Datenbank
-     */
+    private static final Callback dbCallback = new Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+
+            databaseWriteExecutor.execute(() -> {
+                try {
+                    if (INSTANCE != null) {
+                        GameDao dao = INSTANCE.gameDao();
+
+                        // ---------- Dummy Games ----------
+                        GameDao gameDao = INSTANCE.gameDao();
+                        if (gameDao.getAll().isEmpty()) {
+                            gameDao.insert(new Game("Catan", 90, "Strategie"));
+                            gameDao.insert(new Game("Codenames", 30, "Party"));
+                            gameDao.insert(new Game("Carcassonne", 45, "Familie"));
+                        }
+
+                        // ---------- Dummy Meetings ----------
+                        MeetingDao meetingDao = INSTANCE.meetingDao();
+                        if (meetingDao.countMeetings() == 0) {
+
+                            long now = System.currentTimeMillis();
+                            long oneDay = 24L * 60 * 60 * 1000;
+
+                            meetingDao.create(new Meeting(
+                                    "Spieleabend bei Anna",
+                                    now + oneDay,
+                                    "Bei Anna zuhause",
+                                    1L,
+                                    "open"
+                            ));
+
+                            meetingDao.create(new Meeting(
+                                    "Boardgame Night",
+                                    now + 3 * oneDay,
+                                    "Wohnung Markus",
+                                    1L,
+                                    "open"
+                            ));
+
+                            meetingDao.create(new Meeting(
+                                    "Familien-Spieleabend",
+                                    now - oneDay,
+                                    "Elternhaus",
+                                    2L,
+                                    "closed"
+                            ));
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    };
+
+    //Methode mit der das Repository die DB bekommt
     public static AppDatabase getDatabase(final Context context) {
-        // Erste Prüfung: Gibt es schon eine Instanz?
         if (INSTANCE == null) {
-            // synchronized verhindert, dass zwei Threads gleichzeitig eine DB erstellen (Race Condition)
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    AppDatabase.class, "boardgame_database")
-                                    // WICHTIG: Bei Änderungen an der Tabellenstruktur (Version-Erhöhung)
-                                    // wird hier die alte DB gelöscht und neu erstellt.
-                                    // TODO: Für die Produktion später Migrations-Skripte schreiben!
-                                    .fallbackToDestructiveMigration()
-                                    .build();
+                    INSTANCE = Room.databaseBuilder(
+                                    context.getApplicationContext(),
+                                    AppDatabase.class,
+                                    "boardgame_database"
+                            )
+                            .addCallback(dbCallback)
+                            .fallbackToDestructiveMigration()
+                            .build();
                 }
             }
         }
         return INSTANCE;
     }
-
-
 }

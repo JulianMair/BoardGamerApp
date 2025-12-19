@@ -12,9 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BoardGamerApp"
         tools:targetApi="31">
-        <activity
-            android:name=".feature_termine.MeetingListActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,15 +22,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".feature_termine.ui.MeetingCreateForm"
             android:exported="true" />
+
         <activity
             android:name=".feature_termine.ui.MeetingDetailActivity"
             android:exported="false" />
+
         <activity
             android:name=".feature_termine.ui.MeetingListActivity"
             android:exported="false" />
-    </application>
 
+        <activity
+            android:name=".feature_spiele.ui.GamesListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".feature_spiele.ui.AddGameActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".feature_spiele.ui.ManageGamesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".feature_abstimmung.ui.VoteGamesActivity"
+            android:exported="false" />
+
+    </application>
 </manifest>
