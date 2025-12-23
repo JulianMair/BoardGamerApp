@@ -11,31 +11,52 @@ import java.util.concurrent.Executors;
 
 import android.util.Log;
 
+/**
+ * Das Repository fungiert als "Single Source of Truth".
+ * Es verwaltet den Datenzugriff und entscheidet, ob Daten aus einer lokalen Datenbank
+ * oder (später vielleicht) aus dem Netzwerk kommen.
+ * Das ViewModel kennt nur dieses Repository, nicht die Datenbank direkt.
+ */
 public class MeetingRepository {
 
+    // Singleton-Instanz: volatile sorgt dafür, dass alle Threads sofort mitbekommen,
+    // wenn die Instanz erstellt wurde (Thread-Safety).
     private static volatile MeetingRepository INSTANCE;
-    //################
+
+    // Das DAO ist das Werkzeug, um die SQL-Befehle auszuführen
     private final MeetingDao meetingDao;
-    // Erstellt einen Thread pool zur Ausführung der db im Hintergrund
-    //private final ExecutorService databaseWriteExecutor;
+
+    // LiveData: Ein Container, der beobachtet werden kann.
+    // Wenn sich die DB ändert, wird diese Liste automatisch aktualisiert.
     private LiveData<List<Meeting>> allMeetings;
 
-    //Verhindert neue Instanzen von außen
+    /**
+     * Privater Konstruktor: Verhindert, dass von außen einfach 'new MeetingRepository()'
+     * aufgerufen werden kann. Nutzung nur über getInstance().
+     */
     private MeetingRepository(Application application){
-        //Erstellen der DB
-        //AppDatabase db = Room.databaseBuilder(application,AppDatabase.class, "boardgame_database").build();
+        // Erstellen / Holen der Datenbank-Instanz
         AppDatabase db = AppDatabase.getDatabase(application);
 
-        // ########
+        // Wir initialisieren das DAO über die Datenbank
         meetingDao = db.meetingDao();
 
+        // Wir laden direkt die LiveData-Referenz. Das löst noch keine Query aus,
+        // sondern bereitet die Beobachtung vor.
         allMeetings = meetingDao.getAllMeetings();
-        //databaseWriteExecutor = Executors.newFixedThreadPool(4);
+
     }
 
-    // Erstellt eine INSTANCE oder gibt die bestehende zurück
+    /**
+     * Singleton-Pattern Implementierung:
+     * Stellt sicher, dass es in der gesamten App nur genau EIN Repository gibt.
+     * Das spart Speicher und verhindert Daten-Chaos.
+     * @param application Der App-Context wird für die Datenbank benötigt.
+     * @return Die einzige Instanz des Repositories.
+     */
     public static MeetingRepository getInstance(Application application) {
         if(INSTANCE == null){
+            // synchronized verhindert, dass zwei Threads gleichzeitig eine Instanz erstellen
             synchronized (MeetingRepository.class){
                 if(INSTANCE == null){
                     INSTANCE = new MeetingRepository(application);
@@ -46,6 +67,11 @@ public class MeetingRepository {
     }
 
     // -------------------- MEETING ----------------------------------------------
+    /**
+     * Fügt ein neues Meeting hinzu.
+     * WICHTIG: Wir nutzen 'AppDatabase.databaseWriteExecutor', um das in einem
+     * Hintergrund-Thread zu machen. Datenbank-Schreibvorgänge dürfen NIE im Main-Thread (UI) laufen!
+     */
     public void insert(Meeting meeting){
         AppDatabase.databaseWriteExecutor.execute(() -> {
             try {
@@ -56,16 +82,28 @@ public class MeetingRepository {
         });
     }
 
+    /**
+     * Gibt die LiveData-Liste zurück.
+     * Das ViewModel beobachtet diese Methode. Sobald ein Insert/Delete passiert,
+     * liefert Room automatisch die neuen Daten hierhin.
+     */
     public LiveData<List<Meeting>> getAllMeetings() {
         return allMeetings;
     }
 
+    /**
+     * Löscht ein Meeting anhand der ID im Hintergrund.
+     */
     public void deleteById(int id) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             meetingDao.deleteById(id);
         });
     }
 
+    /**
+     * Holt ein einzelnes Meeting für die Detailansicht.
+     * Rückgabewert ist LiveData, damit auch Änderungen im Detail-Screen sofort sichtbar werden.
+     */
     public LiveData<Meeting> getCurrentMeeting(int meetingId) {
         return meetingDao.getById(meetingId);
     }
