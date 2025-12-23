@@ -10,6 +10,8 @@ import de.iu.boardgame.feature_abstimmung.ui.VoteGamesActivity;
 import de.iu.boardgame.feature_spiele.ui.GamesListActivity;
 import de.iu.boardgame.feature_termine.ui.MeetingCreateForm;
 import de.iu.boardgame.feature_termine.ui.MeetingListActivity;
+import de.iu.boardgame.feature_user.helpers.SessionManager;
+import de.iu.boardgame.feature_user.ui.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
 
         btnAppointment.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, MeetingListActivity.class)));
+
+        Button btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            SessionManager.clearCurrentUserId(MainActivity.this);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
 
     }
 }
