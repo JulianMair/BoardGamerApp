@@ -15,14 +15,18 @@ import de.iu.boardgame.feature_abstimmung.data.Vote;
 import de.iu.boardgame.feature_abstimmung.data.VoteDao;
 import de.iu.boardgame.feature_spiele.data.Game;
 import de.iu.boardgame.feature_spiele.data.GameDao;
+import de.iu.boardgame.feature_user.data.User;
+import de.iu.boardgame.feature_user.data.UserDao;
 
-@Database(entities = {Meeting.class, Game.class, Vote.class}, version = 3, exportSchema = false)
+@Database(entities = {Meeting.class, Game.class, Vote.class, User.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MeetingDao meetingDao();
 
     public abstract GameDao gameDao();
 
     public abstract VoteDao voteDao();
+
+    public abstract UserDao userDao();
 
     // Signalton Logik enthält die EInzige Instanz der DB
     private static volatile AppDatabase INSTANCE;
@@ -81,6 +85,15 @@ public abstract class AppDatabase extends RoomDatabase {
                                     "closed"
                             ));
                         }
+
+                        // ---------- Dummy Users ----------
+                        try {
+                            UserDao userDao = INSTANCE.userDao();
+                            if (userDao.getAll().isEmpty()) {
+                                userDao.insert(new User("Anna", "anna@example.com", "0171123456", "Musterstrasse 1", true));
+                                userDao.insert(new User("Markus", "markus@example.com", "0171987654", "Hauptstrasse 5", false));
+                            }
+                        } catch (Exception ignored) { }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

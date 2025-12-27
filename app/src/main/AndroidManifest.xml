@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BoardGamerApp"
         tools:targetApi="31">
-    <activity>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -21,12 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".feature_termine.ui.MeetingCreateForm"
             android:exported="true" />
+
         <activity
             android:name=".feature_termine.ui.MeetingDetailActivity"
             android:exported="false" />
+
         <activity
             android:name=".feature_termine.ui.MeetingListActivity"
             android:exported="false" />
@@ -48,9 +52,12 @@
             android:exported="false" />
 
 
-        <activity android:name=".feature_evaluate.RatingList" />
-        <activity android:name=".feature_evaluate.RatingPage" />
-        <activity android:name=".feature_send_message.ChatActivity"/>
-    </application>
+        <activity android:name=".feature_evaluate.ui.RatingAtivity" />
+        <activity android:name=".feature_evaluate.ui.RatingListActivity" />
+        <activity android:name=".feature_send_message.ui.ChatActivity"/>
+        <activity
+            android:name=".feature_user.ui.LoginActivity"
+            android:exported="false" />
 
+    </application>
 </manifest>
