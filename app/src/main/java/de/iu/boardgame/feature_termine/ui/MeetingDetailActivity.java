@@ -13,6 +13,8 @@ import androidx.lifecycle.LiveData;
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
+import de.iu.boardgame.feature_user.data.User;
+import de.iu.boardgame.feature_user.helpers.SessionManager;
 
 /**
  * Diese Activity zeigt die Details eines einzelnen Termins an.
@@ -33,7 +35,9 @@ public class MeetingDetailActivity extends AppCompatActivity {
     // Logik
     private MeetingViewModel viewModel;
     private int meetingId;
-    private LiveData<Meeting> currentMeeting;
+    //private LiveData<Meeting> currentMeeting;
+    private Meeting currentMeeting;
+
 
     @ Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
         meetingId = getIntent().getIntExtra("MEETING_ID", -1);
 
 
-        currentMeeting = viewModel.getcurrentMeeting(meetingId);
+        //currentMeeting = viewModel.getcurrentMeeting(meetingId);
 
         // Zurück Button
         btnBack.setOnClickListener(view -> {
@@ -73,31 +77,39 @@ public class MeetingDetailActivity extends AppCompatActivity {
         // Löschen Button: Sicherheits Dialog
         btnDelete.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(MeetingDetailActivity.this);
-            builder.setTitle("Alle Achtung");
-            builder.setMessage("Weg damit?");
+            if(isMyMeeting()) {
+                builder.setTitle("Alle Achtung");
+                builder.setMessage("Weg damit?");
 
-            // Button 1 Ja -> löschen
-            builder.setPositiveButton("Ja", new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which){
-                    // Befehl ans ViewModel: "Lösch das Ding aus der Datenbank"
-                    viewModel.deleteById(meetingId);
-                    finish();
-                }
-            });
+                // Button 1 Ja -> löschen
+                builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Befehl ans ViewModel: "Lösch das Ding aus der Datenbank"
+                        viewModel.deleteById(meetingId);
+                        finish();
+                    }
+                });
 
-            // BUTTON 2 NEIN -> Abbrechen
-            builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Hier passiert nichts, Dialog schließt sich einfach
-                    dialog.dismiss();
-                }
-            });
+                // BUTTON 2 NEIN -> Abbrechen
+                builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Hier passiert nichts, Dialog schließt sich einfach
+                        dialog.dismiss();
+                    }
+                });
 
-            // Dialog anzeigen
-            AlertDialog dialog = builder.create();
-            dialog.show();
+                // Dialog anzeigen
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else{
+                builder.setTitle("Zugriff verweigert");
+                builder.setMessage("Dieser Termin kann nur vom Gastgeber gelöscht werden.");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
 
         });
 
@@ -109,6 +121,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
             // Wenn wir das Meeting gerade gelöscht haben, feuert LiveData evtl. nochmal 'null'.
             // Ohne das 'if' würde die App hier abstürzen.
             if (meeting != null){
+                currentMeeting = meeting;
                 tvtitle.setText(meeting.getTitle());
 
                 // Hier nutzen wir unsere schönen Formatier-Methoden aus der Meeting-Klasse
@@ -120,5 +133,10 @@ public class MeetingDetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean isMyMeeting() {
+        // Überprüft ob das Meeting dem aktuell Eingelogten User gehört
+        return SessionManager.getCurrentUserId(MeetingDetailActivity.this) == currentMeeting.getHost_id();
     }
 }

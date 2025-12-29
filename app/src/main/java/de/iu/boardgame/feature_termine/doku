@@ -1,5 +1,5 @@
 1. Klassen Struktur angelegt
-2. Date -> helper objekt erstellt
+2. Date -> helper objekt erstellt<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 2. Meeting -> room objekt
 3. PROBLEM: room dependency nicht vorhanden
 4. room dependency in gradle.kts hinzugefügt

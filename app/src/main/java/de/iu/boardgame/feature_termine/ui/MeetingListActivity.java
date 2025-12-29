@@ -41,7 +41,6 @@ public class MeetingListActivity extends AppCompatActivity {
 
         // --- 1. VIEWMODEL SETUP ---
         // #############################################################################
-        //meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
         MeetingViewModelFactory factory = new MeetingViewModelFactory(this.getApplication());
         meetingViewModel = new ViewModelProvider(this, factory).get(MeetingViewModel.class);
 
@@ -56,7 +55,7 @@ public class MeetingListActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(meeting -> {
            Intent intent = new Intent(MeetingListActivity.this, MeetingDetailActivity.class);
 
-            // Wir packen die ID des angeklickten Meetings in den "Rucksack" des Intents.
+            // Wir packen die ID des angeklickten Meetings in den Intent.
             // In der DetailActivity holen wir sie wieder raus.
             // (Hinweis: Achte drauf, dass der Getter in Meeting.java 'getMeetingId' heißt, camelCase!)
            intent.putExtra("MEETING_ID", meeting.getMeeting_id());

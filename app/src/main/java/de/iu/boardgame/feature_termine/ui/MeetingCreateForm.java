@@ -24,6 +24,7 @@ import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.helpers.DatePickerFragment;
 import de.iu.boardgame.feature_termine.helpers.TimePickerFragment;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
+import de.iu.boardgame.feature_user.helpers.SessionManager;
 
 /**
  * Activity zum Erstellen eines neuen Termins.
@@ -101,11 +102,7 @@ public class MeetingCreateForm extends AppCompatActivity
         // TODO: Status ist vorerst fest auf "dummy"
         btnsave.setOnClickListener(view -> {
             // Neues Meeting-Objekt erstellen
-            Meeting meeting = new Meeting(tvTitle.getText().toString(),
-                                          c.getTimeInMillis(),
-                                          tvLocation.getText().toString(),
-                                          0,
-                                          "dummy");
+            Meeting meeting = createMeeting();
 
             // An das ViewModel übergeben (Das kümmert sich um DB-Speicherung im Hintergrund)
             meetingViewModel.insert(meeting);
@@ -121,6 +118,24 @@ public class MeetingCreateForm extends AppCompatActivity
         btncancle.setOnClickListener(view -> {
            finish();        // Schließt einfach das Fenster ohne Speichern
         });
+    }
+
+    private Meeting createMeeting() {
+        long currentUserId = SessionManager.getCurrentUserId(MeetingCreateForm.this);
+
+        Meeting meeting;
+        if (currentUserId == -1) {
+            Toast.makeText(this, "Fehler: Kein User eingeloggt!", Toast.LENGTH_SHORT).show();
+            return null; // Abbrechen
+        } else {
+            meeting = new Meeting(tvTitle.getText().toString(),
+                    c.getTimeInMillis(),
+                    tvLocation.getText().toString(),
+                    currentUserId,
+                    "open");
+        }
+
+        return meeting;
     }
 
 
