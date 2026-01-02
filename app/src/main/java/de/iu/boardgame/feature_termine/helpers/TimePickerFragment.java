@@ -47,7 +47,7 @@ public class TimePickerFragment extends DialogFragment
         // 'DateFormat.is24HourFormat': Prüft, ob der User am Handy 12h (AM/PM) oder 24h eingestellt hat
         // und passt den Dialog automatisch daran an.
         // TODO: Auf 24h ändern
-        return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+        return new TimePickerDialog(getActivity(), this, hour, minute, true);
     }
 
     /**

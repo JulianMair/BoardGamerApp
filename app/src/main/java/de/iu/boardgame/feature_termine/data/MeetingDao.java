@@ -28,6 +28,9 @@ public interface MeetingDao {
 
     @Query("SELECT * FROM meeting_table WHERE meeting_id = :id")
     LiveData<Meeting> getById(int id);
+    //Gibt für die Anzeige keine Meetings zurück die drei oder mehr Tage in der Vergangenheit liegen
+    @Query("SELECT * FROM meeting_table WHERE status != 'closed' OR timestamp > :historyLimit ORDER BY timestamp")
+    LiveData<List<Meeting>> getRelevantMeetings(long historyLimit);
 
     // --- UPDATE ---
     /**

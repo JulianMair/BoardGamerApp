@@ -26,6 +26,7 @@ import de.iu.boardgame.feature_termine.helpers.TimePickerFragment;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
 import de.iu.boardgame.feature_user.helpers.SessionManager;
 
+
 /**
  * Activity zum Erstellen eines neuen Termins.
  * * WICHTIG: Diese Klasse implementiert zwei Interfaces (DatePickerListener, TimePickerListener).
@@ -49,12 +50,13 @@ public class MeetingCreateForm extends AppCompatActivity
 
     // Logik-Elemente
     MeetingViewModel meetingViewModel;
+    SessionManager usersession;
     int duration = Toast.LENGTH_SHORT;
 
     // Temporäre Speicher für das Datum, bevor wir speichern
     private int year, month, day;
     private int hour, minute;
-    Calendar c;
+    Calendar c = null;
 
 
     @Override
@@ -99,8 +101,11 @@ public class MeetingCreateForm extends AppCompatActivity
 
         // 3. SCHRITT: Speichern
         // TODO: Host_id muss vom User kommen (Login-System noch nicht fertig), daher 0
-        // TODO: Status ist vorerst fest auf "dummy"
         btnsave.setOnClickListener(view -> {
+
+            if(!validateInput()){
+                return;
+            }
             // Neues Meeting-Objekt erstellen
             Meeting meeting = createMeeting();
 
@@ -134,7 +139,6 @@ public class MeetingCreateForm extends AppCompatActivity
                     currentUserId,
                     "open");
         }
-
         return meeting;
     }
 
@@ -161,7 +165,7 @@ public class MeetingCreateForm extends AppCompatActivity
         this.month = month;
         this.day = day;
 
-        // Workflow: Sobald das Datum gewählt ist, öffnen wir sofort die Uhrzeit-Auswahl
+        // Sobald das Datum gewählt ist, öffnen sich die Uhrzeit-Auswahl
         create_Time_Dialog();
     }
 
@@ -179,6 +183,42 @@ public class MeetingCreateForm extends AppCompatActivity
         // UI Update: Dem User zeigen, was er gewählt hat.
         // ACHTUNG BEIM MONAT: Java Calendar zählt Monate von 0 (Jan) bis 11 (Dez).
         // Für die Anzeige müssen wir also (month + 1) rechnen!
-        tvDateRes.setText("am: " + day + "-" + month+1 + "-" + year + "\num: " + hour + ":" + minute);
+        tvDateRes.setText(String.format("am: %02d-%02d-%d\num: %02d:%02d", day, (month+1), year, hour, minute));
+    }
+
+    /**
+     * Prüft alle Eingabefelder.
+     * Setzt Fehlertexte an den Feldern, falls nötig.
+     * @return true, wenn alles valide ist.
+     */
+    private boolean validateInput(){
+        boolean isValid = true;
+
+        // 1. Text auslesen und Leerzeichen am Rand entfernen
+        String title = tvTitle.getText().toString().trim();
+        String location = tvLocation.getText().toString().trim();
+        String datetime = tvDateRes.getText().toString();
+
+        // 2. Titel prüfen
+        if(title.isEmpty()){
+            tvTitle.setError("Titel darf nicht leer sein");
+            tvTitle.requestFocus(); // Springt in das Feld
+            isValid = false;
+        }
+        // Mindest länge
+        else if (title.length() < 3) {
+            tvTitle.setError("Titel muss mind. 3 Zeichen haben");
+            isValid = false;
+        }
+
+        // 3. Adresse prüfen
+        if(location.isEmpty()){
+            tvLocation.setError("Bitte eine Adresse eingeben");
+            if(isValid) {
+                tvLocation.requestFocus(); // Springt in das Feld
+            }
+            isValid = false;
+        }
+        return isValid;
     }
 }
