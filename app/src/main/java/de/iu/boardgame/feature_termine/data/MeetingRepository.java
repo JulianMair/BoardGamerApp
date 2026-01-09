@@ -108,5 +108,29 @@ public class MeetingRepository {
         return meetingDao.getById(meetingId);
     }
 
-    //----------------------END MEETING -------------------------------------------
+    /**
+     * Für die Anzeige in der Liste (Gefiltert)
+     */
+    public LiveData<List<Meeting>> getDisplayMeetings() {
+        return meetingDao.getRelevantMeetings(getHistoryLimit());
+    }
+
+    public void update(Meeting meeting) {
+        meetingDao.update(meeting);
+    }
+
+    // Zeitgrenze berechnen (3 Tage)
+    private long getHistoryLimit() {
+        long now = System.currentTimeMillis();
+        long threeDaysInMillis = 3L * 24 * 60 * 60 * 1000;
+        return now - threeDaysInMillis;
+    }
+    private long getHistoryLimit1() {
+        long now = System.currentTimeMillis();
+        // WICHTIG: Das 'L' hinter der 24 sorgt dafür, dass Java als Long rechnet
+        // und keinen Überlauf produziert (obwohl 1 Tag noch in Integer passt).
+        long oneDayInMillis = 1L * 24 * 60 * 60 * 1000;
+
+        return now - oneDayInMillis;
+    }
 }

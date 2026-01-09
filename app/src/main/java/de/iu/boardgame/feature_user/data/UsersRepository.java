@@ -41,6 +41,10 @@ public class UsersRepository {
         });
     }
 
+    public User getUserByIdSync(long id) {
+        return userDao.getUserByIdSync(id);
+    }
+
     public interface InsertCallback { void onInserted(long id); }
 
     public void insertWithCallback(User user, InsertCallback callback){

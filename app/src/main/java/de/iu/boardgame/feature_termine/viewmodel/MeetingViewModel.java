@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import de.iu.boardgame.feature_termine.data.AppDatabase;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.data.MeetingRepository;
 
@@ -21,6 +22,7 @@ public class MeetingViewModel extends AndroidViewModel {
 
     // Cache für die Liste aller Meetings (LiveData)
     private final LiveData<List<Meeting>> allMeetings;
+    private final LiveData<List<Meeting>> displayMeetings;
 
     /**
      * Konstruktor
@@ -36,6 +38,7 @@ public class MeetingViewModel extends AndroidViewModel {
         // Hollt den "Live-Ticker" aller Meetings.
         // Das Repository läd die Daten aus der DB
         allMeetings = repository.getAllMeetings();
+        displayMeetings = repository.getDisplayMeetings();
     }
 
     /**
@@ -67,4 +70,13 @@ public class MeetingViewModel extends AndroidViewModel {
     public LiveData<Meeting> getcurrentMeeting(int meetingId) {
         return repository.getCurrentMeeting(meetingId);
     }
+
+    public void update(Meeting meeting){
+        AppDatabase.databaseWriteExecutor.execute (() -> {
+            repository.update(meeting);
+        });
+    }
+
+    // Getter für die UI
+    public LiveData<List<Meeting>> getDisplayMeetings() { return displayMeetings; }
 }

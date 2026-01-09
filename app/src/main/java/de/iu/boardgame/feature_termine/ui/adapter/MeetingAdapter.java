@@ -43,10 +43,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
     // --- VIEWHOLDER ---
     // Der ViewHolder ist ein "Cache". Er merkt sich die Textfelder einer Zeile,
     // damit Android nicht bei jedem Scrollen neu nach 'findViewById' suchen muss.
-    // Das macht die Liste flüssig (Performance).
+    // Das macht die Liste flüssig
     public static class MeetingViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDate;
-
         private TextView tvTitle;
         public MeetingViewHolder(View view) {
             super(view);
@@ -87,7 +86,6 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
                 listener.onItemClick(currentMeeting);
             }
         });
-        Log.d("CRASH", "2");
     }
 
     // Sagt dem RecyclerView, wie viele Elemente die Liste insgesamt hat.
@@ -106,5 +104,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
 
         // WICHTIG: Sagt dem RecyclerView, das die Daten sich geändert haben und neu gezeichnet werden müssen"
         notifyDataSetChanged();
+    }
+
+    public List<Meeting> getMeetings(){
+        return this.meetingList;
     }
 }
