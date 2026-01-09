@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import de.iu.boardgame.feature_abstimmung.ui.VoteGamesActivity;
 import de.iu.boardgame.feature_spiele.ui.GamesListActivity;
 import de.iu.boardgame.feature_termine.ui.MeetingCreateForm;
 import de.iu.boardgame.feature_termine.ui.MeetingListActivity;
@@ -31,22 +30,6 @@ public class MainActivity extends AppCompatActivity {
         btnShowGames.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, GamesListActivity.class))
         );
-
-        Button btnTestVoting = findViewById(R.id.btnTestVoting);
-        btnTestVoting.setOnClickListener(v -> {
-
-            // Mock-Daten zum Testen
-            //todo: echte Daten einfügen
-            long mockMeetingId = 1L;
-            long mockUserId = 1L;
-
-            Intent intent = new Intent(MainActivity.this, VoteGamesActivity.class);
-            intent.putExtra(VoteGamesActivity.EXTRA_MEETING_ID, mockMeetingId);
-            intent.putExtra("EXTRA_USER_ID", mockUserId); // nur für Test
-
-            startActivity(intent);
-        });
-
 
         btnAdministration.setOnClickListener(v ->
                 startActivity(new Intent(this, MeetingCreateForm.class)));
