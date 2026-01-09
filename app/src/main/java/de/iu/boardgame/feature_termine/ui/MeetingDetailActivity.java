@@ -1,18 +1,24 @@
 package de.iu.boardgame.feature_termine.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_abstimmung.ui.VoteGamesActivity;
+import de.iu.boardgame.feature_abstimmung.viewmodel.VotesViewModel;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
+import de.iu.boardgame.feature_user.helpers.SessionManager;
 
 /**
  * Diese Activity zeigt die Details eines einzelnen Termins an.
@@ -27,11 +33,14 @@ public class MeetingDetailActivity extends AppCompatActivity {
     private TextView tvtime;
     private TextView tvlocation;
     private TextView tvhost;
+    private TextView tvTopGame;
     private Button btnBack;
     private Button btnDelete;
+    private Button btnVoteGames;
 
     // Logik
     private MeetingViewModel viewModel;
+    private VotesViewModel votesViewModel;
     private int meetingId;
     private LiveData<Meeting> currentMeeting;
 
@@ -47,15 +56,18 @@ public class MeetingDetailActivity extends AppCompatActivity {
         tvlocation = findViewById(R.id.tvlocation);
         tvhost = findViewById(R.id.tvhost);
         tvtitle = findViewById(R.id.tvtitle);
+        tvTopGame = findViewById(R.id.tvTopGame);
 
         btnBack = findViewById(R.id.btnBack);
         btnDelete = findViewById(R.id.btnDelete);
+        btnVoteGames = findViewById(R.id.btnVoteGames);
 
         // --- VIEWMODEL INITIALISIEREN ---
         // TODO: Viewmodel darf nicht mit new erstellt werden!!!
         //        sMeetingViewModelFactory factory = new MeetingViewModelFactory(this.getApplication());
         //        viewModel = new ViewModelProvider(this, factory).get(MeetingViewModel.class);
         viewModel = new MeetingViewModel(getApplication());
+        votesViewModel = new ViewModelProvider(this).get(VotesViewModel.class);
 
         // --- DATEN EMPFANGEN ---
         // Wir holen die ID, die uns die MeetingListActivity (Adapter) mitgeschickt hat.
@@ -68,6 +80,19 @@ public class MeetingDetailActivity extends AppCompatActivity {
         // Zurück Button
         btnBack.setOnClickListener(view -> {
            finish();
+        });
+
+        btnVoteGames.setOnClickListener(view -> {
+            long userId = SessionManager.getCurrentUserId(this);
+            if (userId <= 0) {
+                Toast.makeText(this, "Kein User eingeloggt", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent intent = new Intent(MeetingDetailActivity.this, VoteGamesActivity.class);
+            intent.putExtra(VoteGamesActivity.EXTRA_MEETING_ID, (long) meetingId);
+            intent.putExtra(VoteGamesActivity.EXTRA_USER_ID, userId);
+            startActivity(intent);
         });
 
         // Löschen Button: Sicherheits Dialog
@@ -120,5 +145,17 @@ public class MeetingDetailActivity extends AppCompatActivity {
             }
         });
 
+        votesViewModel.getTopVotedGame(meetingId).observe(this, game -> {
+            if (game == null) {
+                tvTopGame.setText("Noch keine Spiele");
+                return;
+            }
+
+            if (game.voteCount <= 0) {
+                tvTopGame.setText("Noch keine Stimmen");
+            } else {
+                tvTopGame.setText(game.name + " (" + game.voteCount + " Stimmen)");
+            }
+        });
     }
 }
