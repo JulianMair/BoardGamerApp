@@ -10,171 +10,242 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:paddingBottom="24dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_revert"
+                android:contentDescription="Zurück"
+                app:tint="#6200EE"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/tvPageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Details"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                app:layout_constraintStart_toEndOf="@id/btnBack"
+                app:layout_constraintTop_toTopOf="@id/btnBack"
+                app:layout_constraintBottom_toBottomOf="@id/btnBack" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tvtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-black"
             android:textColor="@color/black"
-            android:textSize="32sp"
+            android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Spieleabend" />
+            app:layout_constraintTop_toBottomOf="@id/headerRow"
+            tools:text="Spieleabend Catan" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
             android:layout_marginTop="24dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
             app:cardBackgroundColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tvtitle">
+            app:layout_constraintTop_toBottomOf="@id/tvtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="24dp">
+
+                <ImageButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_delete"
+                    app:tint="#D32F2F"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/tvdate"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:drawablePadding="16dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
                     android:textColor="#333333"
                     app:drawableStartCompat="@android:drawable/ic_menu_my_calendar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/btnDelete"
+                    app:layout_constraintBottom_toBottomOf="@id/btnDelete"
+                    app:layout_constraintEnd_toStartOf="@id/btnDelete"
                     tools:text="12.12.2024" />
 
                 <View
+                    android:id="@+id/sep1"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="#EEEEEE" />
+                    android:background="#EEEEEE"
+                    app:layout_constraintTop_toBottomOf="@id/tvdate"/>
 
                 <TextView
                     android:id="@+id/tvtime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:drawablePadding="16dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
                     android:textColor="#333333"
                     app:drawableStartCompat="@android:drawable/ic_menu_recent_history"
+                    app:layout_constraintTop_toBottomOf="@id/sep1"
                     tools:text="19:00 Uhr" />
 
                 <View
+                    android:id="@+id/sep2"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="#EEEEEE" />
+                    android:background="#EEEEEE"
+                    app:layout_constraintTop_toBottomOf="@id/tvtime"/>
 
                 <TextView
                     android:id="@+id/tvlocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:drawablePadding="16dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
                     android:textColor="#333333"
                     app:drawableStartCompat="@android:drawable/ic_menu_mapmode"
+                    app:layout_constraintTop_toBottomOf="@id/sep2"
                     tools:text="Musterstraße 1" />
 
                 <View
+                    android:id="@+id/sep3"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="#EEEEEE" />
+                    android:background="#EEEEEE"
+                    app:layout_constraintTop_toBottomOf="@id/tvlocation"/>
 
                 <TextView
                     android:id="@+id/tvhost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:drawablePadding="16dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
                     android:textColor="#333333"
                     app:drawableStartCompat="@android:drawable/ic_menu_myplaces"
+                    app:layout_constraintTop_toBottomOf="@id/sep3"
                     tools:text="Max Mustermann" />
 
                 <View
+                    android:id="@+id/sep4"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="#EEEEEE" />
+                    android:background="#EEEEEE"
+                    app:layout_constraintTop_toBottomOf="@id/tvhost"/>
 
-                <TextView
-                    android:layout_width="match_parent"
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchStatus"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Top-Spiel"
-                    android:textColor="#111111"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvTopGame"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Planung offen"
+                    android:textSize="14sp"
                     android:textColor="#333333"
-                    android:textSize="16sp"
-                    tools:text="Catan (3 Stimmen)" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sep4"/>
 
-                <Button
-                    android:id="@+id/btnVoteGames"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Spiele auswählen" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFood"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Essen"
+                    android:textColor="#FF9800"
+                    app:icon="@android:drawable/ic_menu_agenda"
+                    app:iconTint="#FF9800"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/switchStatus"
+                    app:layout_constraintBottom_toBottomOf="@id/switchStatus"/>
 
-            </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddGame"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Spiel +"
+                    android:textColor="#6200EE"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconTint="#6200EE"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toStartOf="@id/btnFood"
+                    app:layout_constraintTop_toTopOf="@id/switchStatus"
+                    app:layout_constraintBottom_toBottomOf="@id/switchStatus"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
+
+        <TextView
+            android:id="@+id/tvGamesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vorgeschlagene Spiele"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="24dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardDetails"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvGames"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/cardDetails"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="1.0">
-
-            <Button
-                android:id="@+id/btnBack"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:text="Zurück"
-                android:textColor="@color/black"
-                app:strokeColor="@color/black" />
-
-            <Space
-                android:layout_width="16dp"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/btnDelete"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:backgroundTint="#D32F2F"
-                android:text="Löschen"
-                android:textColor="@android:color/white"
-                app:icon="@android:drawable/ic_menu_delete"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp" />
-
-        </LinearLayout>
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintTop_toBottomOf="@id/tvGamesLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:itemCount="3"
+            tools:listitem="@android:layout/simple_list_item_1"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -8,8 +8,13 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import de.iu.boardgame.feature_termine.data.AppDatabase;
 import de.iu.boardgame.feature_user.data.User;
 import de.iu.boardgame.feature_user.data.UsersRepository;
+
+// --- Hinzugefügt für Feature "Termine" ---
+// Ermöglicht Zugriff aufs User Objekt ohne Hintergrund Thread und observe
+import java.util.function.Consumer;
 
 public class UsersViewModel extends AndroidViewModel {
     private final UsersRepository repository;
@@ -30,4 +35,18 @@ public class UsersViewModel extends AndroidViewModel {
     public void deleteUser(long id){
         repository.deleteById(id);
     }
+
+
+    // --- Hinzugefügt für Feature "Termine" ---
+    // Ermöglicht Zugriff aufs User Objekt ohne Hintergrund Thread und observe
+    public void getUserByIdOneShot(long id, Consumer<User> callback){
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            // Holt den User im Hintergrund ohne den Main-Thread zu blockieren
+            User user = repository.getUserByIdSync(id);
+
+            // Gibt das Ergebnis zurück, wenn es da ist
+            callback.accept(user);
+        });
+    }
+
 }

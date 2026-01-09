@@ -2,6 +2,10 @@ package de.iu.boardgame.feature_termine.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,10 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
+import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.ui.adapter.MeetingAdapter;
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
+import de.iu.boardgame.feature_user.data.User;
+import de.iu.boardgame.feature_user.viewmodel.UsersViewModel;
 
 /**
  * Die Haupt-Activity für Termine.
@@ -24,8 +33,13 @@ import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
 public class MeetingListActivity extends AppCompatActivity {
 
     private MeetingViewModel meetingViewModel;
-    MeetingViewModelFactory factory;
-    FloatingActionButton btnAdd;
+    private UsersViewModel userViewModel;
+    private TextView tvNextHostName;
+    private MeetingViewModelFactory factory;
+    private FloatingActionButton btnAdd;
+    private ImageButton btnBack;
+    private MeetingAdapter adapter;
+    private List<User> loadedUsers = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,28 +51,28 @@ public class MeetingListActivity extends AppCompatActivity {
 
         // Views verbinden
         btnAdd = findViewById(R.id.btdAdd);
+        btnBack = findViewById(R.id.btnBack);
+        tvNextHostName = findViewById(R.id.tvNextHostName);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         // --- 1. VIEWMODEL SETUP ---
         // #############################################################################
-        //meetingViewModel = new ViewModelProvider(this).get(MeetingViewModel.class);
         MeetingViewModelFactory factory = new MeetingViewModelFactory(this.getApplication());
         meetingViewModel = new ViewModelProvider(this, factory).get(MeetingViewModel.class);
-
+        // Usermodel Setup
+        userViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
 
         // --- 2. RECYCLERVIEW SETUP ---
 
         // a) Der Adapter (Der Kellner, der die Daten bringt)
-        MeetingAdapter adapter = new MeetingAdapter();
+        adapter = new MeetingAdapter();
 
         // b) Klick-Logik definieren
-        // Wir nutzen hier das Interface, das wir im Adapter gebaut haben.
+        // Interfaces des Adapters nutzen
         adapter.setOnItemClickListener(meeting -> {
            Intent intent = new Intent(MeetingListActivity.this, MeetingDetailActivity.class);
 
-            // Wir packen die ID des angeklickten Meetings in den "Rucksack" des Intents.
-            // In der DetailActivity holen wir sie wieder raus.
-            // (Hinweis: Achte drauf, dass der Getter in Meeting.java 'getMeetingId' heißt, camelCase!)
+            // Übergeben der ID des angeklickten Meetings in den Intent.
            intent.putExtra("MEETING_ID", meeting.getMeeting_id());
            startActivity(intent);
         });
@@ -71,13 +85,26 @@ public class MeetingListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // --- 3. BEOBACHTEN (OBSERVER) ---
-        // Das ist die Live-Verbindung zur Datenbank.
-        // Immer wenn sich in der DB etwas ändert (Insert/Delete), läuft dieser Code hier ab.
+        // Live-Verbindung zur Datenbank.
+        // Immer wenn sich in der DB etwas ändert (Insert/Delete), wird der Code aufgerufen.
+        meetingViewModel.getDisplayMeetings().observe(this, meetings -> {
+            if(meetings != null) {
+                // NEUE Liste an den Adapter übergeben.
+                // Der Adapter zeichnet die Liste neu.
+                adapter.setMeetings(meetings);
+            }
+        });
+
+        // Liste aller Meetings in der DB zur Berechnung des nächsten Hosts
         meetingViewModel.getAllMeetings().observe(this, meetings -> {
             if(meetings != null) {
-                // Wir geben die NEUE Liste an den Adapter.
-                // Der Adapter kümmert sich dann darum, die Liste neu zu zeichnen.
-                adapter.setMeetings(meetings);
+                setNextHost(meetings);
+            }
+        });
+
+        userViewModel.getAllUsers().observe(this, users -> {
+            if(users != null){
+                loadedUsers = users;
             }
         });
 
@@ -86,5 +113,28 @@ public class MeetingListActivity extends AppCompatActivity {
             //Wechsel zur Erstell-Maske
             startActivity(new Intent(MeetingListActivity.this, MeetingCreateForm.class));
         });
+
+        btnBack.setOnClickListener(v -> {
+            finish();
+        });
+        // Nächsten Host anzeigen
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    private void setNextHost(List<Meeting> currentMeetingList){
+        if (loadedUsers != null
+                && currentMeetingList != null) {
+            User nextHost = de.iu.boardgame.feature_termine.logic.NextHostCalculator.calculateNextHostId(currentMeetingList, loadedUsers);
+            if (nextHost != null) {
+                tvNextHostName.setText(nextHost.name);
+            } else {
+                tvNextHostName.setText("Alea nondum iacta est.");
+            }
+        }
+
     }
 }

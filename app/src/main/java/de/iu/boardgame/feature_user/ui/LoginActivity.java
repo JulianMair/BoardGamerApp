@@ -29,7 +29,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private UsersViewModel viewModel;
     private ArrayAdapter<String> adapter;
+
     private List<User> users = new ArrayList<>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

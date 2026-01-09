@@ -20,6 +20,12 @@ public class Meeting {
     //@ForeignKey(entity = User.class, parentColumns = "user_id", childColumns = "host_id")
     @ColumnInfo(name="host_id")
     long host_id;
+
+    /***
+     * open
+     * planned
+     * closed
+     */
     @ColumnInfo(name="status")
     String status;
 
