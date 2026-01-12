@@ -37,7 +37,7 @@ public class ManageGamesActivity extends AppCompatActivity implements ManageGame
         gamesViewModel = new ViewModelProvider(this).get(GamesViewModel.class);
 
         // ✅ LiveData beobachten -> kein onResume/loadGames mehr nötig
-        gamesViewModel.getAllGames().observe(this, games -> adapter.setItems(games));
+        gamesViewModel.getAllGames().observe(this, games -> adapter.submitList(games));
     }
 
     public void showAddDialog() {

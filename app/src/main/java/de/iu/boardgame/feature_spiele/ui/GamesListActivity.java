@@ -1,6 +1,7 @@
 package de.iu.boardgame.feature_spiele.ui;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -24,7 +25,10 @@ import de.iu.boardgame.feature_spiele.viewmodel.GamesViewModel;
 
 public class GamesListActivity extends AppCompatActivity {
 
-    private GameAdapter adapter;
+    // UI
+    private GameAdapter gameAdapter;
+
+    // MVVM
     private GamesViewModel gamesViewModel;
 
     @Override
@@ -32,18 +36,45 @@ public class GamesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games_list);
 
+        setupToolbar();
+        setupRecyclerView();
+        setupViewModel();
+        observeGames();
+    }
+
+    /**
+     * Initialisiert Toolbar und aktiviert die ActionBar.
+     */
+    private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
 
-        RecyclerView rv = findViewById(R.id.rvGames);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new GameAdapter();
-        rv.setAdapter(adapter);
+    /**
+     * RecyclerView: LayoutManager + Adapter setzen.
+     */
+    private void setupRecyclerView() {
+        RecyclerView gamesRecyclerView = findViewById(R.id.rvGames);
+        gamesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        gameAdapter = new GameAdapter();
+        gamesRecyclerView.setAdapter(gameAdapter);
+    }
+
+    /**
+     * ViewModel beziehen (über ViewModelProvider).
+     */
+    private void setupViewModel() {
         gamesViewModel = new ViewModelProvider(this).get(GamesViewModel.class);
+    }
 
-        // ✅ LiveData beobachten -> kein onResume/loadGames mehr nötig
-        gamesViewModel.getAllGames().observe(this, games -> adapter.setItems(games));
+    /**
+     * LiveData beobachten:
+     * Sobald sich die Daten in Room ändern (insert/update/delete),
+     * wird die Liste automatisch aktualisiert.
+     */
+    private void observeGames() {
+        gamesViewModel.getAllGames().observe(this, games -> gameAdapter.submitList(games));
     }
 
     @Override
@@ -53,53 +84,113 @@ public class GamesListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
 
-        if (id == R.id.action_add_game) {
-            showAddDialog();
+        if (itemId == R.id.action_add_game) {
+            showAddGameDialog();
             return true;
         }
 
-        if (id == R.id.action_manage_games) {
-            startActivity(new android.content.Intent(this, ManageGamesActivity.class));
+        if (itemId == R.id.action_manage_games) {
+            openManageGamesScreen();
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(menuItem);
     }
 
-    private void showAddDialog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_game_edit, null, false);
+    /**
+     * Öffnet den Screen zum Verwalten (Edit/Delete) der Spiele.
+     */
+    private void openManageGamesScreen() {
+        startActivity(new Intent(this, ManageGamesActivity.class));
+    }
 
-        EditText etName = view.findViewById(R.id.etGameName);
-        EditText etDuration = view.findViewById(R.id.etDuration);
-        EditText etCategory = view.findViewById(R.id.etCategory);
+    /**
+     * Zeigt einen Dialog zum Hinzufügen eines neuen Spiels.
+     * Validierung erfolgt im Dialog (Fehler direkt am Feld).
+     */
+    private void showAddGameDialog() {
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_game_edit, null, false);
 
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        EditText nameInput = dialogView.findViewById(R.id.etGameName);
+        EditText durationInput = dialogView.findViewById(R.id.etDuration);
+        EditText categoryInput = dialogView.findViewById(R.id.etCategory);
+
+        AlertDialog addDialog = new AlertDialog.Builder(this)
                 .setTitle("Spiel hinzufügen")
-                .setView(view)
+                .setView(dialogView)
+                // PositiveButton wird später überschrieben, damit Dialog nicht bei Fehlern schließt
                 .setNegativeButton("Abbrechen", null)
                 .setPositiveButton("Speichern", null)
                 .show();
 
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            String name = etName.getText().toString().trim();
-            String category = etCategory.getText().toString().trim();
-            String durationStr = etDuration.getText().toString().trim();
+        addDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            Game newGame = buildGameFromInputs(nameInput, durationInput, categoryInput);
+            if (newGame == null) return; // Validierung fehlgeschlagen
 
-            if (TextUtils.isEmpty(name)) { etName.setError("Pflichtfeld"); return; }
-            if (TextUtils.isEmpty(category)) { etCategory.setError("Pflichtfeld"); return; }
-
-            int duration = 0;
-            if (!TextUtils.isEmpty(durationStr)) {
-                try { duration = Integer.parseInt(durationStr); }
-                catch (NumberFormatException e) { etDuration.setError("Zahl erforderlich"); return; }
-            }
-
-            gamesViewModel.insert(new Game(name, duration, category));
+            gamesViewModel.insert(newGame);
             Toast.makeText(this, "Hinzugefügt", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
+            addDialog.dismiss();
         });
+    }
+
+    /**
+     * Liest die Eingaben aus, validiert sie und baut ein Game-Objekt.
+     *
+     * @return Game bei Erfolg, sonst null (und setzt Feld-Errors).
+     */
+    @Nullable
+    private Game buildGameFromInputs(EditText nameInput,
+                                     EditText durationInput,
+                                     EditText categoryInput) {
+
+        String name = readTrimmed(nameInput);
+        String category = readTrimmed(categoryInput);
+        String durationText = readTrimmed(durationInput);
+
+        // Pflichtfelder prüfen
+        if (TextUtils.isEmpty(name)) {
+            nameInput.setError("Pflichtfeld");
+            return null;
+        }
+        if (TextUtils.isEmpty(category)) {
+            categoryInput.setError("Pflichtfeld");
+            return null;
+        }
+
+        // Dauer ist optional, aber wenn gesetzt, muss es eine Zahl sein
+        Integer duration = parseOptionalInt(durationText);
+        if (duration == null) {
+            durationInput.setError("Zahl erforderlich");
+            return null;
+        }
+
+        return new Game(name, duration, category);
+    }
+
+    /**
+     * Hilfsmethode: Text aus EditText lesen und trimmen.
+     */
+    private String readTrimmed(EditText editText) {
+        return editText.getText().toString().trim();
+    }
+
+    /**
+     * Parst optionalen Integer:
+     * - leer -> 0
+     * - Zahl -> Zahl
+     * - ungültig -> null
+     */
+    @Nullable
+    private Integer parseOptionalInt(String text) {
+        if (TextUtils.isEmpty(text)) return 0;
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 }
