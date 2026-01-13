@@ -29,9 +29,7 @@ import de.iu.boardgame.feature_user.helpers.SessionManager;
 
 /**
  * Activity zum Erstellen eines neuen Termins.
- * * WICHTIG: Diese Klasse implementiert zwei Interfaces (DatePickerListener, TimePickerListener).
- * Das bedeutet, diese Activity verspricht, die Methoden 'onDateSelected' und 'onTimeSelected'
- * bereitzustellen, damit die Dialog-Fragmente ihre Daten hierher zurückschicken können.
+ * WICHTIG: Diese Klasse implementiert zwei Interfaces (DatePickerListener, TimePickerListener).
  */
 public class MeetingCreateForm extends AppCompatActivity
             implements DatePickerFragment.DatePickerListener,
@@ -53,7 +51,6 @@ public class MeetingCreateForm extends AppCompatActivity
     SessionManager usersession;
     int duration = Toast.LENGTH_SHORT;
 
-    // Temporäre Speicher für das Datum, bevor wir speichern
     private int year, month, day;
     private int hour, minute;
     Calendar c = null;
@@ -63,7 +60,6 @@ public class MeetingCreateForm extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Aktiviert das moderne "Edge-to-Edge" Design (Inhalte gehen bis hinter die Statusleiste)
         EdgeToEdge.enable(this);
         setContentView(R.layout.termine_activity_meeting_create_form);
 
@@ -76,7 +72,7 @@ public class MeetingCreateForm extends AppCompatActivity
         tvLocation = findViewById(R.id.tvLocation);
 
         // --- VIEWMODEL SETUP ---
-        // Wir brauchen eine Factory, weil unser ViewModel Parameter im Konstruktor benötigt (Application).
+        // Initialisierung des ViewModels über Factory (für Application Dependency)
         MeetingViewModelFactory factory = new MeetingViewModelFactory(this.getApplication());
 
         // Der ViewModelProvider sorgt dafür, dass wir das existierende ViewModel bekommen (oder ein neues erstellt wird)
@@ -92,14 +88,14 @@ public class MeetingCreateForm extends AppCompatActivity
             return insets;
         });
 
-        // 1. SCHRITT: Datum auswählen
+        // Datum auswählen
         btndate.setOnClickListener(view -> {
             DatePickerFragment dateFragment = new DatePickerFragment();
 
             dateFragment.show(getSupportFragmentManager(), "datePicker");
         });
 
-        // 3. SCHRITT: Speichern
+        // Speichern
         // TODO: Host_id muss vom User kommen (Login-System noch nicht fertig), daher 0
         btnsave.setOnClickListener(view -> {
 
@@ -121,7 +117,7 @@ public class MeetingCreateForm extends AppCompatActivity
 
         // Abbrechen Button
         btncancle.setOnClickListener(view -> {
-           finish();        // Schließt einfach das Fenster ohne Speichern
+           finish();        // Schließt das Fenster ohne Speichern
         });
     }
 
@@ -145,7 +141,7 @@ public class MeetingCreateForm extends AppCompatActivity
 
     /**
      * Hilfsmethode, um den TimePicker zu öffnen.
-     * Wird automatisch aufgerufen, sobald ein Datum gewählt wurde (für besseren Flow).
+     * Wird automatisch aufgerufen, sobald ein Datum gewählt wurde.
      */
     public void create_Time_Dialog() {
         // Doppelklick verhindern: Prüfen, ob der Dialog schon offen ist
@@ -165,7 +161,7 @@ public class MeetingCreateForm extends AppCompatActivity
         this.month = month;
         this.day = day;
 
-        // Sobald das Datum gewählt ist, öffnen sich die Uhrzeit-Auswahl
+        // Sobald das Datum gewählt ist, öffnen sich die Uhrzeit-Dialog
         create_Time_Dialog();
     }
 
@@ -176,13 +172,12 @@ public class MeetingCreateForm extends AppCompatActivity
         this.hour = hour;
         this.minute = minute;
 
-        // Jetzt haben wir alles (Datum + Zeit). Wir aktualisieren das Calendar-Objekt.
+        // Aktualisieren des Calendar-Objekts.
         // WICHTIG: Das ist nötig, um später c.getTimeInMillis() für die DB zu bekommen.
         c.set(year, month, day, hour, minute);
 
         // UI Update: Dem User zeigen, was er gewählt hat.
         // ACHTUNG BEIM MONAT: Java Calendar zählt Monate von 0 (Jan) bis 11 (Dez).
-        // Für die Anzeige müssen wir also (month + 1) rechnen!
         tvDateRes.setText(String.format("am: %02d-%02d-%d\num: %02d:%02d", day, (month+1), year, hour, minute));
     }
 

@@ -12,10 +12,7 @@ import de.iu.boardgame.feature_termine.data.AppDatabase;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.data.MeetingRepository;
 
-/**
- * Das ViewModel ist das "Gehirn" der UI.
- * Speichert die Daten der Activity auch bei Konfigurationsänderungen (z.B. Bildschirm drehen).
- */
+/** ViewModel zur Verwaltung der UI-Daten und Kapselung der Geschäftslogik. Überlebt Konfigurationsänderungen. */
 public class MeetingViewModel extends AndroidViewModel {
     // Daten Manager
     private final MeetingRepository repository;
@@ -35,7 +32,7 @@ public class MeetingViewModel extends AndroidViewModel {
         // Verbindung zum Repository herstellen (Singleton)
         repository = MeetingRepository.getInstance(application);
 
-        // Hollt den "Live-Ticker" aller Meetings.
+        // Lädt die Meeting-Liste als LiveData.
         // Das Repository läd die Daten aus der DB
         allMeetings = repository.getAllMeetings();
         displayMeetings = repository.getDisplayMeetings();

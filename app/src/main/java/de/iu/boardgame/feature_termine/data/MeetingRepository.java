@@ -11,16 +11,10 @@ import java.util.concurrent.Executors;
 
 import android.util.Log;
 
-/**
- * Das Repository fungiert als "Single Source of Truth".
- * Es verwaltet den Datenzugriff und entscheidet, ob Daten aus einer lokalen Datenbank
- * oder (später vielleicht) aus dem Netzwerk kommen.
- * Das ViewModel kennt nur dieses Repository, nicht die Datenbank direkt.
- */
+/** Verwaltet den Datenzugriff (Repository Pattern) und abstrahiert die Datenbanklogik. */
 public class MeetingRepository {
 
-    // Singleton-Instanz: volatile sorgt dafür, dass alle Threads sofort mitbekommen,
-    // wenn die Instanz erstellt wurde (Thread-Safety).
+    // Volatile für Thread-Safety (Atomic Updates)
     private static volatile MeetingRepository INSTANCE;
 
     // Das DAO ist das Werkzeug, um die SQL-Befehle auszuführen
@@ -50,7 +44,6 @@ public class MeetingRepository {
     /**
      * Singleton-Pattern Implementierung:
      * Stellt sicher, dass es in der gesamten App nur genau EIN Repository gibt.
-     * Das spart Speicher und verhindert Daten-Chaos.
      * @param application Der App-Context wird für die Datenbank benötigt.
      * @return Die einzige Instanz des Repositories.
      */
@@ -67,11 +60,8 @@ public class MeetingRepository {
     }
 
     // -------------------- MEETING ----------------------------------------------
-    /**
-     * Fügt ein neues Meeting hinzu.
-     * WICHTIG: Wir nutzen 'AppDatabase.databaseWriteExecutor', um das in einem
-     * Hintergrund-Thread zu machen. Datenbank-Schreibvorgänge dürfen NIE im Main-Thread (UI) laufen!
-     */
+
+    // Ausführung im Background-Thread, um UI-Blockaden zu vermeiden.
     public void insert(Meeting meeting){
         AppDatabase.databaseWriteExecutor.execute(() -> {
             try {

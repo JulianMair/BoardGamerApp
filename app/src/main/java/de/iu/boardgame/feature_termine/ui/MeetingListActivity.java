@@ -28,7 +28,7 @@ import de.iu.boardgame.feature_user.viewmodel.UsersViewModel;
 /**
  * Die Haupt-Activity für Termine.
  * Zeigt eine Liste aller geplanten Spieleabende an.
- * Von hier aus kann man Details ansehen (Klick auf Item) oder neue Termine erstellen (FAB).
+ * Von hier aus kann man Details ansehen (Klick auf Item) oder neue Termine erstellen.
  */
 public class MeetingListActivity extends AppCompatActivity {
 
@@ -45,7 +45,6 @@ public class MeetingListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Modernes Android-Feature: Die App nutzt den Platz hinter der Statusleiste
         EdgeToEdge.enable(this);
         setContentView(R.layout.termine_activity_meeting_list);
 
@@ -56,15 +55,16 @@ public class MeetingListActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         // --- 1. VIEWMODEL SETUP ---
-        // #############################################################################
+
         MeetingViewModelFactory factory = new MeetingViewModelFactory(this.getApplication());
         meetingViewModel = new ViewModelProvider(this, factory).get(MeetingViewModel.class);
+
         // Usermodel Setup
         userViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
 
         // --- 2. RECYCLERVIEW SETUP ---
 
-        // a) Der Adapter (Der Kellner, der die Daten bringt)
+        // a) // Initialisierung des Adapters
         adapter = new MeetingAdapter();
 
         // b) Klick-Logik definieren
@@ -86,7 +86,6 @@ public class MeetingListActivity extends AppCompatActivity {
 
         // --- 3. BEOBACHTEN (OBSERVER) ---
         // Live-Verbindung zur Datenbank.
-        // Immer wenn sich in der DB etwas ändert (Insert/Delete), wird der Code aufgerufen.
         meetingViewModel.getDisplayMeetings().observe(this, meetings -> {
             if(meetings != null) {
                 // NEUE Liste an den Adapter übergeben.
@@ -117,7 +116,6 @@ public class MeetingListActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> {
             finish();
         });
-        // Nächsten Host anzeigen
     }
 
     @Override

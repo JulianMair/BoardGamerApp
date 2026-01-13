@@ -28,11 +28,11 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();
 
-    // Signalton Logik enthält die EInzige Instanz der DB
+    // Singleton-Instanz der Datenbank
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
 
-    // Execute fürs Repository
+    // ExecutorService für Datenbankoperationen im Hintergrund
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
@@ -102,7 +102,7 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
-    //Methode mit der das Repository die DB bekommt
+    // Statische Methode für den Zugriff auf die Datenbank-Instanz (Singleton-Pattern)
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {

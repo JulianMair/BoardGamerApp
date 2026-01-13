@@ -36,12 +36,7 @@ public class Meeting {
     int evaluation_id;
 
 
-    /**
-     * Konstruktor
-     * WICHTIG: Room braucht diesen Konstruktor, um Daten zu lesen.
-     * meetingId und evaluationId werden nicht übergeben, da sie
-     * automatisch generiert oder später gesetzt werden.
-     */
+    // Konstruktor für Room
     public Meeting(String title,long timestamp, String location, long host_id, String status) {
         this.title = title;
         this.timestamp = timestamp;
@@ -53,7 +48,7 @@ public class Meeting {
     // --- Getter und Setter ---
     public long getTimestmap() {
         return this.timestamp;
-    }
+    }// Konstruktor für Room
 
     public String getLocation() {
         return this.location;
@@ -99,7 +94,7 @@ public class Meeting {
     }
 
 
-    // --- Hilfs-Methoden für die Anzeige ---
+    // --- Helper-Methoden zur Formatierung ---
 
     /**
      * Gibt das Datum formatiert zurück.
