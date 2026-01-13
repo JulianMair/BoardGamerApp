@@ -52,13 +52,7 @@
             android:id="@+id/btnShowGames"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Spiele anzeigen" />
-
-        <Button
-            android:id="@+id/btnTestVoting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TEST: Abstimmung (Mock)" />
+            android:text="Spieleliste verwalten" />
 
         <Button
             android:id="@+id/btnLogout"

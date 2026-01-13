@@ -29,6 +29,10 @@ public class VotesViewModel extends AndroidViewModel {
         return repository.getMyVoteCount(meetingId, userId);
     }
 
+    public LiveData<GameVoteInfo> getTopVotedGame(long meetingId) {
+        return repository.getTopVotedGame(meetingId);
+    }
+
     /**
      * Toggle mit 3er-Limit. Callback, damit Activity Toast zeigen kann.
      */

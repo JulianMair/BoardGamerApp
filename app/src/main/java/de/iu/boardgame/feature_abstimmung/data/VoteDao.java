@@ -40,4 +40,11 @@ public interface VoteDao {
             "AS votedByMe " +
             "FROM games g ORDER BY voteCount DESC, name ASC")
     LiveData<List<GameVoteInfo>> getGamesWithVotesLive(long meetingId, long userId);
+
+    @Query("SELECT g.id AS id, g.gameTitle AS name, g.gameDuration AS durationMinutes, " +
+            "g.category AS category, " +
+            "(SELECT COUNT(*) FROM votes v WHERE v.meeting_id = :meetingId AND v.game_id = g.id) AS voteCount, " +
+            "0 AS votedByMe " +
+            "FROM games g ORDER BY voteCount DESC, name ASC LIMIT 1")
+    LiveData<GameVoteInfo> getTopVotedGame(long meetingId);
 }
