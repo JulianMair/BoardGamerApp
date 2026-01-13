@@ -43,6 +43,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
     private MaterialButton btnFood;
     private Button btnAddGame;
     private SwitchMaterial switchStatus;
+    private ImageButton btnMessageHost;
+    private MaterialButton btnRate;
 
     // Logik
     private MeetingViewModel meetingViewModel;
@@ -68,6 +70,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
         btnDelete = findViewById(R.id.btnDelete);
         btnAddGame = findViewById(R.id.btnAddGame);
         btnFood = findViewById(R.id.btnFood);
+        btnMessageHost = findViewById(R.id.btnMessageHost);
+        btnRate = findViewById(R.id.btnRate);
 
         switchStatus = findViewById(R.id.switchStatus);
 
@@ -172,6 +176,18 @@ public class MeetingDetailActivity extends AppCompatActivity {
             // Später: Intent zur Essens-Activity
         });
 
+        // Listener für Nachricht
+        btnMessageHost.setOnClickListener(v -> {
+            Toast.makeText(this, "Nachricht an den Host", Toast.LENGTH_SHORT).show();
+            // TODO: Nachrichten...
+        });
+
+        // Listener für Bewerten
+        btnRate.setOnClickListener(v -> {
+            Toast.makeText(this, "Bewertung öffnet sich...", Toast.LENGTH_SHORT).show();
+            // TODO: Intent zur EvaluationActivity starten
+        });
+
     }
 
     private boolean isMyMeeting() {
@@ -210,6 +226,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
             switchStatus.setEnabled(false); // Kann nicht mehr geändert werden
             btnAddGame.setVisibility(android.view.View.GONE); // Keine Spiele mehr hinzufügen
             btnFood.setVisibility(android.view.View.GONE);
+            btnRate.setVisibility(View.VISIBLE);
         }
         else if (newStatus.equals("planned")) {
             // Wenn geplant
@@ -218,6 +235,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
             switchStatus.setEnabled(true);
             btnAddGame.setVisibility(android.view.View.GONE);
             btnFood.setVisibility(android.view.View.GONE);
+            btnRate.setVisibility(View.GONE);
         }
         else {
             // Wenn open
@@ -233,6 +251,10 @@ public class MeetingDetailActivity extends AppCompatActivity {
             switchStatus.setEnabled(false);
             btnAddGame.setVisibility(android.view.View.GONE); // GÄSTE SPIELE ADDEn
             btnFood.setVisibility(android.view.View.GONE);
+        }
+
+        if(isMyMeeting()){
+            //btnMessageHost.setVisibility(View.GONE);
         }
     }
 
