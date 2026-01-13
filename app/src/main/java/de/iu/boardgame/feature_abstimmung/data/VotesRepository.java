@@ -38,6 +38,10 @@ public class VotesRepository {
         return voteDao.countVotesByUserLive(meetingId, userId);
     }
 
+    public LiveData<GameVoteInfo> getTopVotedGame(long meetingId) {
+        return voteDao.getTopVotedGame(meetingId);
+    }
+
     public void insertVote(Vote vote) {
         AppDatabase.databaseWriteExecutor.execute(() -> voteDao.insertVote(vote));
     }

@@ -16,6 +16,7 @@ import de.iu.boardgame.R;
 import de.iu.boardgame.feature_abstimmung.data.GameVoteInfo;
 import de.iu.boardgame.feature_abstimmung.ui.adapter.VoteListAdapter;
 import de.iu.boardgame.feature_abstimmung.viewmodel.VotesViewModel;
+import de.iu.boardgame.feature_user.helpers.SessionManager;
 
 public class VoteGamesActivity extends AppCompatActivity implements VoteListAdapter.Listener {
 
@@ -45,8 +46,7 @@ public class VoteGamesActivity extends AppCompatActivity implements VoteListAdap
 
         userId = getIntent().getLongExtra(EXTRA_USER_ID, -1L);
         if (userId <= 0) {
-            userId = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                    .getLong("login_id", -1L);
+            userId = SessionManager.getCurrentUserId(this);
         }
 
         if (userId <= 0) {

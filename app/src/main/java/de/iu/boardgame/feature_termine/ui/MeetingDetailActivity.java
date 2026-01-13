@@ -18,6 +18,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_abstimmung.ui.VoteGamesActivity;
+import de.iu.boardgame.feature_abstimmung.viewmodel.VotesViewModel;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
@@ -38,15 +40,17 @@ public class MeetingDetailActivity extends AppCompatActivity {
     private TextView tvtime;
     private TextView tvlocation;
     private TextView tvhost;
+    private TextView tvTopGameValue;
     private ImageButton btnBack;
     private ImageButton btnDelete;
     private MaterialButton btnFood;
-    private Button btnAddGame;
+    private MaterialButton btnVoteGames;
     private SwitchMaterial switchStatus;
 
     // Logik
     private MeetingViewModel meetingViewModel;
     private UsersViewModel userViewMode;
+    private VotesViewModel votesViewModel;
     private int meetingId;
     private Meeting currentMeeting;
     private User currentUser;
@@ -63,11 +67,12 @@ public class MeetingDetailActivity extends AppCompatActivity {
         tvlocation = findViewById(R.id.tvlocation);
         tvhost = findViewById(R.id.tvhost);
         tvtitle = findViewById(R.id.tvtitle);
+        tvTopGameValue = findViewById(R.id.tvTopGameValue);
 
         btnBack = findViewById(R.id.btnBack);
         btnDelete = findViewById(R.id.btnDelete);
-        btnAddGame = findViewById(R.id.btnAddGame);
         btnFood = findViewById(R.id.btnFood);
+        btnVoteGames = findViewById(R.id.btnVoteGames);
 
         switchStatus = findViewById(R.id.switchStatus);
 
@@ -75,6 +80,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
         MeetingViewModelFactory factory = new MeetingViewModelFactory(this.getApplication());
         meetingViewModel = new ViewModelProvider(this, factory).get(MeetingViewModel.class);
         userViewMode = new ViewModelProvider(this).get(UsersViewModel.class);
+        votesViewModel = new ViewModelProvider(this).get(VotesViewModel.class);
 
         // --- DATEN EMPFANGEN ---
         // Wir holen die ID, die uns die MeetingListActivity (Adapter) mitgeschickt hat.
@@ -172,6 +178,29 @@ public class MeetingDetailActivity extends AppCompatActivity {
             // Später: Intent zur Essens-Activity
         });
 
+        btnVoteGames.setOnClickListener(v -> {
+            if (meetingId <= 0) {
+                return;
+            }
+            long userId = SessionManager.getCurrentUserId(MeetingDetailActivity.this);
+            if (userId <= 0) {
+                Toast.makeText(this, "Kein User eingeloggt", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            android.content.Intent intent = new android.content.Intent(this, VoteGamesActivity.class);
+            intent.putExtra(VoteGamesActivity.EXTRA_MEETING_ID, (long) meetingId);
+            intent.putExtra(VoteGamesActivity.EXTRA_USER_ID, userId);
+            startActivity(intent);
+        });
+
+        votesViewModel.getTopVotedGame(meetingId).observe(this, game -> {
+            if (game == null || game.voteCount <= 0) {
+                tvTopGameValue.setText("-");
+                return;
+            }
+            tvTopGameValue.setText(game.name);
+        });
+
     }
 
     private boolean isMyMeeting() {
@@ -208,30 +237,29 @@ public class MeetingDetailActivity extends AppCompatActivity {
             switchStatus.setChecked(true);
             switchStatus.setText("Abgeschlossen");
             switchStatus.setEnabled(false); // Kann nicht mehr geändert werden
-            btnAddGame.setVisibility(android.view.View.GONE); // Keine Spiele mehr hinzufügen
             btnFood.setVisibility(android.view.View.GONE);
+            btnVoteGames.setEnabled(false);
         }
         else if (newStatus.equals("planned")) {
             // Wenn geplant
             switchStatus.setChecked(true); // Schalter an
             switchStatus.setText("Planung fertig");
             switchStatus.setEnabled(true);
-            btnAddGame.setVisibility(android.view.View.GONE);
             btnFood.setVisibility(android.view.View.GONE);
+            btnVoteGames.setEnabled(true);
         }
         else {
             // Wenn open
             switchStatus.setChecked(false); // Schalter aus
             switchStatus.setText("Planung offen");
             switchStatus.setEnabled(true);
-            btnAddGame.setVisibility(android.view.View.VISIBLE);
             btnFood.setVisibility(android.view.View.VISIBLE);
+            btnVoteGames.setEnabled(true);
         }
 
         // Nur der Host darf den Status  ändern!
         if (!isMyMeeting() && !newStatus.equals("closed")) {
             switchStatus.setEnabled(false);
-            btnAddGame.setVisibility(android.view.View.GONE); // GÄSTE SPIELE ADDEn
             btnFood.setVisibility(android.view.View.GONE);
         }
     }
