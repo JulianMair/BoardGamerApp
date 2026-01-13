@@ -1,11 +1,13 @@
 package de.iu.boardgame.feature_termine.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -41,6 +44,7 @@ public class MeetingListActivity extends AppCompatActivity {
     private MeetingAdapter adapter;
     private List<User> loadedUsers = null;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +120,8 @@ public class MeetingListActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> {
             finish();
         });
+
+
     }
 
     @Override
