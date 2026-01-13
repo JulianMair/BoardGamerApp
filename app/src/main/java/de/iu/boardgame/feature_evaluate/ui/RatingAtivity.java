@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_evaluate;
+package de.iu.boardgame.feature_evaluate.ui;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -7,17 +7,24 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.time.LocalDateTime;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_evaluate.data.MeetingRating;
+import de.iu.boardgame.feature_evaluate.viewmodel.RatingViewModel;
 
-public class RatingPage extends AppCompatActivity {
+public class RatingAtivity extends AppCompatActivity {
+
     private RatingBar ratingHost, ratingFood, ratingEvening;
     private EditText editComment;
     private Button btnSaveRating;
+    private RatingViewModel viewModel;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +37,13 @@ public class RatingPage extends AppCompatActivity {
         editComment = findViewById(R.id.editComment);
         btnSaveRating = findViewById(R.id.btnSaveRating);
 
+        // ViewModel initialisieren
+        viewModel = new ViewModelProvider(this).get(RatingViewModel.class);
+
         btnSaveRating.setOnClickListener(v -> saveRating());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveRating() {
         float host = ratingHost.getRating();
         float food = ratingFood.getRating();
@@ -45,22 +56,22 @@ public class RatingPage extends AppCompatActivity {
         }
 
         // Bewertung erstellen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            MeetingRating rating = new MeetingRating(
-                    host,
-                    food,
-                    evening,
-                    comment,
-                    LocalDateTime.now()
-            );
-        }
+        int meetingId = getIntent().getIntExtra("meeting_id", -1);
+        System.out.println(meetingId);
+        MeetingRating rating = new MeetingRating(
+                meetingId,
+                host,
+                food,
+                evening,
+                comment,
+                LocalDateTime.now()
+        );
 
-        // Speichern in Datenbank (ASYNC!)
+        // Speichern in der Datenbank über ViewModel (asynchron)
+        viewModel.insert(rating);
 
-            runOnUiThread(() -> {
-                Toast.makeText(this, "Bewertung gespeichert!", Toast.LENGTH_SHORT).show();
-                finish(); // Activity schließen, wenn gewünscht
-            });
-    };
+        // Feedback an User
+        Toast.makeText(this, "Bewertung gespeichert!", Toast.LENGTH_SHORT).show();
+        finish(); // Activity schließen
+    }
 }
-

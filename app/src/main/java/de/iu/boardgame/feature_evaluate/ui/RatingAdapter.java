@@ -1,4 +1,4 @@
-package de.iu.boardgame.feature_evaluate;
+package de.iu.boardgame.feature_evaluate.ui;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_evaluate.data.MeetingRating;
 
 public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder> {
 
     private List<MeetingRating> daten = new ArrayList<>();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
+    /** Wird vom ViewModel-Observer aufgerufen */
     public void setData(List<MeetingRating> neueDaten) {
         this.daten = neueDaten != null ? neueDaten : new ArrayList<>();
         notifyDataSetChanged();
@@ -44,23 +46,23 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
             holder.txtDatum.setText("📅 Kein Datum angegeben");
         }
 
-        // Ratings anzeigen (1–5 → Sterne)
+        // Ratings (1–5 Sterne)
         holder.ratingGastgeber.setRating(rating.getHostRating());
         holder.ratingEssen.setRating(rating.getFoodRating());
         holder.ratingAbend.setRating(rating.getEveningRating());
 
-        // Kommentar anzeigen
+        // Kommentar
         String comment = rating.getComment();
-        if (comment == null || comment.trim().isEmpty()) {
-            holder.txtKommentar.setText("– Kein Kommentar –");
-        } else {
-            holder.txtKommentar.setText("„" + comment + "“");
-        }
+        holder.txtKommentar.setText(
+                (comment == null || comment.trim().isEmpty())
+                        ? "– Kein Kommentar –"
+                        : "„" + comment + "“"
+        );
     }
 
     @Override
     public int getItemCount() {
-        return daten.size();
+        return daten != null ? daten.size() : 0;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -12,4 +12,6 @@
     <string name="loeschen">Löschen</string>
     <string name="bearbeiten">Bearbeiten</string>
     <string name="default_abstimmung">12 Votes</string>
+    <string name="open_drawer">Menü öffnen</string>
+    <string name="close_drawer">Menü schließen</string>
 </resources>

@@ -3,7 +3,7 @@ package de.iu.boardgame.feature_send_message;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.iu.boardgame.feature_send_message.Message;
+import de.iu.boardgame.feature_send_message.data.Message;
 
 public class MockMessageRepository {
 

@@ -11,10 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import de.iu.boardgame.feature_evaluate.RatingList;
-import de.iu.boardgame.feature_send_message.ChatActivity;
+import de.iu.boardgame.feature_evaluate.ui.RatingListActivity;
+import de.iu.boardgame.feature_send_message.ui.ChatActivity;
 import de.iu.boardgame.feature_termine.data.Meeting;
 
 public class MeetingAdaptertest extends RecyclerView.Adapter<MeetingAdaptertest.ViewHolder> {
@@ -56,13 +57,14 @@ public class MeetingAdaptertest extends RecyclerView.Adapter<MeetingAdaptertest.
         });
 
         holder.btnRate.setOnClickListener(v -> {
-            Intent intent = new Intent(context, RatingList.class);
-            intent.putExtra("eventId", event.getMeeting_id());
+            Intent intent = new Intent(context, RatingListActivity.class);
+            intent.putExtra("meeting_id", event.getMeeting_id());
             context.startActivity(intent);
         });
 
         holder.btnMessage.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChatActivity.class);
+            intent.putExtra("meeting_id", event.getMeeting_id());
             context.startActivity(intent);
 
         });
@@ -72,7 +74,10 @@ public class MeetingAdaptertest extends RecyclerView.Adapter<MeetingAdaptertest.
     public int getItemCount() {
         return events.size();
     }
-
+    public void setData(List<Meeting> newMeetings) {
+        this.events = newMeetings != null ? newMeetings : new ArrayList<>();
+        notifyDataSetChanged();
+    }
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDate, tvLocation, tvHost, tvTime;
         ImageButton btnEdit, btnSuggestGame, btnVote, btnRate, btnMessage;

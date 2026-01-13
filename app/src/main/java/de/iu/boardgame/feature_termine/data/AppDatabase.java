@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
@@ -13,12 +14,18 @@ import java.util.concurrent.Executors;
 
 import de.iu.boardgame.feature_abstimmung.data.Vote;
 import de.iu.boardgame.feature_abstimmung.data.VoteDao;
+import de.iu.boardgame.feature_evaluate.data.MeetingRating;
+import de.iu.boardgame.feature_evaluate.data.RatingDao;
+import de.iu.boardgame.feature_evaluate.helper.Converter;
+import de.iu.boardgame.feature_send_message.data.Message;
+import de.iu.boardgame.feature_send_message.data.MessageDao;
 import de.iu.boardgame.feature_spiele.data.Game;
 import de.iu.boardgame.feature_spiele.data.GameDao;
 import de.iu.boardgame.feature_user.data.User;
 import de.iu.boardgame.feature_user.data.UserDao;
 
-@Database(entities = {Meeting.class, Game.class, Vote.class, User.class}, version = 4, exportSchema = false)
+@Database(entities = {Meeting.class, Game.class, Vote.class, MeetingRating.class, Message.class, User.class}, version = 7, exportSchema = false)
+@TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MeetingDao meetingDao();
 
@@ -27,6 +34,10 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract VoteDao voteDao();
 
     public abstract UserDao userDao();
+
+    public abstract RatingDao ratingDao();
+
+    public abstract MessageDao messageDao();
 
     // Signalton Logik enthält die EInzige Instanz der DB
     private static volatile AppDatabase INSTANCE;

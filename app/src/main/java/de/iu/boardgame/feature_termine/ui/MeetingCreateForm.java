@@ -69,7 +69,7 @@ public class MeetingCreateForm extends AppCompatActivity
 
         // Views verbinden
         btnsave = findViewById(R.id.btnSave);
-        btndate = findViewById(R.id.btnSelect);
+        btndate = findViewById(R.id.pickTime);
         btncancle = findViewById(R.id.btnCancel);
         tvDateRes = findViewById(R.id.tvDateResult);
         tvTitle = findViewById(R.id.tvtitle);
