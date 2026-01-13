@@ -52,7 +52,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
     private UsersViewModel userViewMode;
     private VotesViewModel votesViewModel;
     private int meetingId;
-    //private LiveData<Meeting> currentMeeting;
     private Meeting currentMeeting;
     private User currentUser;
 
@@ -85,7 +84,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
         // --- DATEN EMPFANGEN ---
         // Wir holen die ID, die uns die MeetingListActivity (Adapter) mitgeschickt hat.
-        // "-1" ist der Standardwert, falls irgendwas schiefgelaufen ist (keine ID gefunden).
+        // "-1" ist der Standardwert, falls keine ID gefunden wurde
         meetingId = getIntent().getIntExtra("MEETING_ID", -1);
 
         // Zurück Button
@@ -114,7 +113,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
                 builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Hier passiert nichts, Dialog schließt sich einfach
+                        // Hier passiert nichts, Dialog schließt sich.
                         dialog.dismiss();
                     }
                 });
@@ -134,11 +133,8 @@ public class MeetingDetailActivity extends AppCompatActivity {
 
         // --- BEOBACHTEN (OBSERVER) ---
         // Sobald die Datenbank die Daten geladen hat (oder sie sich ändern),
-        // läuft dieser Codeblock (Lambda) ab.
         meetingViewModel.getcurrentMeeting(meetingId).observe(this, meeting -> {
             // WICHTIG: Prüfung auf null.
-            // Wenn wir das Meeting gerade gelöscht haben, feuert LiveData evtl. nochmal 'null'.
-            // Ohne das 'if' würde die App hier abstürzen.
             if (meeting != null){
                 currentMeeting = meeting;
                 userViewMode.getUserByIdOneShot(currentMeeting.getHost_id(), user -> {
@@ -166,6 +162,14 @@ public class MeetingDetailActivity extends AppCompatActivity {
                 meetingViewModel.update(currentMeeting);
                 meetingStatusUpdate(newStatus);
             }
+        });
+
+        btnAddGame.setOnClickListener(v -> {
+            // TODO: Hier später Intent zur Spiele-Auswahl
+            Toast.makeText(this, "Hier öffnet sich bald die Spiele-Suche!", Toast.LENGTH_SHORT).show();
+
+            // TODO: Intent intent = new Intent(this, GameSelectActivity.class);
+            // startActivity(intent);
         });
 
         btnFood.setOnClickListener(v -> {
@@ -208,7 +212,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             tvtitle.setText(currentMeeting.getTitle());
 
-            // Hier nutzen wir unsere schönen Formatier-Methoden aus der Meeting-Klasse
             tvdate.setText("Datum: " + currentMeeting.getFormatedDate());
             tvtime.setText("Uhrzeit: " + currentMeeting.getFormatedTime());
             tvhost.setText("Gastgeber: " + currentUser.name);
@@ -221,7 +224,7 @@ public class MeetingDetailActivity extends AppCompatActivity {
         long now = System.currentTimeMillis();
 
         if(currentMeeting.getTimestmap() < now && !currentMeeting.getStatus().equals("closed")){
-            // Automatisch schließen!
+            // Automatisch schließen.
             currentMeeting.setStatus("closed");
             meetingViewModel.update(currentMeeting);
 

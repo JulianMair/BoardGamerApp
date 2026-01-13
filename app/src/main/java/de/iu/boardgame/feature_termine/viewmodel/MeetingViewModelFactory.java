@@ -20,7 +20,7 @@ public class MeetingViewModelFactory implements ViewModelProvider.Factory {
 
     /**
      * Konstruktor der Factory.
-     * Hier muss die Application EINMALIG von der Activity übergeben werden
+     * Hier muss die Application einmalig von der Activity übergeben werden
      */
     public MeetingViewModelFactory(@NonNull Application application){
         this.application = application;

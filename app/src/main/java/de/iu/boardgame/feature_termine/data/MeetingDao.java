@@ -9,11 +9,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
-/**
- * Das DAO (Data Access Object) ist der "Übersetzer".
- * Es wandelt unsere Java-Methodenaufrufe in SQL-Befehle um.
- * Hier wird KEINE Logik geschrieben, nur definiert.
- */
+/** Data Access Object für Meeting-Entitäten. Definiert SQL-Queries. */
 @Dao
 public interface MeetingDao {
 
@@ -55,11 +51,8 @@ public interface MeetingDao {
     void deleteById(int id);
 
     // --- READ ---
-    /**
-     * Diese Methode gibt 'LiveData' zurück. Das ist wie ein Livestream.
-     * Wenn sich in der Datenbank etwas ändert, wird die UI automatisch aktualisiert.
-     * Das ist die Methode, die wir im ViewModel nutzen sollten!
-     */
+    /** Liefert eine beobachtbare Liste aller Meetings (LiveData).
+     * Aktualisiert sich automatisch bei DB-Änderungen. */
     @Query("SELECT * FROM meeting_table ORDER BY timestamp")
     LiveData<List<Meeting>> getAllMeetings();
 

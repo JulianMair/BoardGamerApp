@@ -21,9 +21,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     private DatePickerDialog.OnDateSetListener listener;
 
     /**
-     * WICHTIG: Das Interface (Der Vertrag).
-     * Jede Activity, die diesen DatePicker nutzen will, MUSS dieses Interface implementieren.
-     * So weiß das Fragment: "Egal wer mich aufruft, er hat auf jeden Fall die Methode 'onDateSelected'".
+     * WICHTIG: Das Interface
      */
     public interface DatePickerListener {
         void onDateSelected(int year, int month, int day);
@@ -31,19 +29,19 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     /**
      * Wird aufgerufen, sobald sich der Dialog öffnet.
-     * Hier konfigurieren wir das Aussehen und die Startwerte.
+     * Konfiguration von Aussehen und Startwerte.
      */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        // // Wir nutzen die aktuelle Systemzeit als Startwert für den Kalender
+        // Nutzt die aktuelle Systemzeit als Startwert für den Kalender
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Erstellt den eigentlichen Android-Dialog
-        // 'this' bedeutet: Dieses Fragment hier kümmert sich darum, wenn der User "OK" klickt (OnDateSetListener)
+        // Dieses Fragment hier kümmert sich darum, wenn der User "OK" klickt (OnDateSetListener)
         DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
 
         // Zugriff auf das interne Picker-Widget, um Regeln festzulegen
@@ -58,7 +56,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     /**
      * Diese Methode wird automatisch aufgerufen, wenn der User im Kalender auf "OK" klickt.
-     * Hier schicken wir die gewählten Daten zurück an die Activity.
+     * @return das Ausgewählte Datums
      */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -68,11 +66,10 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
             return;
         }
         // Kommunikation zurück zur Activity (Callback):
-        // 1. Wir prüfen: Hat die Activity unser Interface 'DatePickerListener' implementiert?
+        // 1. Prüfen ob das Interface 'DatePickerListener' implementiert ist
         if (getActivity() instanceof DatePickerListener) {
-            // (Hinweis: Dein Log-Text war hier etwas verwirrend, eigentlich ist Activity hier NICHT null)
-            // 2. Wir 'casten' die Activity in das Interface und rufen die Methode auf.
-            // Damit übergeben wir die Daten (Jahr, Monat, Tag) an den Screen zurück.
+            // 2.Casten von der Activity in das Interface
+            // Rückgabe von Daten (Jahr, Monat, Tag) an den Screen .
             ((DatePickerListener) getActivity()).onDateSelected(year, month, day);
         }
     }

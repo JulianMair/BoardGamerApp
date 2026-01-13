@@ -15,21 +15,15 @@ import java.util.List;
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.data.Meeting;
 
-/**
- * Der Adapter ist der "Vermittler" zwischen den rohen Daten (Liste von Meetings)
- * und der Anzeige (RecyclerView).
- * Er entscheidet:
- * 1. Wie sieht eine einzelne Zeile aus? (onCreateViewHolder)
- * 2. Welche Daten kommen in welche Zeile? (onBindViewHolder)
- */
+/** RecyclerView-Adapter für die Darstellung der Meeting-Liste. */
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingViewHolder> {
 
     // Die Datenquelle. Wir initialisieren sie leer, um NullPointerExceptions zu vermeiden.
     private List<Meeting> meetingList = new ArrayList<>();
 
     // --- INTERFACE FÜR KLICKS ---
-    // Der Adapter selbst soll nicht entscheiden, was beim Klick passiert (z.B. Activity wechseln).
-    // Er meldet den Klick nur nach "draußen" an die Activity/Fragment.
+
+    // Interface für Click-Events zur Kommunikation mit der Activity.
     public interface OnItemClickListener {
         void onItemClick(Meeting meeting);
     }
@@ -41,23 +35,20 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
     }
 
     // --- VIEWHOLDER ---
-    // Der ViewHolder ist ein "Cache". Er merkt sich die Textfelder einer Zeile,
-    // damit Android nicht bei jedem Scrollen neu nach 'findViewById' suchen muss.
-    // Das macht die Liste flüssig
     public static class MeetingViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDate;
         private TextView tvTitle;
         public MeetingViewHolder(View view) {
             super(view);
-            // Hier verbinden wir die Variablen mit den IDs aus der XML (termine_item_meeting.xml)
+            // Verbinden der Variablen mit den IDs des XML (termine_item_meeting.xml)
             this.tvDate = view.findViewById(R.id.tvItemDateTime);
             this.tvTitle = view.findViewById(R.id.tvTitle);
         }
     }
 
     // --- 1. LAYOUT ERSTELLEN ---
-    // Diese Methode wird aufgerufen, wenn der RecyclerView eine NEUE Zeile braucht.
-    // Sie "bläst" das XML-Layout auf (Inflation) und erstellt einen ViewHolder.
+
+    // Flexibles Layout für Listen-Elemente.
     @NonNull
     @Override
     public MeetingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -67,8 +58,8 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
     }
 
     // --- 2. DATEN REINSCHREIBEN ---
-    // Diese Methode wird STÄNDIG aufgerufen, wenn eine Zeile ins Bild gescrollt wird.
-    // Hier verbinden wir das Java-Objekt (Meeting) mit der Anzeige (ViewHolder).
+
+    // Bindet Daten an den ViewHolder.
     @Override
     public void onBindViewHolder(@NonNull MeetingViewHolder holder, int position) {
         // Welches Meeting sind wir gerade? (Basierend auf der Position in der Liste)
@@ -88,7 +79,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MeetingV
         });
     }
 
-    // Sagt dem RecyclerView, wie viele Elemente die Liste insgesamt hat.
+    // gibt die Anzahl der Elemente in der Liste zurück
     @Override
     public int getItemCount() {
         return meetingList.size();
