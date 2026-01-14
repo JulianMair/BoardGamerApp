@@ -159,7 +159,7 @@
 
                 <TextView
                     android:id="@+id/tvhost"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:drawablePadding="16dp"
@@ -167,8 +167,23 @@
                     android:textSize="16sp"
                     android:textColor="#333333"
                     app:drawableStartCompat="@android:drawable/ic_menu_myplaces"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/btnMessageHost"
                     app:layout_constraintTop_toBottomOf="@id/sep3"
                     tools:text="Max Mustermann" />
+
+                <ImageButton
+                    android:id="@+id/btnMessageHost"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_dialog_email"
+                    app:tint="#6200EE"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvhost"
+                    app:layout_constraintBottom_toBottomOf="@id/tvhost"/>
 
                 <View
                     android:id="@+id/sep4"
@@ -178,83 +193,74 @@
                     android:background="#EEEEEE"
                     app:layout_constraintTop_toBottomOf="@id/tvhost"/>
 
-                <TextView
-                    android:id="@+id/tvTopGameLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:drawablePadding="16dp"
-                    android:gravity="center_vertical"
-                    android:text="Topspiel:"
-                    android:textSize="16sp"
-                    android:textColor="#333333"
-                    app:drawableStartCompat="@android:drawable/ic_menu_agenda"
-                    app:layout_constraintTop_toBottomOf="@id/sep4" />
-
-                <TextView
-                    android:id="@+id/tvTopGameValue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-"
-                    android:textSize="15sp"
-                    android:textColor="#333333"
-                    app:layout_constraintStart_toEndOf="@id/tvTopGameLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvTopGameLabel"
-                    app:layout_constraintBottom_toBottomOf="@id/tvTopGameLabel" />
-
-                <View
-                    android:id="@+id/sep5"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="12dp"
-                    android:background="#EEEEEE"
-                    app:layout_constraintTop_toBottomOf="@id/tvTopGameValue"/>
-
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchStatus"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="Planung offen"
                     android:textSize="14sp"
                     android:textColor="#333333"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sep5"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/sep4"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnFood"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:text="Essen"
                     android:textColor="#FF9800"
                     app:icon="@android:drawable/ic_menu_agenda"
                     app:iconTint="#FF9800"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/switchStatus" />
+                    app:layout_constraintTop_toTopOf="@id/switchStatus"
+                    app:layout_constraintBottom_toBottomOf="@id/switchStatus"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddGame"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Spiel +"
+                    android:textColor="#6200EE"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconTint="#6200EE"
+                    android:layout_marginEnd="0dp"
+                    app:layout_constraintEnd_toStartOf="@id/btnFood"
+                    app:layout_constraintTop_toTopOf="@id/switchStatus"
+                    app:layout_constraintBottom_toBottomOf="@id/switchStatus"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRate"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bewerten"
+                    android:textColor="#4CAF50"
+                    android:visibility="gone"
+                    app:icon="@android:drawable/btn_star"
+                    app:iconTint="#4CAF50"
+                    android:layout_marginEnd="0dp"
+                    app:layout_constraintEnd_toStartOf="@id/btnFood"
+                    app:layout_constraintTop_toTopOf="@id/switchStatus"
+                    app:layout_constraintBottom_toBottomOf="@id/switchStatus"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnVoteGames"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <TextView
+            android:id="@+id/tvGamesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Spielevoting"
-            android:textColor="#6200EE"
-            app:icon="@android:drawable/ic_menu_agenda"
-            app:iconTint="#6200EE"
+            android:text="Vorgeschlagene Spiele"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="24dp"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardDetails"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/cardDetails"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvGames"
@@ -263,7 +269,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/btnVoteGames"
+            app:layout_constraintTop_toBottomOf="@id/tvGamesLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:itemCount="3"
