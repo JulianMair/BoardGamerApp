@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_evaluate.data.MeetingRating;
 import de.iu.boardgame.feature_evaluate.viewmodel.RatingViewModel;
+import de.iu.boardgame.feature_user.helpers.SessionManager;
 
 public class RatingAtivity extends AppCompatActivity {
 
@@ -23,6 +24,8 @@ public class RatingAtivity extends AppCompatActivity {
     private EditText editComment;
     private Button btnSaveRating;
     private RatingViewModel viewModel;
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -40,6 +43,7 @@ public class RatingAtivity extends AppCompatActivity {
         // ViewModel initialisieren
         viewModel = new ViewModelProvider(this).get(RatingViewModel.class);
 
+        //Methode fürs speichern von Ratings
         btnSaveRating.setOnClickListener(v -> saveRating());
     }
 
@@ -49,6 +53,7 @@ public class RatingAtivity extends AppCompatActivity {
         float food = ratingFood.getRating();
         float evening = ratingEvening.getRating();
         String comment = editComment.getText().toString().trim();
+        long userId = SessionManager.getCurrentUserId(this);
 
         if (comment.isEmpty()) {
             Toast.makeText(this, "Bitte gib einen Kommentar ein.", Toast.LENGTH_SHORT).show();
@@ -57,9 +62,10 @@ public class RatingAtivity extends AppCompatActivity {
 
         // Bewertung erstellen
         int meetingId = getIntent().getIntExtra("meeting_id", -1);
-        System.out.println(meetingId);
+
         MeetingRating rating = new MeetingRating(
                 meetingId,
+                userId,
                 host,
                 food,
                 evening,

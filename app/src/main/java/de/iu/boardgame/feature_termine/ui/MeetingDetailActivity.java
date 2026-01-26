@@ -1,6 +1,7 @@
 package de.iu.boardgame.feature_termine.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import de.iu.boardgame.R;
+import de.iu.boardgame.feature_evaluate.ui.RatingListActivity;
+import de.iu.boardgame.feature_send_message.ui.ChatActivity;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
@@ -177,13 +180,16 @@ public class MeetingDetailActivity extends AppCompatActivity {
         });
 
         btnMessageHost.setOnClickListener(v -> {
-            // TODO
-            Toast.makeText(this, "Msg Host", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ChatActivity.class);
+            intent.putExtra("meeting_id", currentMeeting.getMeeting_id());
+            intent.putExtra("user", currentUser.name);
+            this.startActivity(intent);
         });
 
         btnRate.setOnClickListener(v -> {
-            Toast.makeText(this, "Bewertung öffnet sich...", Toast.LENGTH_SHORT).show();
-            // TODO: Intent zur EvaluationActivity starten
+            Intent intent = new Intent(this, RatingListActivity.class);
+            intent.putExtra("meeting_id", currentMeeting.getMeeting_id());
+            this.startActivity(intent);
         });
 
     }
@@ -252,9 +258,6 @@ public class MeetingDetailActivity extends AppCompatActivity {
             btnFood.setVisibility(android.view.View.GONE);
         }
 
-        if(isMyMeeting()){
-            btnMessageHost.setVisibility(View.GONE);
-        }
     }
 
 }

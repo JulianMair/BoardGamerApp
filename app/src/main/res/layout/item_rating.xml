@@ -16,6 +16,14 @@
         android:padding="16dp">
 
         <!-- Datum & Uhrzeit -->
+        <EditText
+            android:id="@+id/lblUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Bewertung von: " />
+
         <TextView
             android:id="@+id/txtDatum"
             android:layout_width="wrap_content"

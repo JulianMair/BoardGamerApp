@@ -6,49 +6,61 @@ import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 import androidx.room.ForeignKey;
 
+import java.time.LocalDateTime;
+
 import de.iu.boardgame.feature_termine.data.Meeting;
+import de.iu.boardgame.feature_user.data.User;
 
 @Entity(
-        tableName = "messages",
-        foreignKeys = @ForeignKey(
-                entity = Meeting.class,
-                parentColumns = "meeting_id",
-                childColumns = "meeting_id",
-                onDelete = ForeignKey.CASCADE
-        ),
-        indices = {@Index("meeting_id")}  // Index auf die Foreign Key-Spalte
+        foreignKeys = {
+                @ForeignKey(
+                        entity = Meeting.class,
+                        parentColumns = "meeting_id",
+                        childColumns = "meeting_id",
+                        onDelete = ForeignKey.CASCADE
+                ),
+                @ForeignKey(
+                        entity = User.class,
+                        parentColumns = "id",
+                        childColumns = "senderUserId",
+                        onDelete = ForeignKey.CASCADE
+                )
+        },
+        indices = {
+                @Index("meeting_id"),
+                @Index("senderUserId")
+        }// Index auf die Foreign Key-Spalte
 )
 public class Message {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-
-    private String sender;
+    private long senderUserId;
     private String text;
-    private long timestamp;
+    private LocalDateTime timestamp;
 
     @ColumnInfo(name = "meeting_id")
     private int meetingId;  // Verbindung zum Meeting
 
-    public Message(String sender, String text, int meetingId) {
-        this.sender = sender;
+    public Message(long senderUserId, String text, int meetingId,LocalDateTime timestamp) {
+        this.senderUserId = senderUserId;
         this.text = text;
         this.meetingId = meetingId;
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = timestamp;
     }
 
     // --- Getter + Setter ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public String getSender() { return sender; }
-    public void setSender(String sender) { this.sender = sender; }
+    public long getSenderUserId() { return senderUserId; }
+    public void setSenderUserId(long senderUserId) { this.senderUserId = senderUserId; }
 
     public String getText() { return text; }
     public void setText(String text) { this.text = text; }
 
-    public long getTimestamp() { return timestamp; }
-    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 
     public int getMeetingId() { return meetingId; }
     public void setMeetingId(int meetingId) { this.meetingId = meetingId; }

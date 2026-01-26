@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_evaluate.data.MeetingRating;
+import de.iu.boardgame.feature_evaluate.data.RatingWithUser;
 import de.iu.boardgame.feature_evaluate.viewmodel.RatingViewModel;
+import de.iu.boardgame.feature_user.helpers.SessionManager;
 
 public class RatingListActivity extends AppCompatActivity {
 
@@ -28,6 +30,10 @@ public class RatingListActivity extends AppCompatActivity {
 
         View btnNewRating = findViewById(R.id.fabNeueBewertung);
 
+        //User ID aus Session holen
+        long userId = SessionManager.getCurrentUserId(this);
+
+        // Adapter initialisieren
         adapter = new RatingAdapter();
         recyclerView.setAdapter(adapter);
 
@@ -37,11 +43,19 @@ public class RatingListActivity extends AppCompatActivity {
         // LiveData aus der DB beobachten
         int meetingId = getIntent().getIntExtra("meeting_id", -1);
         if (meetingId != -1) {
-            viewModel.getRatingsForMeeting(meetingId).observe(this, ratings -> {
+            viewModel.getRatingsForMeetingWithUser(meetingId).observe(this, ratings -> {
+                for(RatingWithUser r :ratings){
+
+                    if(r.getUserId() ==userId){
+                        btnNewRating.setVisibility(View.INVISIBLE);
+                    }
+                }
                 adapter.setData(ratings);
+
             });
         }
 
+        //Aufruf der Rating Activity
         btnNewRating.setOnClickListener(v -> {
             Intent intent = new Intent(RatingListActivity.this, RatingAtivity.class);
             intent.putExtra("meeting_id", meetingId); // ✅ Meeting-ID weitergeben

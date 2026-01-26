@@ -18,12 +18,14 @@ public class MessageRepository {
     }
 
     // Nachrichten als LiveData
-    public LiveData<List<Message>> getMessagesForMeeting(int meetingId) {
-        return messageDao.getMessagesForMeeting(meetingId);
+    public LiveData<List<MessageWithUser>> getMessagesForMeeting(int meetingId) {
+        return messageDao.getMessagesForMeetingWithUser(meetingId);
     }
 
     // Neue Nachricht einfügen
     public void insert(Message message) {
         Executors.newSingleThreadExecutor().execute(() -> messageDao.insert(message));
     }
+
+
 }

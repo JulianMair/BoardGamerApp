@@ -8,6 +8,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+
+/** Methoden zur Unterstützung von Daten und Zeit*/
 public class Converter {
 
     @TypeConverter

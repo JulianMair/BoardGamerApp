@@ -10,25 +10,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import de.iu.boardgame.R;
-import de.iu.boardgame.feature_send_message.data.Message;
+import de.iu.boardgame.feature_send_message.data.MessageWithUser;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
+    private long currentUserId;
+    private List<MessageWithUser> messages;
 
-    private List<Message> messages;
-    private final String currentUser = "Ich";
-
-    public MessageAdapter(List<Message> messages) {
-        this.messages = messages;
+    public MessageAdapter(long userid){
+        this.currentUserId = userid;
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public void setMessages(List<MessageWithUser> messages) {
+        this.messages = messages != null ? messages : new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -46,32 +45,43 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-        Message m = messages.get(position);
-        holder.messageText.setText(m.getText());
+        MessageWithUser messageWithUser = messages.get(position);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        holder.messageTime.setText(sdf.format(new Date(m.getTimestamp())));
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        holder.messageText.setText(messageWithUser.getText());
 
-        LinearLayout container = holder.messageContainer;
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) container.getLayoutParams();
-        if (m.getSender().equals(currentUser)) {
+        // Sicher Name holen
+        holder.messageSender.setText(messageWithUser.getUsername());
+
+        holder.messageTime.setText(messageWithUser.getTimestamp().format(formatter));
+
+        // Hier werden die Parameter des Layouts geholt um sie dann Userabhänhig zu verändern
+        LinearLayout.LayoutParams params =
+                (LinearLayout.LayoutParams) holder.messageContainer.getLayoutParams();
+
+        /** Bestimmung ob die Nachricht von dem angemeldeten User ist oder von einem anderen
+         *  Aufgrund dessen ändert sich die Farbe der Nachricht und auch die Anordnung links oder rechts
+         */
+        if (messageWithUser.getSenderUserId() == currentUserId) {
             params.gravity = Gravity.END;
-            container.setBackgroundColor(0xFFDCF8C6);
+            holder.messageContainer.setBackgroundResource(R.drawable.bg_message_me);
         } else {
             params.gravity = Gravity.START;
-            container.setBackgroundColor(0xFFFFFFFF);
+            holder.messageContainer.setBackgroundResource(R.drawable.bg_message_other);
         }
-        container.setLayoutParams(params);
+
+        holder.messageContainer.setLayoutParams(params);
     }
 
     static class MessageViewHolder extends RecyclerView.ViewHolder {
-        TextView messageText, messageTime;
+        TextView messageText, messageTime, messageSender;
         LinearLayout messageContainer;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             messageText = itemView.findViewById(R.id.messageText);
             messageTime = itemView.findViewById(R.id.messageTime);
+            messageSender = itemView.findViewById(R.id.messageSender);
             messageContainer = itemView.findViewById(R.id.messageContainer);
         }
     }

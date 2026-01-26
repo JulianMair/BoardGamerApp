@@ -24,7 +24,7 @@ import de.iu.boardgame.feature_spiele.data.GameDao;
 import de.iu.boardgame.feature_user.data.User;
 import de.iu.boardgame.feature_user.data.UserDao;
 
-@Database(entities = {Meeting.class, Game.class, Vote.class, MeetingRating.class, Message.class, User.class}, version = 7, exportSchema = false)
+@Database(entities = {Meeting.class, Game.class, Vote.class, MeetingRating.class, Message.class, User.class}, version = 12, exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MeetingDao meetingDao();
@@ -103,6 +103,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             if (userDao.getAll().isEmpty()) {
                                 userDao.insert(new User("Anna", "anna@example.com", "0171123456", "Musterstrasse 1", true));
                                 userDao.insert(new User("Markus", "markus@example.com", "0171987654", "Hauptstrasse 5", false));
+                                userDao.insert(new User("Hans", "markus@example.com", "0171987654", "Hauptstrasse 5", false));
                             }
                         } catch (Exception ignored) { }
                     }

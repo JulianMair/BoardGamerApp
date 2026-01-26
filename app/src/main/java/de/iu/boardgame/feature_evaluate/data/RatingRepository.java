@@ -31,10 +31,6 @@ public class RatingRepository {
         });
     }
 
-    public LiveData<List<MeetingRating>> getAllRatings() {
-        return ratingDao.getAllRatings();  // Room liefert automatisch LiveData
-    }
-
     /** Neues Rating einfügen */
     public void insert(MeetingRating rating) {
         executorService.execute(() -> {
@@ -50,8 +46,15 @@ public class RatingRepository {
             loadAllRatings(); // nach Delete neu laden
         });
     }
+
+    /** Alle Ratings für ein Meeting aus Datenbank holen */
     public LiveData<List<MeetingRating>> getRatingsForMeeting(int meetingId) {
         return ratingDao.getRatingsForMeeting(meetingId);
+    }
+
+    /** Alle Ratings für ein Meeting mit dem User aus Datenbank holen */
+    public LiveData<List<RatingWithUser>> getRatingsForMeetingWithUser(int meetingId){
+        return ratingDao.getRatingsForMeetingWithUser(meetingId);
     }
 
 }

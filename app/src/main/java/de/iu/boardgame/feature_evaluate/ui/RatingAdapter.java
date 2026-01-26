@@ -15,14 +15,15 @@ import java.util.List;
 
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_evaluate.data.MeetingRating;
+import de.iu.boardgame.feature_evaluate.data.RatingWithUser;
 
 public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder> {
 
-    private List<MeetingRating> daten = new ArrayList<>();
+    private List<RatingWithUser> daten = new ArrayList<>();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-    /** Wird vom ViewModel-Observer aufgerufen */
-    public void setData(List<MeetingRating> neueDaten) {
+    /** Adapter wird mit Daten bestückt */
+    public void setData(List<RatingWithUser> neueDaten) {
         this.daten = neueDaten != null ? neueDaten : new ArrayList<>();
         notifyDataSetChanged();
     }
@@ -37,7 +38,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MeetingRating rating = daten.get(position);
+        RatingWithUser rating = daten.get(position);
 
         // Datum formatieren (LocalDateTime)
         if (rating.getTimestamp() != null) {
@@ -50,6 +51,9 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
         holder.ratingGastgeber.setRating(rating.getHostRating());
         holder.ratingEssen.setRating(rating.getFoodRating());
         holder.ratingAbend.setRating(rating.getEveningRating());
+        String user = "Bewertung von: "+ rating.getUsername();
+        holder.txtUser.setText(user);
+
 
         // Kommentar
         String comment = rating.getComment();
@@ -66,7 +70,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtDatum, txtKommentar;
+        TextView txtDatum, txtKommentar, txtUser;
         RatingBar ratingGastgeber, ratingEssen, ratingAbend;
 
         public ViewHolder(@NonNull View itemView) {
@@ -76,6 +80,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
             ratingEssen = itemView.findViewById(R.id.ratingEssen);
             ratingAbend = itemView.findViewById(R.id.ratingAbend);
             txtKommentar = itemView.findViewById(R.id.txtKommentar);
+            txtUser = itemView.findViewById(R.id.lblUser);
         }
     }
 }
