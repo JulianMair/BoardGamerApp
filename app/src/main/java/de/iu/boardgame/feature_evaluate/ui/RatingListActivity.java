@@ -13,6 +13,7 @@ import de.iu.boardgame.R;
 import de.iu.boardgame.feature_evaluate.data.MeetingRating;
 import de.iu.boardgame.feature_evaluate.data.RatingWithUser;
 import de.iu.boardgame.feature_evaluate.viewmodel.RatingViewModel;
+import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_user.helpers.SessionManager;
 
 public class RatingListActivity extends AppCompatActivity {
@@ -40,8 +41,27 @@ public class RatingListActivity extends AppCompatActivity {
         // ViewModel initialisieren
         viewModel = new ViewModelProvider(this).get(RatingViewModel.class);
 
-        // LiveData aus der DB beobachten
+        //meeting ID über Intent mitnehmen
         int meetingId = getIntent().getIntExtra("meeting_id", -1);
+
+        //Nur Bewerten wenn Spieler
+
+        MeetingViewModel meetingViewModel =
+                new ViewModelProvider(this).get(MeetingViewModel.class);
+        meetingViewModel.getcurrentMeeting(meetingId)
+                .observe(this, meeting -> {
+
+                    long currentUserId = SessionManager.getCurrentUserId(this);
+
+                    // Gastgeber darf nicht bewerten
+                    if (meeting.getHost_id() == currentUserId) {
+                        btnNewRating.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+
+        // LiveData aus der DB beobachten
+
         if (meetingId != -1) {
             viewModel.getRatingsForMeetingWithUser(meetingId).observe(this, ratings -> {
                 for(RatingWithUser r :ratings){
@@ -58,7 +78,7 @@ public class RatingListActivity extends AppCompatActivity {
         //Aufruf der Rating Activity
         btnNewRating.setOnClickListener(v -> {
             Intent intent = new Intent(RatingListActivity.this, RatingAtivity.class);
-            intent.putExtra("meeting_id", meetingId); // ✅ Meeting-ID weitergeben
+            intent.putExtra("meeting_id", meetingId); //  Meeting-ID weitergeben
             startActivity(intent);
         });
 

@@ -10,22 +10,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
+import de.iu.boardgame.MainActivity;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.ui.adapter.MeetingAdapter;
 import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
 import de.iu.boardgame.feature_user.data.User;
+import de.iu.boardgame.feature_user.helpers.SessionManager;
+import de.iu.boardgame.feature_user.ui.LoginActivity;
 import de.iu.boardgame.feature_user.viewmodel.UsersViewModel;
 
 /**
@@ -41,6 +49,9 @@ public class MeetingListActivity extends AppCompatActivity {
     private MeetingViewModelFactory factory;
     private FloatingActionButton btnAdd;
     private ImageButton btnBack;
+    private ImageButton btnMenu;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     private MeetingAdapter adapter;
     private List<User> loadedUsers = null;
 
@@ -51,6 +62,40 @@ public class MeetingListActivity extends AppCompatActivity {
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.termine_activity_meeting_list);
+
+        // Burger Menü initialisieren
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigationView);
+        btnMenu = findViewById(R.id.btnMenu);
+
+        btnMenu.setOnClickListener(v ->
+                drawerLayout.openDrawer(GravityCompat.START)
+        );
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+
+            int id = item.getItemId();
+
+            if (id == R.id.nav_add_game) {
+                Toast.makeText(this, "Termine", Toast.LENGTH_SHORT).show();
+            }
+
+            else if (id == R.id.nav_logout) {
+                SessionManager.clearCurrentUserId(MeetingListActivity.this);
+                Intent intent = new Intent(MeetingListActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+
+            else if (id == R.id.nav_logout) {
+                Toast.makeText(this, "Logout erfolgreich", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
 
         // Views verbinden
         btnAdd = findViewById(R.id.btdAdd);
@@ -66,6 +111,7 @@ public class MeetingListActivity extends AppCompatActivity {
         // Usermodel Setup
         userViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
 
+
         // --- 2. RECYCLERVIEW SETUP ---
 
         // a) // Initialisierung des Adapters
@@ -74,11 +120,11 @@ public class MeetingListActivity extends AppCompatActivity {
         // b) Klick-Logik definieren
         // Interfaces des Adapters nutzen
         adapter.setOnItemClickListener(meeting -> {
-           Intent intent = new Intent(MeetingListActivity.this, MeetingDetailActivity.class);
+            Intent intent = new Intent(MeetingListActivity.this, MeetingDetailActivity.class);
 
             // Übergeben der ID des angeklickten Meetings in den Intent.
-           intent.putExtra("MEETING_ID", meeting.getMeeting_id());
-           startActivity(intent);
+            intent.putExtra("MEETING_ID", meeting.getMeeting_id());
+            startActivity(intent);
         });
 
         // c) Verknüpfung
@@ -117,11 +163,15 @@ public class MeetingListActivity extends AppCompatActivity {
             startActivity(new Intent(MeetingListActivity.this, MeetingCreateForm.class));
         });
 
-        btnBack.setOnClickListener(v -> {
-            finish();
-        });
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -139,6 +189,5 @@ public class MeetingListActivity extends AppCompatActivity {
                 tvNextHostName.setText("Alea nondum iacta est.");
             }
         }
-
     }
 }
