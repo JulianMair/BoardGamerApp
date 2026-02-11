@@ -26,6 +26,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.List;
 
 import de.iu.boardgame.MainActivity;
+import de.iu.boardgame.feature_spiele.ui.GamesListActivity;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.ui.adapter.MeetingAdapter;
 import de.iu.boardgame.R;
@@ -76,11 +77,7 @@ public class MeetingListActivity extends AppCompatActivity {
 
             int id = item.getItemId();
 
-            if (id == R.id.nav_add_game) {
-                Toast.makeText(this, "Termine", Toast.LENGTH_SHORT).show();
-            }
-
-            else if (id == R.id.nav_logout) {
+            if (id == R.id.nav_logout) {
                 SessionManager.clearCurrentUserId(MeetingListActivity.this);
                 Intent intent = new Intent(MeetingListActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -88,9 +85,8 @@ public class MeetingListActivity extends AppCompatActivity {
                 finish();
             }
 
-            else if (id == R.id.nav_logout) {
-                Toast.makeText(this, "Logout erfolgreich", Toast.LENGTH_SHORT).show();
-                finish();
+            else if (id == R.id.nav_add_game) {
+                startActivity(new Intent(MeetingListActivity.this, GamesListActivity.class));
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);
