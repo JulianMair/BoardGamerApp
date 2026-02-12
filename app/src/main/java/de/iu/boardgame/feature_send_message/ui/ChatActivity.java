@@ -3,6 +3,7 @@ package de.iu.boardgame.feature_send_message.ui;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChatViewModel viewModel;
     private RecyclerView recyclerView;
     private MessageAdapter adapter;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,14 @@ public class ChatActivity extends AppCompatActivity {
         long currentUserId = SessionManager.getCurrentUserId(this);
 
         recyclerView = findViewById(R.id.chatRecycler);
+        btnBack = findViewById(R.id.btnBack);
+
+        //Zurück Button
+        btnBack.setOnClickListener(view -> {
+            finish();
+        });
+
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);

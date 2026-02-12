@@ -44,6 +44,7 @@ public class RatingRepository {
         executorService.execute(() -> {
             ratingDao.delete(rating);
             loadAllRatings(); // nach Delete neu laden
+
         });
     }
 

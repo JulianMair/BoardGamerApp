@@ -3,6 +3,7 @@ package de.iu.boardgame.feature_evaluate.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,6 +22,9 @@ public class RatingListActivity extends AppCompatActivity {
     private RatingAdapter adapter;
     private RatingViewModel viewModel;
 
+    private ImageButton btnBack;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,7 @@ public class RatingListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         View btnNewRating = findViewById(R.id.fabNeueBewertung);
+        btnBack = findViewById(R.id.btnBack);
 
         //User ID aus Session holen
         long userId = SessionManager.getCurrentUserId(this);
@@ -37,6 +42,11 @@ public class RatingListActivity extends AppCompatActivity {
         // Adapter initialisieren
         adapter = new RatingAdapter();
         recyclerView.setAdapter(adapter);
+
+        //Zurück Button
+        btnBack.setOnClickListener(view -> {
+            finish();
+        });
 
         // ViewModel initialisieren
         viewModel = new ViewModelProvider(this).get(RatingViewModel.class);
@@ -72,6 +82,7 @@ public class RatingListActivity extends AppCompatActivity {
                 }
                 adapter.setData(ratings);
 
+
             });
         }
 
@@ -83,4 +94,7 @@ public class RatingListActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 }

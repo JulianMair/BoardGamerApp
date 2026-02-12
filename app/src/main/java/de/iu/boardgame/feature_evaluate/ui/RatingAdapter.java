@@ -3,6 +3,7 @@ package de.iu.boardgame.feature_evaluate.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -14,19 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.iu.boardgame.R;
-import de.iu.boardgame.feature_evaluate.data.MeetingRating;
 import de.iu.boardgame.feature_evaluate.data.RatingWithUser;
 
 public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder> {
 
     private List<RatingWithUser> daten = new ArrayList<>();
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
+
 
     /** Adapter wird mit Daten bestückt */
     public void setData(List<RatingWithUser> neueDaten) {
         this.daten = neueDaten != null ? neueDaten : new ArrayList<>();
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override
@@ -39,6 +43,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RatingWithUser rating = daten.get(position);
+
 
         // Datum formatieren (LocalDateTime)
         if (rating.getTimestamp() != null) {
@@ -72,6 +77,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtDatum, txtKommentar, txtUser;
         RatingBar ratingGastgeber, ratingEssen, ratingAbend;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -2,8 +2,10 @@ package de.iu.boardgame.feature_evaluate.ui;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ public class RatingAtivity extends AppCompatActivity {
     private EditText editComment;
     private Button btnSaveRating;
     private RatingViewModel viewModel;
+    private ImageButton btnBack;
 
 
 
@@ -39,12 +42,18 @@ public class RatingAtivity extends AppCompatActivity {
         ratingEvening = findViewById(R.id.ratingEvening);
         editComment = findViewById(R.id.editComment);
         btnSaveRating = findViewById(R.id.btnSaveRating);
+        btnBack = findViewById(R.id.btnBack);
 
         // ViewModel initialisieren
         viewModel = new ViewModelProvider(this).get(RatingViewModel.class);
 
         //Methode fürs speichern von Ratings
         btnSaveRating.setOnClickListener(v -> saveRating());
+
+        //Zurück Button
+        btnBack.setOnClickListener(view -> {
+            finish();
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
