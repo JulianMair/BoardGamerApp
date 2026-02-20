@@ -1,12 +1,13 @@
 package de.iu.boardgame.feature_send_message.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +22,7 @@ import de.iu.boardgame.feature_termine.data.AppDatabase;
 import de.iu.boardgame.feature_user.helpers.SessionManager;
 import de.iu.boardgame.feature_user.data.UserDao;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
 
     private ChatViewModel viewModel;
     private RecyclerView recyclerView;

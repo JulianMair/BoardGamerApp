@@ -1,11 +1,12 @@
 package de.iu.boardgame.feature_abstimmung.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +18,9 @@ import de.iu.boardgame.feature_abstimmung.data.GameVoteInfo;
 import de.iu.boardgame.feature_abstimmung.ui.adapter.VoteListAdapter;
 import de.iu.boardgame.feature_abstimmung.viewmodel.VotesViewModel;
 import de.iu.boardgame.feature_user.helpers.SessionManager;
+import android.widget.ImageButton;
 
-public class VoteGamesActivity extends AppCompatActivity implements VoteListAdapter.Listener {
+public class VoteGamesActivity extends BaseActivity implements VoteListAdapter.Listener {
 
     public static final String EXTRA_MEETING_ID = "meeting_id";
     public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
@@ -37,6 +39,9 @@ public class VoteGamesActivity extends AppCompatActivity implements VoteListAdap
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_games);
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
 
         meetingId = getIntent().getLongExtra(EXTRA_MEETING_ID, -1L);
         if (meetingId <= 0) {

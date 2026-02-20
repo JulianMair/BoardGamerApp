@@ -1,5 +1,7 @@
 package de.iu.boardgame.feature_spiele.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -7,7 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import de.iu.boardgame.R;
@@ -22,7 +23,7 @@ import de.iu.boardgame.feature_spiele.viewmodel.GamesViewModel;
  * - Game-Objekt erstellen
  * - Speichern über ViewModel (MVVM)
  */
-public class AddGameActivity extends AppCompatActivity {
+public class AddGameActivity extends BaseActivity {
 
     // UI-Elemente
     private EditText nameInput;

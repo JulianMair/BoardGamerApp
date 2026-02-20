@@ -1,9 +1,10 @@
 package de.iu.boardgame;
 
+import de.iu.boardgame.BaseActivity;
+
 import static de.iu.boardgame.R.*;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -22,7 +23,7 @@ import de.iu.boardgame.feature_termine.ui.MeetingListActivity;
 import de.iu.boardgame.feature_user.helpers.SessionManager;
 import de.iu.boardgame.feature_user.ui.LoginActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

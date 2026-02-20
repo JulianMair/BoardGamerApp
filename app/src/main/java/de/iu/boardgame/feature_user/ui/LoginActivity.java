@@ -1,5 +1,7 @@
 package de.iu.boardgame.feature_user.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
@@ -13,7 +15,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -23,9 +24,9 @@ import de.iu.boardgame.R;
 import de.iu.boardgame.feature_user.data.User;
 import de.iu.boardgame.feature_user.helpers.SessionManager;
 import de.iu.boardgame.feature_user.viewmodel.UsersViewModel;
-import de.iu.boardgame.MainActivity;
+import de.iu.boardgame.feature_termine.ui.MeetingListActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private UsersViewModel viewModel;
     private ArrayAdapter<String> adapter;
@@ -50,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                 long userId = users.get(position).id;
                 SessionManager.setCurrentUserId(LoginActivity.this, userId);
                 Toast.makeText(this, "Eingeloggt als " + users.get(position).name, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MeetingListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -92,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (id > 0){
                     SessionManager.setCurrentUserId(LoginActivity.this, id);
                     Toast.makeText(this, "Benutzer erstellt und eingeloggt", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MeetingListActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();

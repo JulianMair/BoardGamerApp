@@ -1,5 +1,7 @@
 package de.iu.boardgame.feature_termine.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -7,10 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -31,7 +29,7 @@ import de.iu.boardgame.feature_user.helpers.SessionManager;
  * Activity zum Erstellen eines neuen Termins.
  * WICHTIG: Diese Klasse implementiert zwei Interfaces (DatePickerListener, TimePickerListener).
  */
-public class MeetingCreateForm extends AppCompatActivity
+public class MeetingCreateForm extends BaseActivity
             implements DatePickerFragment.DatePickerListener,
             TimePickerFragment.TimePickerListener {
 
@@ -80,15 +78,7 @@ public class MeetingCreateForm extends AppCompatActivity
 
         // Kalender initialisieren (Standard: Aktuelle Zeit)
         c = Calendar.getInstance();
-
-        // System-Bars (Statusleiste/Navi) Padding setzen, damit nichts überdeckt wird
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        // Datum auswählen
+// Datum auswählen
         btndate.setOnClickListener(view -> {
             DatePickerFragment dateFragment = new DatePickerFragment();
 
