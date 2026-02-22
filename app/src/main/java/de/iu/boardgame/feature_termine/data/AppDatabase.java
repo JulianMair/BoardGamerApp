@@ -24,7 +24,7 @@ import de.iu.boardgame.feature_spiele.data.GameDao;
 import de.iu.boardgame.feature_user.data.User;
 import de.iu.boardgame.feature_user.data.UserDao;
 
-@Database(entities = {Meeting.class, Game.class, Vote.class, MeetingRating.class, Message.class, User.class}, version = 12, exportSchema = false)
+@Database(entities = {Meeting.class, Game.class, Vote.class, MeetingRating.class, Message.class, User.class}, version = 13, exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MeetingDao meetingDao();

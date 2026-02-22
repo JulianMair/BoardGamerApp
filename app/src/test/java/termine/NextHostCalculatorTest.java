@@ -1,4 +1,4 @@
-
+package termine;
 
 import org.junit.Test;
 import java.util.ArrayList;

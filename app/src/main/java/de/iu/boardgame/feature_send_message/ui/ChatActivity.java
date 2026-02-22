@@ -74,6 +74,7 @@ public class ChatActivity extends AppCompatActivity {
 
             //Nachricht in Datenbank speichern
             viewModel.sendMessage(m);
+            input.setText("");
         });
     }
 }
