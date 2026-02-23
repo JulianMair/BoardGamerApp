@@ -3,11 +3,16 @@ package de.iu.boardgame.feature_send_message.ui;
 import de.iu.boardgame.BaseActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +37,23 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Edge-to-edge korrekt behandeln (wichtig wenn adjustResize nicht greift)
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_chat);
+
+        View root = findViewById(R.id.root);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
+            Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            // Wenn Tastatur offen -> ime.bottom groß, sonst sys.bottom (NavBar)
+            int bottom = Math.max(ime.bottom, sys.bottom);
+
+            v.setPadding(sys.left, sys.top, sys.right, bottom);
+            return insets;
+        });
 
         int meetingId = getIntent().getIntExtra("meeting_id", -1);
         long currentUserId = SessionManager.getCurrentUserId(this);

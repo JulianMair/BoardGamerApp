@@ -48,7 +48,9 @@
 
         <activity android:name=".feature_evaluate.ui.RatingAtivity" />
         <activity android:name=".feature_evaluate.ui.RatingListActivity" />
-        <activity android:name=".feature_send_message.ui.ChatActivity"/>
+        <activity
+            android:name=".feature_send_message.ui.ChatActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".feature_user.ui.LoginActivity"
             android:exported="false" />
