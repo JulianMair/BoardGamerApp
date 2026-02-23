@@ -1,5 +1,7 @@
 package de.iu.boardgame.feature_spiele.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,8 +23,9 @@ import de.iu.boardgame.R;
 import de.iu.boardgame.feature_spiele.data.Game;
 import de.iu.boardgame.feature_spiele.ui.adapter.GameAdapter;
 import de.iu.boardgame.feature_spiele.viewmodel.GamesViewModel;
+import android.graphics.Color;
 
-public class GamesListActivity extends AppCompatActivity {
+public class GamesListActivity extends BaseActivity {
 
     // UI
     private GameAdapter gameAdapter;
@@ -48,6 +50,12 @@ public class GamesListActivity extends AppCompatActivity {
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.BLACK);
+        toolbar.setNavigationIcon(android.R.drawable.ic_menu_revert);
+        if (toolbar.getNavigationIcon() != null) {
+            toolbar.getNavigationIcon().setTint(Color.parseColor("#6200EE"));
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     /**

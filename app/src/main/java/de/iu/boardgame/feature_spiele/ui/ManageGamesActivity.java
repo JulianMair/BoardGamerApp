@@ -1,5 +1,7 @@
 package de.iu.boardgame.feature_spiele.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,8 +19,9 @@ import de.iu.boardgame.R;
 import de.iu.boardgame.feature_spiele.data.Game;
 import de.iu.boardgame.feature_spiele.ui.adapter.ManageGameAdapter;
 import de.iu.boardgame.feature_spiele.viewmodel.GamesViewModel;
+import android.widget.ImageButton;
 
-public class ManageGamesActivity extends AppCompatActivity implements ManageGameAdapter.Listener {
+public class ManageGamesActivity extends BaseActivity implements ManageGameAdapter.Listener {
 
     private ManageGameAdapter adapter;
     private GamesViewModel gamesViewModel;
@@ -28,6 +30,9 @@ public class ManageGamesActivity extends AppCompatActivity implements ManageGame
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_games);
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
 
         RecyclerView rv = findViewById(R.id.rvGames);
         rv.setLayoutManager(new LinearLayoutManager(this));

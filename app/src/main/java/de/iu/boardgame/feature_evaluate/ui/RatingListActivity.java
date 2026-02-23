@@ -1,11 +1,12 @@
 package de.iu.boardgame.feature_evaluate.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +18,7 @@ import de.iu.boardgame.feature_evaluate.viewmodel.RatingViewModel;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_user.helpers.SessionManager;
 
-public class RatingListActivity extends AppCompatActivity {
+public class RatingListActivity extends BaseActivity {
 
     private RatingAdapter adapter;
     private RatingViewModel viewModel;

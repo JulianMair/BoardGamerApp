@@ -1,5 +1,7 @@
 package de.iu.boardgame.feature_evaluate.ui;
 
+import de.iu.boardgame.BaseActivity;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +12,6 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ import de.iu.boardgame.feature_evaluate.data.MeetingRating;
 import de.iu.boardgame.feature_evaluate.viewmodel.RatingViewModel;
 import de.iu.boardgame.feature_user.helpers.SessionManager;
 
-public class RatingAtivity extends AppCompatActivity {
+public class RatingAtivity extends BaseActivity {
 
     private RatingBar ratingHost, ratingFood, ratingEvening;
     private EditText editComment;

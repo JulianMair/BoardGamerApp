@@ -49,70 +49,69 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static final Callback dbCallback = new Callback() {
         @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-
-            databaseWriteExecutor.execute(() -> {
-                try {
-                    if (INSTANCE != null) {
-                        GameDao dao = INSTANCE.gameDao();
-
-                        // ---------- Dummy Games ----------
-                        GameDao gameDao = INSTANCE.gameDao();
-                        if (gameDao.getAll().isEmpty()) {
-                            gameDao.insert(new Game("Catan", 90, "Strategie"));
-                            gameDao.insert(new Game("Codenames", 30, "Party"));
-                            gameDao.insert(new Game("Carcassonne", 45, "Familie"));
-                        }
-
-                        // ---------- Dummy Meetings ----------
-                        MeetingDao meetingDao = INSTANCE.meetingDao();
-                        if (meetingDao.countMeetings() == 0) {
-
-                            long now = System.currentTimeMillis();
-                            long oneDay = 24L * 60 * 60 * 1000;
-
-                            meetingDao.create(new Meeting(
-                                    "Spieleabend bei Anna",
-                                    now + oneDay,
-                                    "Bei Anna zuhause",
-                                    1L,
-                                    "open"
-                            ));
-
-                            meetingDao.create(new Meeting(
-                                    "Boardgame Night",
-                                    now + 3 * oneDay,
-                                    "Wohnung Markus",
-                                    1L,
-                                    "open"
-                            ));
-
-                            meetingDao.create(new Meeting(
-                                    "Familien-Spieleabend",
-                                    now - oneDay,
-                                    "Elternhaus",
-                                    2L,
-                                    "closed"
-                            ));
-                        }
-
-                        // ---------- Dummy Users ----------
-                        try {
-                            UserDao userDao = INSTANCE.userDao();
-                            if (userDao.getAll().isEmpty()) {
-                                userDao.insert(new User("Anna", "anna@example.com", "0171123456", "Musterstrasse 1", true));
-                                userDao.insert(new User("Markus", "markus@example.com", "0171987654", "Hauptstrasse 5", false));
-                                userDao.insert(new User("Hans", "markus@example.com", "0171987654", "Hauptstrasse 5", false));
-                            }
-                        } catch (Exception ignored) { }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            databaseWriteExecutor.execute(AppDatabase::seedIfEmpty);
         }
     };
+
+    private static void seedIfEmpty() {
+        try {
+            if (INSTANCE == null) {
+                return;
+            }
+
+            // ---------- Dummy Games ----------
+            GameDao gameDao = INSTANCE.gameDao();
+            if (gameDao.getAll().isEmpty()) {
+                gameDao.insert(new Game("Catan", 90, "Strategie"));
+                gameDao.insert(new Game("Codenames", 30, "Party"));
+                gameDao.insert(new Game("Carcassonne", 45, "Familie"));
+            }
+
+            // ---------- Dummy Meetings ----------
+            MeetingDao meetingDao = INSTANCE.meetingDao();
+            if (meetingDao.countMeetings() == 0) {
+
+                long now = System.currentTimeMillis();
+                long oneDay = 24L * 60 * 60 * 1000;
+
+                meetingDao.create(new Meeting(
+                        "Spieleabend bei Anna",
+                        now + oneDay,
+                        "Bei Anna zuhause",
+                        1L,
+                        "open"
+                ));
+
+                meetingDao.create(new Meeting(
+                        "Boardgame Night",
+                        now + 3 * oneDay,
+                        "Wohnung Markus",
+                        1L,
+                        "open"
+                ));
+
+                meetingDao.create(new Meeting(
+                        "Familien-Spieleabend",
+                        now - oneDay,
+                        "Elternhaus",
+                        2L,
+                        "closed"
+                ));
+            }
+
+            // ---------- Dummy Users ----------
+            UserDao userDao = INSTANCE.userDao();
+            if (userDao.getAll().isEmpty()) {
+                userDao.insert(new User("Anna", "anna@example.com", "0171123456", "Musterstrasse 1", true));
+                userDao.insert(new User("Markus", "markus@example.com", "0171987654", "Hauptstrasse 5", false));
+                userDao.insert(new User("Hans", "markus@example.com", "0171987654", "Hauptstrasse 5", true));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Statische Methode für den Zugriff auf die Datenbank-Instanz (Singleton-Pattern)
     public static AppDatabase getDatabase(final Context context) {
