@@ -14,4 +14,9 @@
     <string name="default_abstimmung">12 Votes</string>
     <string name="open_drawer">Menü öffnen</string>
     <string name="close_drawer">Menü schließen</string>
+    <string name="abbrechen">Abbrechen</string>
+    <string name="was_soll_es_zu_essen_geben">Was soll es zu essen geben?</string>
+    <string name="italienisch">Italienisch</string>
+    <string name="deutsch">Deutsch</string>
+    <string name="griechisch">Griechisch</string>
 </resources>

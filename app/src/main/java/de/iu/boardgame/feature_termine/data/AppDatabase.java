@@ -17,6 +17,8 @@ import de.iu.boardgame.feature_abstimmung.data.VoteDao;
 import de.iu.boardgame.feature_evaluate.data.MeetingRating;
 import de.iu.boardgame.feature_evaluate.data.RatingDao;
 import de.iu.boardgame.feature_evaluate.helper.Converter;
+import de.iu.boardgame.feature_food.data.FoodVote;
+import de.iu.boardgame.feature_food.data.FoodVoteDao;
 import de.iu.boardgame.feature_send_message.data.Message;
 import de.iu.boardgame.feature_send_message.data.MessageDao;
 import de.iu.boardgame.feature_spiele.data.Game;
@@ -24,7 +26,7 @@ import de.iu.boardgame.feature_spiele.data.GameDao;
 import de.iu.boardgame.feature_user.data.User;
 import de.iu.boardgame.feature_user.data.UserDao;
 
-@Database(entities = {Meeting.class, Game.class, Vote.class, MeetingRating.class, Message.class, User.class}, version = 13, exportSchema = false)
+@Database(entities = {Meeting.class, Game.class, Vote.class, MeetingRating.class, Message.class, User.class, FoodVote.class}, version = 15, exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MeetingDao meetingDao();
@@ -38,6 +40,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract RatingDao ratingDao();
 
     public abstract MessageDao messageDao();
+
+    public abstract FoodVoteDao foodVoteDao();
 
     // Singleton-Instanz der Datenbank
     private static volatile AppDatabase INSTANCE;

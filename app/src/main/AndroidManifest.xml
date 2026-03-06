@@ -30,6 +30,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".feature_food.ui.FoodSelectionActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".feature_spiele.ui.GamesListActivity"
             android:exported="false" />
 

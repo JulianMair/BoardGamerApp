@@ -31,6 +31,8 @@ import de.iu.boardgame.feature_abstimmung.ui.VoteGamesActivity;
 import de.iu.boardgame.feature_abstimmung.data.GameVoteInfo;
 import de.iu.boardgame.feature_abstimmung.viewmodel.VotesViewModel;
 import de.iu.boardgame.feature_evaluate.ui.RatingListActivity;
+import de.iu.boardgame.feature_food.ui.FoodSelectionActivity;
+import de.iu.boardgame.feature_food.viewmodel.FoodViewModel;
 import de.iu.boardgame.feature_send_message.ui.ChatActivity;
 import de.iu.boardgame.feature_termine.data.Meeting;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
@@ -65,6 +67,7 @@ public class MeetingDetailActivity extends BaseActivity {
     private MeetingViewModel meetingViewModel;
     private UsersViewModel userViewMode;
     private VotesViewModel votesViewModel;
+    private FoodViewModel foodViewModel;
     private TopGamesAdapter topGamesAdapter;
     private int myVoteCount = 0;
     private int meetingId;
@@ -102,6 +105,7 @@ public class MeetingDetailActivity extends BaseActivity {
         meetingViewModel = new ViewModelProvider(this, factory).get(MeetingViewModel.class);
         userViewMode = new ViewModelProvider(this).get(UsersViewModel.class);
         votesViewModel = new ViewModelProvider(this).get(VotesViewModel.class);
+        foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
 
         // --- DATEN EMPFANGEN ---
         // Wir holen die ID, die uns die MeetingListActivity (Adapter) mitgeschickt hat.
@@ -209,12 +213,21 @@ public class MeetingDetailActivity extends BaseActivity {
                 updateVoteStatus(myVoteCount);
             });
             votesViewModel.getGames(meetingId, voteUserId).observe(this, this::updateTopGames);
+            
+            // Food Results beobachten
+            foodViewModel.getResults(meetingId).observe(this, results -> {
+                if (results != null && !results.isEmpty()) {
+                    btnFood.setText("Essen: " + results.get(0).foodType);
+                } else {
+                    btnFood.setText("Essen");
+                }
+            });
         }
 
         btnFood.setOnClickListener(v -> {
-            // TODO implement
-            Toast.makeText(this, "Essens-Planung kommt bald!", Toast.LENGTH_SHORT).show();
-            // Später: Intent zur Essens-Activity
+            Intent intent = new Intent(this, FoodSelectionActivity.class);
+            intent.putExtra("MEETING_ID", meetingId);
+            startActivity(intent);
         });
 
         btnMessageHost.setOnClickListener(v -> {
@@ -296,7 +309,8 @@ public class MeetingDetailActivity extends BaseActivity {
             switchStatus.setText("Abgeschlossen");
             switchStatus.setEnabled(false); // Kann nicht mehr geändert werden
             setVoteEnabled(false);
-            btnFood.setVisibility(android.view.View.GONE);
+            btnFood.setVisibility(android.view.View.VISIBLE); // Auch bei closed anzeigen (aber evtl disabled?)
+            btnFood.setEnabled(false);
             btnRate.setVisibility(View.VISIBLE);
         }
         else if (newStatus.equals("planned")) {
@@ -305,7 +319,8 @@ public class MeetingDetailActivity extends BaseActivity {
             switchStatus.setText("Planung fertig");
             switchStatus.setEnabled(true);
             setVoteEnabled(false);
-            btnFood.setVisibility(android.view.View.GONE);
+            btnFood.setVisibility(android.view.View.VISIBLE);
+            btnFood.setEnabled(true);
             btnRate.setVisibility(View.GONE);
         }
         else {
@@ -315,13 +330,13 @@ public class MeetingDetailActivity extends BaseActivity {
             switchStatus.setEnabled(true);
             setVoteEnabled(true);
             btnFood.setVisibility(android.view.View.VISIBLE);
+            btnFood.setEnabled(true);
             btnRate.setVisibility(View.GONE);
         }
 
         // Nur der Host darf den Status  ändern!
         if (!isMyMeeting() && !newStatus.equals("closed")) {
             switchStatus.setEnabled(false);
-            btnFood.setVisibility(android.view.View.GONE);
         }
 
     }

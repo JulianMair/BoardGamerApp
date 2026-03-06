@@ -35,6 +35,9 @@ public class Meeting {
     @ColumnInfo(name="evaluation_id")
     int evaluation_id;
 
+    @ColumnInfo(name="food_type")
+    String foodType;
+
 
     // Konstruktor für Room
     public Meeting(String title,long timestamp, String location, long host_id, String status) {
@@ -43,6 +46,7 @@ public class Meeting {
         this.location = location;
         this.host_id = host_id;
         this.status = status;
+        this.foodType = "Keine Auswahl";
     }
 
     // --- Getter und Setter ---
@@ -91,6 +95,14 @@ public class Meeting {
     }
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getFoodType() {
+        return foodType;
+    }
+
+    public void setFoodType(String foodType) {
+        this.foodType = foodType;
     }
 
 
