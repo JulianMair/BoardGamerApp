@@ -29,4 +29,8 @@ public class FoodRepository {
     public LiveData<List<FoodVoteResult>> getResults(int meetingId) {
         return foodVoteDao.getResults(meetingId);
     }
+
+    public LiveData<Integer> getVotedUserCount(int meetingId) {
+        return foodVoteDao.getVotedUserCount(meetingId);
+    }
 }

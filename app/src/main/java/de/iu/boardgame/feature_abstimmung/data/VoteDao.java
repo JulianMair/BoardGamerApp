@@ -24,6 +24,9 @@ public interface VoteDao {
     @Query("SELECT COUNT(*) FROM votes WHERE meeting_id = :meetingId AND user_id = :userId")
     LiveData<Integer> countVotesByUserLive(long meetingId, long userId);
 
+    @Query("SELECT COUNT(DISTINCT user_id) FROM votes WHERE meeting_id = :meetingId")
+    LiveData<Integer> countTotalUsersVotedLive(long meetingId);
+
     @Query("SELECT g.id AS id, g.gameTitle AS name, g.gameDuration AS durationMinutes, " +
             "g.category AS category, " +
             "(SELECT COUNT(*) FROM votes v WHERE v.meeting_id = :meetingId AND v.game_id = g.id) AS voteCount, " +

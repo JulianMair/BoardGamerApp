@@ -18,4 +18,7 @@ public interface FoodVoteDao {
 
     @Query("SELECT food_type, COUNT(*) as voteCount FROM food_votes WHERE meeting_id = :meetingId GROUP BY food_type ORDER BY voteCount DESC")
     LiveData<List<FoodVoteResult>> getResults(int meetingId);
+
+    @Query("SELECT COUNT(DISTINCT user_id) FROM food_votes WHERE meeting_id = :meetingId")
+    LiveData<Integer> getVotedUserCount(int meetingId);
 }

@@ -19,4 +19,6 @@
     <string name="italienisch">Italienisch</string>
     <string name="deutsch">Deutsch</string>
     <string name="griechisch">Griechisch</string>
+    <string name="order_reminder">BITTE JETZT DAS ESSEN BESTELLEN!</string>
+    <string name="essen_kann_bestellt_werden">Essen kann bestellt werden.</string>
 </resources>

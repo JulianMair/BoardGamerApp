@@ -30,6 +30,9 @@ public interface UserDao {
     @Query("SELECT * FROM users ORDER BY name")
     LiveData<List<User>> getAllUsers();
 
+    @Query("SELECT COUNT(*) FROM users")
+    LiveData<Integer> getUserCountLive();
+
     @Query("SELECT * FROM users WHERE id = :id")
     User getUserByIdSync(long id);
 }

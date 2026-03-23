@@ -192,6 +192,7 @@
                     android:layout_marginTop="12dp"
                     android:background="#EEEEEE"
                     app:layout_constraintTop_toBottomOf="@id/tvhost"/>
+
                 <TextView
                     android:id="@+id/tvVoteStatus"
                     android:layout_width="match_parent"
@@ -206,10 +207,51 @@
                     android:focusable="true"
                     android:background="?attr/selectableItemBackground"
                     app:drawableStartCompat="@drawable/ic_vote"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/sepHostVote" />
 
+                <TextView
+                    android:id="@+id/tvTotalVotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="56dp"
+                    android:textSize="12sp"
+                    android:textColor="#666666"
+                    app:layout_constraintTop_toBottomOf="@id/tvVoteStatus"
+                    tools:text="Spiel-Voting: 2 von 5 Personen" />
+
+                <View
+                    android:id="@+id/sepFoodStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="12dp"
+                    android:background="#EEEEEE"
+                    app:layout_constraintTop_toBottomOf="@id/tvTotalVotes"/>
+
+                <TextView
+                    android:id="@+id/tvFoodStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="16dp"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:textColor="#FF9800"
+                    android:text="Essen: Abstimmen"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@android:drawable/ic_menu_agenda"
+                    app:layout_constraintTop_toBottomOf="@id/sepFoodStatus" />
+
+                <TextView
+                    android:id="@+id/tvTotalFoodVotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="56dp"
+                    android:textSize="12sp"
+                    android:textColor="#666666"
+                    app:layout_constraintTop_toBottomOf="@id/tvFoodStatus"
+                    tools:text="Essen-Voting: 3 von 5 Personen" />
 
                 <View
                     android:id="@+id/sep4"
@@ -217,7 +259,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
                     android:background="#EEEEEE"
-                    app:layout_constraintTop_toBottomOf="@id/tvVoteStatus"/>
+                    app:layout_constraintTop_toBottomOf="@id/tvTotalFoodVotes"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchStatus"
@@ -230,18 +272,22 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/sep4"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnFood"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                <TextView
+                    android:id="@+id/tvOrderNotification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Essen"
-                    android:textColor="#FF9800"
-                    app:icon="@android:drawable/ic_menu_agenda"
-                    app:iconTint="#FF9800"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="@string/essen_kann_bestellt_werden"
+                    android:textColor="#D32F2F"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:gravity="end"
+                    android:visibility="gone"
                     app:layout_constraintTop_toTopOf="@id/switchStatus"
-                    app:layout_constraintBottom_toBottomOf="@id/switchStatus"/><com.google.android.material.button.MaterialButton
+                    app:layout_constraintBottom_toBottomOf="@id/switchStatus"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:visibility="visible"/>
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRate"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="wrap_content"
@@ -251,8 +297,7 @@
                     android:visibility="gone"
                     app:icon="@android:drawable/btn_star"
                     app:iconTint="#4CAF50"
-                    android:layout_marginEnd="0dp"
-                    app:layout_constraintEnd_toStartOf="@id/btnFood"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/switchStatus"
                     app:layout_constraintBottom_toBottomOf="@id/switchStatus"/>
 
