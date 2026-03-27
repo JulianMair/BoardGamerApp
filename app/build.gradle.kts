@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.androidTestImplementation
+
 plugins {
     id("com.android.application")
 }
@@ -26,8 +28,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_15
+        targetCompatibility = JavaVersion.VERSION_15
     }
 }
 
@@ -36,7 +38,17 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("androidx.activity:activity:1.12.1")
+    implementation("androidx.databinding:adapters:3.2.0-alpha11")
+    implementation("androidx.test.ext:junit:1.3.0")
+
+    //--------------Test dependencies-----------------------
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:core:1.5.0")
+    androidTestImplementation ("androidx.room:room-testing:2.6.1")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

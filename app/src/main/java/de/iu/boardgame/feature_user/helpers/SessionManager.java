@@ -2,6 +2,8 @@ package de.iu.boardgame.feature_user.helpers;
 
 import android.content.Context;
 
+import de.iu.boardgame.feature_abstimmung.ui.VoteGamesActivity;
+
 public class SessionManager {
     private static final String PREFS = "boardgame_prefs";
     private static final String KEY_USER_ID = "current_user_id";

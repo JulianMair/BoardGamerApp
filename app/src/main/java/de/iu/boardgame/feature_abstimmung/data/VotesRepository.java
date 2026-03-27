@@ -38,6 +38,10 @@ public class VotesRepository {
         return voteDao.countVotesByUserLive(meetingId, userId);
     }
 
+    public LiveData<Integer> getTotalUsersVoted(long meetingId) {
+        return voteDao.countTotalUsersVotedLive(meetingId);
+    }
+
     public LiveData<GameVoteInfo> getTopVotedGame(long meetingId) {
         return voteDao.getTopVotedGame(meetingId);
     }

@@ -29,6 +29,10 @@ public class VotesViewModel extends AndroidViewModel {
         return repository.getMyVoteCount(meetingId, userId);
     }
 
+    public LiveData<Integer> getTotalUsersVoted(long meetingId) {
+        return repository.getTotalUsersVoted(meetingId);
+    }
+
     public LiveData<GameVoteInfo> getTopVotedGame(long meetingId) {
         return repository.getTopVotedGame(meetingId);
     }
