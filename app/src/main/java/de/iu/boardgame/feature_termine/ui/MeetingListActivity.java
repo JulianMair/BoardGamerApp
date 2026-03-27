@@ -5,11 +5,9 @@ import de.iu.boardgame.BaseActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -28,8 +25,8 @@ import java.util.List;
 
 import de.iu.boardgame.feature_spiele.ui.GamesListActivity;
 import de.iu.boardgame.feature_termine.data.Meeting;
+import de.iu.boardgame.feature_termine.logic.NextHostCalculator;
 import de.iu.boardgame.feature_termine.ui.adapter.MeetingAdapter;
-import de.iu.boardgame.R;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModel;
 import de.iu.boardgame.feature_termine.viewmodel.MeetingViewModelFactory;
 import de.iu.boardgame.feature_user.data.User;
@@ -111,11 +108,10 @@ public class MeetingListActivity extends BaseActivity {
 
         // --- 2. RECYCLERVIEW SETUP ---
 
-        // a) // Initialisierung des Adapters
+        // a) Initialisierung des Adapters
         adapter = new MeetingAdapter();
 
         // b) Klick-Logik definieren
-        // Interfaces des Adapters nutzen
         adapter.setOnItemClickListener(meeting -> {
             Intent intent = new Intent(MeetingListActivity.this, MeetingDetailActivity.class);
 
@@ -128,20 +124,15 @@ public class MeetingListActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
         // d) LayoutManager
-        // LinearLayoutManager -> Einfache Liste von oben nach unten.
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // --- 3. BEOBACHTEN (OBSERVER) ---
-        // Live-Verbindung zur Datenbank.
         meetingViewModel.getDisplayMeetings().observe(this, meetings -> {
             if(meetings != null) {
-                // NEUE Liste an den Adapter übergeben.
-                // Der Adapter zeichnet die Liste neu.
                 adapter.setMeetings(meetings);
             }
         });
 
-        // Liste aller Meetings in der DB zur Berechnung des nächsten Hosts
         meetingViewModel.getAllMeetings().observe(this, meetings -> {
             if(meetings != null) {
                 loadedMeetings = meetings;
@@ -154,11 +145,13 @@ public class MeetingListActivity extends BaseActivity {
                 loadedUsers = users;
                 setNextHost(loadedMeetings);
             }
+            if(loadedUsers != null && allMeetingCatch != null){
+                setNextHost(allMeetingCatch);
+            }
         });
 
         // --- 4. NEUEN TERMIN ERSTELLEN ---
         btnAdd.setOnClickListener(v -> {
-            //Wechsel zur Erstell-Maske
             startActivity(new Intent(MeetingListActivity.this, MeetingCreateForm.class));
         });
 
@@ -190,9 +183,8 @@ public class MeetingListActivity extends BaseActivity {
     }
 
     private void setNextHost(List<Meeting> currentMeetingList){
-        if (loadedUsers != null
-                && currentMeetingList != null) {
-            User nextHost = de.iu.boardgame.feature_termine.logic.NextHostCalculator.calculateNextHostId(currentMeetingList, loadedUsers);
+        if (loadedUsers != null && currentMeetingList != null) {
+            User nextHost = NextHostCalculator.calculateNextHostId(currentMeetingList, loadedUsers);
             if (nextHost != null) {
                 tvNextHostName.setText(nextHost.name);
             } else {
